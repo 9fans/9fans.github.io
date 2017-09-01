@@ -1,0 +1,31 @@
+#!/usr/bin/env perl
+
+open(OMIT, "9 sed -n 's/.*Omitman\\[\"(.*)\\((.)\\)\".*/\\1 \\2/p' $ENV{'PLAN9'}/dist/checkman.awk |") || die "omit: $!";
+@omit = <OMIT>;
+close OMIT;
+chomp @omit;
+# push @omit, "grep 1", "lseek 2", "tcs 1", "sed 1", "rc 1", "strcat 3", "yacc 1";
+
+sub noref {
+	my ($p, $s) = @_;
+
+	$text =~ s!<a href="../man$s/$p.html">(([^<]|<[^/]|</[^a])*)</a>!\1!g;
+}
+
+for($i=0; $i<@ARGV; $i++){
+	open(IN, $ARGV[$i]) || die "open $ARGV[$i]: $!";
+	@text = <IN>;
+	close IN;
+	$text = join("", @text);
+
+	foreach $o (@omit) {
+		$o =~ /(.*) (.*)/;
+		noref($1, $2);
+	}
+
+	open(OUT, ">$ARGV[$i]") || die "open $ARGV[$i]: $!";
+	print OUT $text;
+	close OUT;
+}
+
+exit 0;

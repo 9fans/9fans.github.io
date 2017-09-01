@@ -1,0 +1,21 @@
+if(! ~ $march i386){
+	echo '>>>' do not need to build bin24 on non-x86
+	exit 1
+}
+if(! ~ `{uname -r} 2.4.*){
+	echo '>>>' must build bin24 on 2.4 system
+	exit 1
+}
+arch=$march
+depends=plan9port-^(base)
+conflicts=plan9port-bin26
+desc='Plan 9 from User Space - binaries
+ This package contains binaries for Plan 9 from User Space.
+ Due to incompatibilities between the Linux 2.6+ thread library
+ (NPTL) and the pre-2.6 Linux thread library (linuxthreads),
+ different binaries must be used on the pre-2.6 systems than
+ on 2.6 and later systems.
+ .
+ This package contains binaries for Linux 2.6 and later kernels.
+'
+grepfor=bin

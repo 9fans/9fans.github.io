@@ -1,0 +1,4 @@
+#!/bin/sh
+
+awk -f $PLAN9/dist/isum.awk $PLAN9/install.log
+

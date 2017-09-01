@@ -1,0 +1,27 @@
+#!/usr/bin/env perl
+
+@_ = <>;
+my $root = $ENV{'PLAN9'};
+my $html = join("", @_);
+$html =~ s;$root/;XXX$root/;g;
+$newhtml = "";
+while($html =~ /XXX($root\/([a-zA-Z0-9_.\/]|&#8722;)*[a-zA-Z0-9_\/])/){
+	($a, $b, $c) = ($`, $1, $');
+	$b =~ s/&#8722;/-/g;
+	$l = $b;
+	while(! -e $l){
+		if($l =~ /(.*\/)(.+)/){
+			$l = $1;
+		}else{
+			last;
+		}
+	}
+	$bb = substr($b, length($l));
+	$b = $l;
+	$b =~ s/-/\&#8722;/g;
+	$bb =~ s/-/\&#8722;/g;
+	$newhtml .= "$a<a href=\"$l\">$b</a>$bb";
+	$html = $c;
+}
+$newhtml .= $html;
+print $newhtml;
