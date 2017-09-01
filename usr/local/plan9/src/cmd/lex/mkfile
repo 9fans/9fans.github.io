@@ -1,0 +1,20 @@
+<$PLAN9/src/mkhdr
+
+TARG=lex
+OFILES=lmain.$O\
+	y.tab.$O\
+	sub1.$O\
+	sub2.$O\
+	header.$O\
+
+HFILES=ldefs.h\
+
+YFILES=parser.y\
+
+<$PLAN9/src/mkone
+
+installall:V:
+	for objtype in $CPUS ; do
+		mk install
+	done
+	cp ncform $SYS9/lib/lex

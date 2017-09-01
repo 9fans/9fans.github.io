@@ -1,0 +1,34 @@
+
+RCFILES=mail.rc\
+
+all:Q:
+	#
+
+installall:Q:	install
+	#
+
+install safeinstall safeinstallall:V:
+	cp mail.rc $PLAN9/bin/mail
+
+clean:Q:
+	#
+
+nuke:V:
+	rm $PLAN9/bin/mail
+
+UPDATE=\
+	gone.fishing\
+	gone.msg\
+	mail.c\
+	mail.rc\
+	mail.sh\
+	makefile\
+	mkfile\
+	namefiles\
+	omail.rc\
+	qmail\
+	remotemail\
+	rewrite\
+
+update:V:
+	update $UPDATEFLAGS $UPDATE

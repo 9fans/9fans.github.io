@@ -1,0 +1,24 @@
+<$PLAN9/src/mkhdr
+
+TARG=Netfiles
+
+OFILES=\
+	acme.$O\
+	main.$O\
+	wait.$O\
+	
+HFILES=acme.h
+
+<$PLAN9/src/mkone
+
+XTARG=\
+	netfileget\
+	netfileput\
+	netfilestat\
+	netfilelib.rc\
+
+install:V:
+	for i in $XTARG; do
+		cp $i $BIN
+	done
+

@@ -1,0 +1,37 @@
+<$PLAN9/src/mkhdr
+
+TARG=`ls *.[cy] *.lx | egrep -v "\.tab\.c$|^x\." | sed 's/\.[cy]//; s/\.lx//'`
+
+<$PLAN9/src/mkmany
+
+BUGGERED='CVS|faces|factotum|lp|ip|mailfs|upas|vncv|mnihongo|mpm|index|u9fs|secstore|smugfs|snarfer'
+DIRS=lex `ls -l |sed -n 's/^d.* //p' |egrep -v "^($BUGGERED)$"|egrep -v '^lex$'` $FONTSRV
+
+<$PLAN9/src/mkdirs
+
+dir-all dir-install: $PLAN9/bin/yacc $PLAN9/bin/lex
+
+bc.tab.c units.tab.c: $PLAN9/bin/yacc
+
+%.tab.h %.tab.c: %.y
+	$YACC $YFLAGS -s $stem $stem.y
+
+%.o: %.tab.c
+	9c -o $target $stem.tab.c
+
+delatex.c:D: delatex.lx $PLAN9/bin/lex
+	9 lex -t delatex.lx >delatex.c
+
+$PLAN9/bin/lex: $PLAN9/bin/yacc
+	cd lex; mk install
+
+# This should not be necessary.
+$PLAN9/bin/yacc: $O.yacc
+	install -c $O.yacc $PLAN9/bin/yacc
+$O.yacc: yacc.$O
+	$LD -o $target $prereq
+yacc.$O: yacc.c
+	$CC $CFLAGS yacc.c
+
+CLEANFILES=$CLEANFILES bc.tab.[ch] units.tab.[ch] delatex.c
+

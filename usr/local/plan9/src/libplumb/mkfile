@@ -1,0 +1,11 @@
+<$PLAN9/src/mkhdr
+
+LIB=libplumb.a
+OFILES=\
+	event.$O\
+	fid.$O\
+	mesg.$O\
+
+HFILES=$PLAN9/include/plumb.h
+
+<$PLAN9/src/mksyslib

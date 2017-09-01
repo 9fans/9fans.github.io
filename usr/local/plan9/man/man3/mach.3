@@ -1,0 +1,96 @@
+.TH MACH 3
+.SH NAME
+machbytype, machbyname \- machine-independent access to executables and programs
+.SH SYNOPSIS
+.B #include <u.h>
+.br
+.B #include <libc.h>
+.br
+.B #include <mach.h>
+.PP
+.PP
+.B
+void machbytype(int type)
+.PP
+.B
+int machbyname(char *name)
+.PP
+.B
+extern Mach *mach;
+.SH DESCRIPTION
+.I Libmach
+provides an interface for accessing
+the executable files and executing images of various architectures
+and operating systems.
+The interface is machine-independent, meaning that, for example,
+Mac OS X core dumps may be inspected using an x86 Linux machine
+and vice versa.
+In its current form,
+the library is mainly useful for writing debuggers
+of one sort or another.
+.PP
+An architecture is described primarily by a
+.B Mach
+structure, which contains
+data structures and parameters describing the
+particular architecture.
+Most library functions assume that the global variable
+.I mach
+points at the structure for the architecture being debugged.
+It is set implicitly by
+.I crackhdr
+(see
+.IR mach-file (3))
+and can be set explicitly by calling
+.I machbyname
+or
+.IR machbytype .
+.PP
+There is no operating system-specific structure akin to
+.IR mach .
+Typically the choice of operating system on a particular
+architecture affects only the executable and core dump formats;
+the various file parsers deduce the operating system from
+information in the binary files themselves and adjust 
+accordingly.
+.PP
+The supported architectures are
+.B 386
+(Intel 32-bit x86) 
+386 and later)
+and
+.B power
+(IBM PowerPC, typically running
+Mac OS X).
+.PP
+Other manual pages
+describe the library functions in detail.
+.PP
+.IR Mach-cmd (3)
+describes some convenience routines for attaching to
+processes and core files.
+.PP
+.IR Mach-file (3)
+describes the manipulation of binary files.
+.PP
+.IR Mach-map (3)
+describes the interface to address spaces and register sets
+in executable files and executing programs.
+.PP
+.IR Mach-stack (3)
+describes support for unwinding the stack.
+.PP
+.IR Mach-swap (3)
+describes helper functions for accessing data
+in a particular byte order.
+.PP
+.IR Mach-symbol (3)
+describes the interface to debugging symbol information.
+.SH SOURCE
+.B \*9/src/libmach
+.SH "SEE ALSO
+.IR mach-file (3),
+.IR mach-map (3),
+.IR mach-stack (3),
+.IR mach-swap (3),
+.IR mach-symbol (3)

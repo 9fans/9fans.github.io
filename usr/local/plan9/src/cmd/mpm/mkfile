@@ -1,0 +1,24 @@
+<$PLAN9/src/mkhdr
+
+TARG=auxpm
+OFILES=misc.$O\
+	slug.$O\
+	range.$O\
+	queue.$O\
+	page.$O\
+
+HFILES=misc.h\
+
+LD=g++
+
+<$PLAN9/src/mkone
+CC=g++
+CFLAGS=-c
+
+slug.$O:	slug.h
+range.$O:	range.h slug.h
+queue.$O:	page.h range.h slug.h
+page.$O:	page.h range.h slug.h
+
+test:V:	$O.out
+	tryout $O.out

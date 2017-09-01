@@ -1,0 +1,28 @@
+none:VQ:
+	echo usage: mk all, install, installall, '$O'.cmd, cmd.install, or cmd.installall
+
+PROGS=${TARG:%=$O.%}
+
+all:V:	$PROGS
+
+$O.%:	%.$O $OFILES $LIB # ${SHORTLIB:%=$LIBDIR/lib%.a}
+	$LD -o $target $prereq $LDFLAGS
+
+%.install:V:	$BIN/%
+
+$BIN/%:	$O.%
+	$INSTALL $O.$stem $BIN/$stem
+
+many-install:V:
+	for i in $TARG
+	do
+		mk $MKFLAGS $i.install
+	done
+
+install:V: many-install
+
+CLEANFILES=$CLEANFILES $PROGS
+NUKEFILES=$NUKEFILES ${TARG:%=$BIN/%}
+
+<$PLAN9/src/mkcommon
+

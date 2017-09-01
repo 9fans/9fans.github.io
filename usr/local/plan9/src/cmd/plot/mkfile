@@ -1,0 +1,23 @@
+<$PLAN9/src/mkhdr
+
+TARG=plot
+OFILES=plot.$O\
+
+HFILES=plot.h\
+
+LIB=libplot.a
+
+<$PLAN9/src/mkone
+
+$LIB:
+	cd libplot
+	mk install
+
+clean:V:
+	rm -f *.[$OS] [$OS].out y.tab.? y.debug y.output $TARG libplot.a
+	cd libplot
+	mk clean
+
+nuke:V:
+	mk clean
+	rm -f libplot.a[$OS]

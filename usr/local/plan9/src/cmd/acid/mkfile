@@ -1,0 +1,27 @@
+<$PLAN9/src/mkhdr
+
+TARG=acid
+UOFILES=\
+	main.$O\
+	lex.$O\
+	util.$O\
+	exec.$O\
+	expr.$O\
+	list.$O\
+	builtin.$O\
+	proc.$O\
+	dot.$O\
+	print.$O\
+
+OFILES=$UOFILES y.tab.$O
+
+YFILES=dbg.y
+HFILES=acid.h $PLAN9/include/mach.h
+
+
+<$PLAN9/src/mkone
+
+lex.$O:		y.tab.h
+util.$O:	y.tab.h
+builtin.$O:	y.tab.h
+main.$O:	y.tab.h

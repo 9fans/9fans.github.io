@@ -1,0 +1,34 @@
+<$PLAN9/src/mkhdr
+
+TARG=page
+
+HFILES=page.h
+OFILES=\
+	cache.$O\
+	filter.$O\
+	gfx.$O\
+	gs.$O\
+	page.$O\
+	pdf.$O\
+	ps.$O\
+	rotate.$O\
+	util.$O\
+	view.$O\
+
+LIB=$PLAN9/lib/libdraw.a
+
+UPDATE=\
+	mkfile\
+	${OFILES:%.$O=%.c}\
+	pdfprolog.ps\
+	$HFILES\
+
+<$PLAN9/src/mkone
+
+BIN=$PLAN9/bin
+
+pdfprolog.c: pdfprolog.ps
+	cat pdfprolog.ps | sed 's/.*/"&\\n"/g' >pdfprolog.c
+
+pdf.$O: pdfprolog.c
+

@@ -1,0 +1,15 @@
+<$PLAN9/src/mkhdr
+
+TARG=plumber plumb
+
+<$PLAN9/src/mkmany
+
+PLUMBER=plumber.$O fsys.$O match.$O rules.$O
+PLUMB=plumb.$O
+
+$PLUMBER:	$HFILES plumber.h
+$PLUMB:		$HFILES
+
+$O.plumb:	$PLUMB
+$O.plumber:	$PLUMBER
+

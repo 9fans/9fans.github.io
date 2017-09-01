@@ -1,0 +1,28 @@
+<$PLAN9/src/mkhdr
+
+LIB=lib9pclient.a
+
+OFILES=\
+	access.$O\
+	auth.$O\
+	close.$O\
+	create.$O\
+	dirread.$O\
+	fs.$O\
+	ns.$O\
+	open.$O\
+	openfd.$O\
+	print.$O\
+	read.$O\
+	remove.$O\
+	seek.$O\
+	stat.$O\
+	walk.$O\
+	write.$O\
+	wstat.$O\
+
+HFILES=\
+	$PLAN9/include/9pclient.h\
+	$PLAN9/include/mux.h\
+
+<$PLAN9/src/mksyslib

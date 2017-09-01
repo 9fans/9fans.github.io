@@ -1,0 +1,14 @@
+default:V:	$LIB
+
+$LIB(%):N: %
+$LIB:	${OFILES:%=$LIB(%)}
+	$AR rsc $LIB $newmember
+
+&:n:	&.$O
+	$AR rsc $LIB $stem.$O
+
+all install:V: $LIB
+
+CLEANFILES=$CLEANFILES $LIB
+
+<$PLAN9/src/mkcommon

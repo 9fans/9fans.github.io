@@ -1,0 +1,22 @@
+<$PLAN9/src/mkhdr
+
+LIB=lib9p.a
+OFILES=\
+	_post.$O\
+	dirread.$O\
+	fid.$O\
+	file.$O\
+	intmap.$O\
+	mem.$O\
+	req.$O\
+	parse.$O\
+	srv.$O\
+	tpost.$O\
+	uid.$O\
+	util.$O\
+
+<$PLAN9/src/mksyslib
+
+$O.ramfs: ramfs.$O $LIBDIR/$LIB
+	$LD -o $target $prereq
+

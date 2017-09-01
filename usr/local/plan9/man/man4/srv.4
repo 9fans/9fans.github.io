@@ -1,0 +1,103 @@
+.TH SRV 4
+.SH NAME
+srv, 9fs \- start network file service
+.SH SYNOPSIS
+.B srv
+[
+.B -an
+]
+[
+.B -k
+.I keypattern
+]
+.I address
+[
+.I srvname
+]
+.PP
+.B 9fs
+.I system
+.SH DESCRIPTION
+.I Srv
+dials the given address and initializes the connection to serve the 9P protocol.
+It then posts the resulting connection in the current name space 
+(see
+.IR intro (4))
+as
+.I srvname 
+(default
+.IR address ).
+.PP
+The
+.B -a
+option causes
+.I srv
+to post a pre-authenticated connection to the file system
+.I aname
+(by default, the empty string;
+see
+.IR attach (9p)).
+.PP
+The 
+.B -n
+option causes 
+.I srv
+to reject authentication attempts by clients,
+useful if the remote server is known not to require authentication.
+.PP
+.I Srv
+authenticates over the 9P connection to establish a valid auth fid.
+.IR Keypattern ,
+if specified, is used to select the key used for authentication.
+Client attach requests are rewritten to use the specified
+.I aname
+and auth fid.
+.PP
+The
+.I 9fs
+command executes the
+.I srv
+necessary to make available the files of 
+.IR system .
+.PP
+.I 9fs
+recognizes some special names,
+such as
+.B sources
+to make the file server
+.I sources.cs.bell-labs.com
+available as service
+.IR sources .
+.I 9fs
+is an
+.IR rc (1)
+script; examine it to see what local conventions apply.
+.SH EXAMPLES
+List the root directory on 
+.IR sources :
+.IP
+.EX
+9fs sources
+9p ls sources
+.EE
+.PP
+Mount a remote file server 
+.I bootes
+on Linux using the kernel 9P mount driver,
+with 
+.I srv
+handling authentication:
+.IP
+.EX
+srv -a sources.cs.bell-labs.com sources
+sudo mount -t 9p -o trans=unix,uname=$USER,dfltuid=`id -u`,dfltgid=`id -g`
+           `namespace`/sources /n/sources
+.EE
+.SH SOURCE
+.B \*9/src/cmd/srv.c
+.br
+.B \*9/bin/9fs
+.SH "SEE ALSO
+.IR dial (3),
+.IR intro (4),
+.IR netfiles (1)

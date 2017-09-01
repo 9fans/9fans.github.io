@@ -1,0 +1,7 @@
+<$PLAN9/src/mkhdr
+
+TARG=unesc
+OFILES=unesc.$O
+
+BIN=$BIN/upas
+<$PLAN9/src/mkone

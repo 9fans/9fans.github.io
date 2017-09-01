@@ -1,0 +1,57 @@
+# This file lists people who have contributed code to
+# plan9port, as recorded by the Mercurial and CVS logs.
+# The list is incomplete but a start.
+# My thanks to the people not listed here too.
+
+Abhishek Kulkarni <adkulkar@umail.iu.edu>
+Albert Lee <trisk@acm.jhu.edu>
+Alessandro Arzilli <alessandro.arzilli@gmail.com>
+Akshat Kumar <seed@mail.nanosouffle.net>
+André Günther <Andre.G@gmx.de>
+Anthony Martin <ality@pbrane.org>
+Anthony Sorace <a@9srv.net>
+Aram Hăvărneanu <aram@mgk.ro>
+Arvindh Rajesh Tamilmani <art@a-30.net>
+Benjamin Huntsman <BHuntsman@mail2.cu-portland.edu>
+Caio Oliveira <cmarcelo@gmail.com>
+Christian Kellermann <ckeen@pestilenz.org>
+Christopher Brannon <chris@the-brannons.com>
+David du Colombier <0intro@gmail.com>
+David Jeannot <djeannot24@gmail.com>
+David Swasey <david.swasey@gmail.com>
+Enrique Soriano <enrique.soriano@gmail.com>
+Eoghan Sherry <ejsherry@gmail.com>
+Erik Quanstrom <quanstro@quanstro.net>
+Ethan Burns <burns.ethan@gmail.com>
+Fazlul Shahriar <fshahriar@gmail.com>
+Ingo Dreilich <yngoto@gmail.com>
+Justin Davis <jrcd83@gmail.com>
+J.R. Mauro <jrm8005@gmail.com>
+Jani Lahtinen <jani.lahtinen8@gmail.com>
+Jeff Sickel <jas@corpus-callosum.com>
+Jonathan Cast <jonathanccast@gmail.com>
+Kris Maglione <jg@suckless.org>
+Marius Eriksen <marius.eriksen@gmail.com>
+Martin Neubauer <m.ne@gmx.net>
+Mathieu Lonjaret <lejatorn@gmail.com>
+Mathieu Lonjaret <mathieu.lonjaret@gmail.com>
+Michael Stroucken <mxs@cmu.edu>
+Michael Teichgräber <mt4swm@googlemail.com>
+Michael Teichgräber <mt@ib.wmipf.de>
+Nathaniel W Filardo <nwf@cs.jhu.edu> <nwfilardo@gmail.com>
+Nikolai Saoukh <nikolai.saoukh@gmail.com>
+Yuval Pavel Zholkover <paulzhol@gmail.com>
+Peter Saveliev <svinota.saveliev@gmail.com>
+Richard Miller <millerresearch@gmail.com>
+Rob Kroeger <robkroeger@gmail.com>
+Rob Pike <robpike@gmail.com>
+Roger Peppe <rogpeppe@gmail.com>
+Russ Cox <rsc@swtch.com>
+Sean McKean <smckean83@gmail.com>
+Shenghou Ma <minux.ma@gmail.com>
+Steve McCoy <mccoyst@gmail.com>
+Ties Bos <gitbisector@gmail.com>
+Tim Newsham <tim.newsham@gmail.com>
+Tony Lainson <t.lainson@gmail.com>
+Venkatesh Srinivas <extrudedaluminiu@gmail.com>
+Xi Wang <xi.wang@gmail.com>

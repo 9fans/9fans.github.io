@@ -1,0 +1,1667 @@
+# Note: the name listed next to a change sometimes
+# submitted the patch but more often just reported
+# the problem.
+
+# For entries more recent than January 30, 2008,
+# see the Mercurial repository history at 
+# http://hg.pdos.csail.mit.edu/hg/plan9/shortlog
+# (or if you have checked out the Mercurial tree, run hg view).
+
+January 30, 2008
+	acme: fix regexp match choice bug
+	devdraw: add F11 for full-screen toggle
+	rio: accomodate full-screen apps more gracefully
+	sam: fix regexp match choice bug
+
+January 28, 2008
+	xd: fix printing of 4-byte values on 64-bit machines (Sam Hopkins)
+
+January 12, 2008
+	delatex: reset lexer state at each beginning of file
+	ipso: do not flush factotum keys unless using factotum file
+	libdiskfs: fix ext2 directory reading bug (Mike Mammarella)
+	lp: move devices to devices.sample
+	rio: make full-screen work properly; add showevent
+	venti: fewer calls to gettimeofday
+	vmount: need to say -t nfs now on Linux
+
+January 10, 2008
+	acme: make STACK bigger for OS X (David Swasey)
+	dist,unix: use MKSHELL=$PLAN9/bin/rc (John DeGood)
+	libdraw: fix spinning event loop (David Bulkow)
+	libregexp: fix match choice bug
+
+December 7, 2007
+	acme, sam, libregexp: regexp fixes and reversions
+
+December 4, 2007
+	hoc: print exact floating point output
+	sam: turn off DEBUG logging (oops)
+	vbackup: fix uninitialized variable use in -i code
+
+November 28, 2007
+	acme: refresh window properly after Tab command (Fazlul Shahriar)
+
+November 27, 2007
+	.hgignore: ignore more
+	libdiskfs: make ext2 use little-endian disk format on big-endian machines (Joshua Wood)
+	acme: accept clicks between body and scroll bar (Axel Belinfante)
+	tpic: clean up better
+	upas/smtp: remove intermediate files
+	vbackup: add -i flag to avoid score prefetching (David Swasey)
+	venti: add debugging HTML form
+
+November 25, 2007
+	acme: avoid infinite loop on search in 8125-byte file (Roger Peppe)
+	lib9: avoid DIOCGMEDIASIZE on FreeBSD 4.11 (Rodrigo Readi)
+	mailfs: use root in imapcopylist (Richard Bilson)
+	moveplan9.files: add tmac/tmac.an (Tony Lainson)
+
+November 23, 2007
+	9pfuse: ignore Linux O_CLOEXEC flag (Michael Kaminsky)
+
+November 22, 2007
+	9pfuse: fix array bounds error (Michael Teichgräber)
+	vbackup: fix fsysopen error message (Joshua Wood)
+
+November 7, 2007
+	9fs: use -n to mount sources (Jeff Sickel),
+	9pfuse: MacFUSE moved again! (Jeff Sickel)
+
+November 6, 2007
+	.cvsignore: add 9pm (for old trees)
+	unvf: ignore case in Content-Transfer-Encoding: line.
+	validateattachment: reject malformed zip files
+
+November 5, 2007
+	building: use ar s flag to avoid ranlib (OS X)
+	diff: continue after i/o errors when diffing many files
+	factotum: silence gcc warning
+	getns: turn / into _ in $DISPLAY
+	libdiskfs: OS X linker fixes
+	libmach: OS X linker fixes
+	libmp: no text jump labels (OS X)
+	libthread: use our own swapcontext on OS X
+	mailfs: handle NIL body, add -r flag (Richard Bilson)
+
+November 4, 2007
+	man: document hg interface, fix CVS host name
+
+November 3, 2007
+	libthread: more OS X 10.5 changes (Jeff Sickel)
+
+October 31, 2007
+	venti: use 9ar, not ar (fixes Darwin build)
+
+October 30, 2007
+	libthread: OS X 10.5 tweaks (Jeff Sickel, Bakul Shah)
+
+October 29, 2007
+	grap: fclose, error context bug fixes (Doug Gwyn)
+	venti: fix sync deadlock, add /proc stub
+
+October 12, 2007
+	9p: add -n to disable authentication
+	9pserve: add -n to reject authentication
+	srv: add -n to reject authentication
+
+October 9, 2007
+	mount: ask for Unix test explicitly (Chris King)
+
+September 24-25, 2007
+	venti: many fixes, new index cache
+
+September 16, 2007
+	factotum: fix build error (Axel Belinfante)
+
+September 15, 2007
+	auxstats: use acpi for battery on Linux (Andrey Mirtchovski)
+
+September 13, 2007
+	factotum: implement 9pcr (of dubious utility)
+
+August 28, 2007
+	9pserve: fix infinite loop bug
+
+August 23, 2007
+	venti: add -s flag, bug fixes (Michael Kaminsky)
+
+August 22, 2007
+	9.rc: change to work with rc -e (Tony Lainson)
+	9pserve: fix races causing assert(c->nmsg == 0) to fail.
+	acme: fix warning memory leak (Michael Teichgräber)
+	libfmt: add fmtlocale to Makefile (Faried Nawaz)
+	libthread: simplify alt tracking, possibly fixing bug
+	mailfs: fix handling of FLAGS responses (Robert Vollmert)
+	unix ports: Linux x86-64 Makefiles (Ævar Arnfjörð Bjarmason)
+
+July 25, 2007
+	9pfuse: even more MacFUSE path changes
+
+June 29, 2007
+	dict: look in $dictpath for dictionaries
+
+June 24, 2007
+	mailfs: fix subject line in header file.
+
+June 23, 2007
+	mailfs: various IMAP bug fixes
+	Mail: add Get command, refresh at startup,
+		fix deleted messages bug
+	nedmail: refresh at startup, on i and y.
+
+June 20, 2007
+	9pfuse: add -a aname to get at sourcesdump
+
+June 19, 2007
+	9pfuse: the MacFUSE file locations changed again (Rob Pike)
+
+June 18, 2007
+	upas/marshal: remove debugging print
+	9pserve: ignore window resizes (fix really should be elsewhere)
+	libdiskfs: more HFS fixes (David Swasey)
+
+June 15, 2007
+	acme(1): fix Snarf bug, change Indent ON to apply to all windows.
+
+June 12, 2007
+	vcat: always write last block, to make disk correct size
+	vbackup: more OS X fixes, add -M flag
+	vbackup(8): document -M
+
+June 9, 2007
+	libregexp, sam, acme: day 1 bug in sam regexp code
+
+June 8, 2007
+	libdiskfs: add HFS resource fork support (David Swasey)
+
+June 5, 2007
+	ramfs: be less chatty
+
+June 3, 2007
+	vbackup: fix dotdot (David Swasey)
+
+May 29, 2007
+	libdiskfs: more HFS fixes (David Swasey)
+	
+May 28, 2007
+	libdiskfs: missing Bterm, make ext2 quieter,
+		add disk partitions, HFS code (David Swasey)
+
+May 21, 2007
+	libregexp: fix pointer comparison warning (Ramon de Vera)
+	test: fix
+	
+May 20, 2007
+	touch: print error if wstat fails
+	libc: use futimes on Linux to implement dirfwstat
+
+May 19, 2007
+	test: import from Plan 9
+
+May 18, 2007
+	libregexp: fix bug about leading ^ in regexp on multiline text (Roger Peppe)
+
+May 15, 2007
+	libc: new media size code for _p9dir on FreeBSD (Lou Kamenov)
+	acme(4): document tab width field in ctl file
+
+May 10, 2007
+	libc: more NaN fixes (rsc)
+		use device names in _p9dir for FreeBSD (Lou Kamenov)
+	acme, samterm: manage off-screen tick better (Bill Cheswick)
+
+May 8, 2007
+	9pfuse: better handling of create (Michael Teichgräber)	
+
+May 7, 2007
+	troff: fix age-old troff crash (Noel Hunt)
+
+May 5, 2007
+	page: fix troff input (Colin DeVilbiss)
+
+May 4, 2007
+	9pfuse: propagate offset in read and write (Michael Teichgräber)
+
+May 3, 2007
+	devdraw: fix UTF-8 snarf problems
+	grep: add undocumented -q flag (Rob Pike)
+	venti: more OS X compatibility
+
+May 2, 2007
+	snoopy: add support for reading pcap files
+	venti: debugging, more bug fixes
+
+May 1, 2007
+	libthread: use standard Sun context routines on SunOS
+	mount: use 9p not 9P as mount type (Michael Kaminsky)
+
+April 27, 2007
+	venti: yet more fixes
+
+April 25, 2007
+	acme: allow swap of column 0 with other columns
+
+April 24, 2007
+	libsunrpc: fix memory leak (Bakul Shah)
+	venti: more fixes
+
+April 22-23, 2007
+	venti: more fixes
+
+April 21, 2007
+	libhttpd: fix chunked-related bugs
+	htmlroff: warn about missing argument to \w
+	mk: fix for Unix port
+	venti: many fixes
+
+April 17, 2007
+	date: put up with longer timezones from strftime %Z (xav@chantry)
+	win: better dump string (Fazlul Shahriar)
+
+April 14, 2007
+	auxstats: better network stats (Jeff Sickel)
+
+April 13, 2007
+	grap: fix double-fclose (Gabi Diaz)
+
+April 12, 2007
+	auxstats: better memory stats on OS X (Jeff Sickel)
+
+April 7, 2007
+	libventi: dangling pointer race fix (Bakul Shah)
+	vbackup: complain loudly about vtwrite failure
+
+April 6, 2007
+	libc: new __isNaN (again)
+	9p(3): remove mention of threading
+
+April 5, 2007
+	libc: new __isNaN (Scott Schwartz)
+
+April 3, 2007
+	adict: fix comment (Arvindht Tamilmani)
+	plumb/basic: plumb all URLs
+	page: finish conversion to libthread (Tim Wiess)
+
+March 28, 2007
+	rc: keep path and PATH in sync again
+
+March 26, 2007
+	9l: cope with new gcc error syntax
+	acme: make :1-1 a valid address (Arvindh Tamilmani)
+	auxstats: fix OpenBSD nit (Chad Dougherty)
+	mk: 64-bit fixes, fix memory errors, fix wait (rsc)
+		better rc detection (Michael Teichgräber)
+		empty string interpolation (Michael Teichgräber)
+	page: import from Plan 9 (Kris Maglione)
+	venti: pad zmagic to better length
+	
+March 25, 2007
+	acme: make Load more faithful to Dump (Peter Canning)
+	adict: parse -d arg correctly (Fazlul Shahriar)
+	cb: Beof ctype bug (Michael Teichgräber)
+	dist/main.html: mention x86 OS X, x86-64 Linux & BSD
+	rc: cope with programs that leave fd in non-blocking mode (Tim Wiess)
+	statusbar: import from Plan 9 (Lou Kamenov)
+	troff2html: use plain char if no translation
+	libdiskfs: add big file support in ext2 (David Swasey)
+	venti/checkarenas: fix argument parsing (David Swasey)
+	vnfs: remove double-free (David Swasey)
+
+March 15, 2007
+	acme: redraw tags only as often as needed (Rob Pike)
+	auxclog: avoid libc conflict on OS X
+
+February 22, 2007
+	9l, devdraw, snarfer: -ldraw no longer implies -lX11
+
+February 11, 2007
+	acme: fix various memory errors
+
+January 29, 2007
+	ls: make ls -lF work
+	yacc: fix bug in yacc -a writing to wrong file
+
+January 27, 2007
+	acme(1): add paragraph about < | > (Rob Pike)
+
+January 25, 2007
+	vbackup: stop using vtgoodbye, which seems to hang
+		on some systems
+
+January 24, 2007
+	9pfuse: Google moved fusefs.kext; look in both places
+
+January 18, 2007
+	vac:
+		print + lines for new files in verbose mode
+		return value bug fixes
+		decode uid/gid strings as numbers when possible
+		(Michael Kaminsky)
+	mount, unmount, 9pfuse: Mac FUSE support! (Jeff Sickel)
+
+January 14, 2007
+	libmp: change mpdigit to uint - something is wrong if mpdigit is 64 bits
+
+January 12, 2007
+	sam: fix 15-year-old sam protocol bug
+
+December 9, 2006
+	lib/moveplan9.sh: avoid quoting bugs when /bin/sh is dash
+
+November 30, 2006
+	venti: stop printing EOk messages
+
+November 20, 2006
+	libdiskfs: add fsysclose for ext2 (Michael Kaminsky)
+
+November 6, 2006
+	venti: placate 64-bit gcc (William Josephson)
+
+November 5, 2006
+	libdraw: fix cpu-chewing loop in eread (Lu Xuxiao)
+	postscript: update README
+	fcall.h: fix GBIT32 macros to be 64-bit safe
+
+November 4, 2006
+	libdraw: fix cpu-chewing loop in eread (Lu Xuxiao)
+	
+November 2, 2006
+	lib9: fix sleep on OpenBSD 4 (Tim Wiess)
+
+October 19, 2006
+	vbackup, libventi: plug various memory leaks
+
+October 16, 2006
+	psfonts: use 9 psdownload (William Josephson)
+
+October 13, 2006
+	devdraw/mkwsysrules.sh: look for /usr/X11
+
+October 11, 2006
+	": remove prompt to avoid double-send problems
+		use all 9 commands (Karl Sackett)
+	9pfuse: allow for EPROTO being missing (Tim Wiess)
+	hget: print final update in -v mode
+	mk: avoid broken print (Gabriel Diaz)
+	seq: import Plan 9 seq (Anthony Martin)
+	tcs: avoid htmlroff hang, avoid nonstandard entity names (Michael Teichgräber)
+	lib9p: correct ref counting in walkfile (F. J. Ballesteros)
+
+September 18, 2006
+	venti: fix zblock bug
+
+September 17, 2006
+	lp: add generic, lpd stat backends
+
+August 29, 2006
+	libip: remove duplicate myetheraddr (William Josephson)
+	sam: avoid seg fault in new $samfile code
+
+August 24, 2006
+	sam: set $samfile during external commands
+
+August 1, 2006
+	9pfuse: break from read properly (Lou Kamenov)
+
+July 31, 2006
+	9pfuse: free fuse messages
+
+July 27, 2006
+	B: allow +line syntax to placate Unix tools
+	9pfuse: use correct O_LARGEFILE,
+		wait for mount before exiting
+	mount: quote the equals character
+
+July 26, 2006
+	9pfuse: FreeBSD fixes (Lou Kamenov)
+	
+July 24, 2006
+	INSTALL: add space after -v in awk command for OS X (Andrey Mirtchovski)
+
+July 23, 2006
+	INSTALL: print status updates
+	ed: clean up on kill signal, use /var/tmp for temp files
+	upas/vf: clean up temporary files
+
+July 22, 2006
+	9pfuse: new program - mount 9P via FUSE (!) (see 9pfuse(4))
+	mount, unmount: new shell scripts (see mount(1))
+	snarfer: fix nowsys build (Lou Kamenov)
+	troff2png: new shell script for htmlroff
+	vwhois: new shell script
+	lib9/dial: allow regular files in unix!file syntax
+	lib9/_p9dialparse: experiment: allow host:port and unadorned /tmp/ns/foo
+	lib9pclient: more low-level 9P functions
+	lib9/sendfd: don't die on eof in recvfd
+	libventi: fix cache bug (Eoghan Sherry)
+
+July 18, 2006
+	libventi: add vttimefmt
+	venti/srv: import latest fixes from Plan 9
+	vcat: remove incorrect check for Linux (Michael Kaminsky)
+	vmount: use port 2049 instead of 12049 (Michael Kaminsky)
+
+July 5, 2006
+	devdraw: fix opaque resize error (Bart Locanthi)
+	plumb/basic: allow _, -, and / in header file names
+
+July 4, 2006
+	libdraw: move USED to right place in drawclient.c (Arvindh Tamilmani)
+
+July 2, 2006
+	libbio: return number of bytes output in Bvprint, Bprint
+	bio(3): update Bprint description
+	print(3): update runeprint description
+
+June 30, 2006
+	mail/lib/rewrite: remove personal mail config (oops)
+
+June 29, 2006
+	acme/Mail, upas/nfs: use correct file names
+		for attachments (Lou Kamenov)
+	lib/acme.rc: remove extra acme in names (Arvindh Tamilmani)
+	devdraw(1): fix man page bugs
+	srv(4): fix typo (Serge Gagnon)
+
+June 28, 2006
+	9term: better cleanup on window delete
+
+June 27, 2006
+	rc: allow = in command line arguments
+
+June 26, 2006
+	9term: use getdents instead of getdirentries on NetBSD (Christoph Lohmann)
+
+June 25, 2006
+	9l: tweak to handle memdraw memlayer
+	sam: fix bug in duplicate file name detection
+	stack: accept process names as arguments
+	web: handle spaces in URLs
+	lib9/fmt: silence a gcc warning
+	lib9p, lib9pclient: clean up useless #includes, debugging prints
+	libacme: document in acme(3)
+	libdraw: split out libmemdraw, libmemlayer
+		move X11 code into separate server devdraw(1)
+		add <drawfcall.h>, drawfcall(3)
+	libmux: add non-blocking support
+		change muxthreads to muxprocs to match mux(3)
+	libplumb: add plumbunmount
+
+June 16, 2006
+	acme: root out unrooted paths
+
+June 14, 2006
+	libdiskfs: ext2, vnfs bug fixes (Steve VanDeBogart)
+
+June 12, 2006
+	libthread: fix Linux 2.4 proc leak
+	lib9, libthread: add p9usepwlibrary to avoid pw library in threaded
+		programs (can stack overflow)
+	sed: new flag -l
+
+June 7, 2006
+	libflate: make 64-bit safe
+	venti: call fmtlocaleinit in fmtzblock
+
+June 6, 2006
+	plumb/basic: use "9 page" instead of page
+
+June 4, 2006
+	libthread: run threaded programs in own note group when
+		not using tty (for threaddaemonize)
+	libthread: attempt at Sparc assembly
+
+May 30, 2006
+	lib9: use didtz correctly (Rob Pike)
+	graph: remove C99-isms
+
+May 27, 2006
+	lib9/fmt: silence warning in fltfmt
+	9pserve: use same uname that srv.c does
+	acme Mail: make srvname global
+	astro: use va_args for cosadd, sinadd (Michael Teichgräber)
+
+May 26, 2006
+	libbio, lib9pclient, libhttpd: bug fixes - call fmtlocaleinit in more places
+
+May 25, 2006
+	lib9/fmt: bug fixes - call fmtlocaleinit in more places
+
+May 24, 2006
+	libacme: new library
+	acme Mail: make compile (missing srvname)
+	upas/nfs: fix broken comments
+
+May 23, 2006
+	astro: make sure to use local fmod (Michael Teichgräber)
+
+May 22, 2006
+	lib9/fmt: new, commented fltfmt (rsc)
+	lib9/fmt: fixes and cleanups (Rob Pike, Google)
+
+May 21, 2006
+	lib9/fmt: fixes and cleanups (Rob Pike, Google)
+	libdraw: import Plan 9 changes to libmemdraw
+	graph: add colors argument (Gregor Asplund)
+	snoopy: fix icmp overflow
+	tapefs: import 64-bit changes from Plan 9
+	tcs: import from Plan 9
+	upas/spam: add spam filter (Lou Kamenov)
+	upas/libcommon: better locking in libcommon
+	upas/nfs: remove useless warning
+
+May 19, 2006
+	libdraw: rfork(RFNOTEG) in initdraw (Anselm Garbe)
+	htmlroff: break line on .ti (Michael Teichgräber)
+
+May 18, 2006
+	lib9: better time zone handling
+
+May 16, 2006
+	vbackup: use linux/version.h to determine Linux version
+
+May 12, 2006
+	libthread: avoid zombie when execvp fails
+
+May 10, 2006
+	libsunrpc: fix bug introduced in ext3 fixes (Serge Gannon)
+
+May 9, 2006
+	libdiskfs: set name length in FFS reader
+	fmt: correct double spacing bug (Rob Pike)
+	htmlroff: fix font size bug (Michael Techgräber)
+
+May 6, 2006
+	acme Mail: show full From name in main window
+	htmlroff: correct path to utfmap (Michael Teichgräber)
+	ndb: fix compilation problem on FreeBSD 4
+	sam: silence gcc warnings
+	tmac: import tmac.s from Plan 9
+
+May 5, 2006
+	libdiskfs, libsunrpc, libventi, vbackup: correct compile errors
+	acme: fix Edit | bug.
+
+May 4, 2006
+	libdiskfs: ext2: various off-by-one etc. fixes (Steve VanDeBogart)
+	libsunrpc: various odd Linux errors (Steve VanDeBogart)
+	libsunrpc: 32->64 array index sign extension bug (Lou Kamenov)
+	9pserve: be careful about message sizes (Andrey Mirtchovski)
+
+April 27, 2006
+	libdiskfs: ffs code: fix double free, silence chatty print (Steve VanDeBogart)
+
+April 21, 2006
+	map/libmap: can probably use system tan instead of writing our own
+	libmp, libthread, 9pserve, proof, sam: more OS X x86 fixes
+
+April 20, 2006
+	lib9p, libregexp, factotum, tar: silence 64-bit warnings (Andrey Mirtchovski)
+	libdraw, libmach, libmp, eqn, gzip, hoc, rio, tapefs, tbl, tpic: silence gcc warnings
+	libmp, libsec: use gcc -E instead of cpp on OS X [sic]; clean up assembly
+	libthread: start on OS X x86 version
+	lex, sam, samterm: import 64-bit safe version from Plan 9
+	venti: minor bug fixes (Mechiel Lukkien)
+
+April 19, 2006
+	lib9p: avoid double-lock (Lucho Ionkov)
+
+April 13, 2006
+	tpic: import
+
+April 12, 2006
+	validateattachment: add bogus zip file in virus
+	venti: minor bug fixes (Mechiel Lukkien)
+
+April 8, 2006
+	rc: add exitcode function; exit 123 exits with status 123 now.
+	upas/vf: import vf, create unvf, add mail/lib/validateattachment
+
+April 6, 2006
+	lookman: remove reference to /fd/2
+
+April 4, 2006
+	srv(4): add v9fs-based example
+	9c: give up on -ansi -pedantic with gcc
+	9l: look for libresolv.dylib on OS X (Anothy Sorace)
+	u.h: #defines to get strtoll on FreeBSD
+	libdraw: remove unused checksnarf
+	libthread: remove // comments in power-ucontext.h
+
+April 1, 2006
+	9c: use -ansi and -pedantic with gcc
+	everything: remove many post-C90-isms.
+	9term: add more matching characters
+	snarfer: avoid primary selection
+
+March 31, 2006
+	libdraw: fix X11 alpha bug
+	marshal: add UTF-in-subject code
+	tar: remove unnamed unions
+
+March 30, 2006
+	9l: fix egrep bug
+	9term: handle grey fonts correctly
+	ndb: remove unnamed unions
+	tar: import from Plan 9
+
+March 27, 2006
+	win: silence on Del
+
+March 26, 2006
+	img: add important flushdisplay call (Erik Quanstrom)
+
+March 23, 2006
+	snarfer: new program
+
+March 22, 2006
+	libmp/386: do not store precious data below stack pointer
+
+March 21, 2006
+	lib9p: call destroyfid in a more timely manner
+	acme: use $-free paths in Dump files (Peter Canning)
+	ssh-agent: fix various memory errors
+
+March 19, 2006
+	9pclient(3): document new functions
+	jpg, gif, etc.: resize window to fit image (Erik Quanstrom)
+	man: add htmlroff(1), mhtml(7)
+	page (source code): various cleanup, still not working
+	rc: fix lexing overflow bug
+	resample: import from Plan 9
+	sam: fix usage
+	upas/smtp: be more lenient about \r
+
+	new postscript fonts DejaVu and Luxi families
+	- postscript/font: new files
+	- postscript/troff: Unicode maps
+	- troff/font/devutf: descriptions and metrics
+	- tmac/tmac.an: use Luxi Sans in man pages
+	- tmac/tmac.s: .FP luxisans
+	- dist/troff: tools for importing new fonts
+	- troff2html: recognize new man fonts
+	- postscript/text2post: use DejaVu font
+	
+	new license for bitmap fonts from B&H
+	- font/luc, font/lucsans: new directory names
+	- font/^(luc lucm lucsans pelm)^/NOTICE: distribution terms
+	- font/LICENSE: pointers to new terms
+	- LICENSE: pointer to new terms
+	- font/lucsans/*.font: use new luc name
+	- font/shinonome/*.font: use new luc name
+	- dist/main.html: acknowledge B&H
+	- acme, scat, venti/srv: use new names
+
+March 12, 2006
+	libdraw: import new latin1 tables
+	label(1): fix typo (Georg Neis)
+
+March 9, 2006
+	libdraw: new X11 snarf type for Synergy (Paul LaLonde)
+		possible flushimage to fix jpg (Erik Quanstrom)
+
+March 7, 2006
+	acme Mail: seek to end of outgoing file
+
+March 5, 2006
+	libmp: mptouv bug fix
+
+March 3, 2006
+	lib9: change 9P2000.u Tcreate message
+	acme Mail: various updates
+	ndb: add subscript to tolower() call
+	upas: various cleanup
+	upas/nfs: use valid imap tag (Lou Kamenov)
+
+March 2, 2006
+	lib9: avoid redefining sched_yield (Christian Pfeil)
+
+February 28, 2006
+	libdraw: use Carbon pasteboard directly on OS X
+	upas/nfs: avoid reserved word 'isnumber'
+	snarfer: new command
+
+February 27, 2006
+	acme Mail: new Delmesg argument
+
+February 25, 2006
+	faces: locking mistakes (Erik Quanstrom)
+	nedmail: minor fixes (Erik Quanstrom)
+	tapefs: minor fixes (Erik Quanstrom)
+
+February 24, 2006
+	ndb: dns clean up (Erik Quanstrom)
+	mkhdr, etc: use install not install -c
+	tapefs: import from Plan 9 (Erik Quanstrom)
+
+February 23, 2006
+	upas: latest nfs
+
+February 22, 2006
+	fortunes: import from Plan 9
+
+February 21, 2006
+	acme: fix event buffer NUL-termination bug
+	htmlroff: import from Plan 9
+
+February 20, 2006
+	lib9: add "dns" service to _p9dialparse
+	ndb: dns clean up (Erik Quanstrom)
+
+February 19, 2006
+	wmail: use correct URL
+
+February 18, 2006
+	lib9: sizeof socket fixes in getnetconn
+	upas: handle 09 in nfs imap
+
+February 17, 2006
+	mpm: make build without libutf
+	ndb: dns clean up (Erik Quanstrom)
+	upas/nfs: add a.h
+
+February 16, 2006
+	libthread: more sparc64 changes
+
+February 15, 2006
+	jpg, etc: resize window to fit image (Erik Quanstrom)
+	ndb: dns clean up (Erik Quanstrom)
+	upas: add new upas/fs (in upas/nfs)
+
+February 14, 2006
+	lib9p: correct memory overflow bug
+	libmach: pointer conversion fixes
+	libthread: more sparc64 changes
+	9c: adapt to ever-changing gcc error messages
+	9p: seek backward in rdwr
+	acid: better names
+	faces: better lookup
+	factotum: silence pointer conversion warnings
+	fmt: fix fmt -j again
+	gview: bigger line buffer
+	mpm: better UTF support
+	ndb: add root servers, remove unused functions
+	rc: shut up about signals during scripts
+	snoopy: fixes
+	tcs: better labels in listing
+
+February 13, 2006
+	9l: more draw fixes, add -lresolv for ndb.
+
+February 12, 2006
+	lib9: add exitcode
+	libthread: add procwait
+	upas: more clean up
+	mail: add tree
+
+February 11, 2006
+	acme mail, faces: more changes
+	upas: clean up
+
+February 10, 2006
+	libthread: more sparc64 changes
+
+February 9, 2006
+	libmp, libthread: add sparc64
+	acme/mail: use new upas conventions
+	samterm: ignore SIGINT
+
+February 8, 2006
+	lib9pclient: add fsprint
+	acme: add another chord fix
+	postscript/font: add NOTICE about location of lucida fonts
+	upas: clean up
+
+February 7, 2006
+	libthread: add threadidle (experimental)
+
+February 6, 2006
+	acme: add chord fix from Plan 9
+	eqn: silence printf warnings
+
+February 5, 2006
+	lib9p: ignore doubled calls to respond; allow nil readstr (experimental)
+	libmach: silence warnings
+	libthread: add threadid
+	9p: add -n to ls; add rm and create
+
+February 4, 2006
+	eqn: silence various warnings about printf formats
+	srv: put in new note group
+
+February 2, 2006
+	lib9: attempt at more portable date handling
+	9pserve: correct offsets in 9P2000.u -> 9P2000 conversion
+	ndb/dns: fix fid handling
+
+January 30, 2006
+	lib9pclient: add <thread.h> to 9pclient(3)
+
+January 29, 2006
+	libndb: remove dependence on arpa headers
+
+January 28, 2006
+	libdraw: allow freeimage(0) when screen==0
+
+January 27, 2006
+	libndb: add dnsquery implemented via C library resolver
+	various: OpenBSD fixes
+
+January 26, 2006
+	lib9pclient: add fsremove, fscreate, fsaccess
+	lib9p: handle 9P2000.u
+	libauth: handle auth_freerpc(nil).
+	libbio: document return value of Bprint,  Bvprint
+	libdraw: nowsys fixes (Lou Kamenov)
+	9l: don't link with X11 if nowsys
+	auxstats: avoid nonportable vm_swapusage on OS X
+	rio: better build rules
+
+January 18, 2006
+	9term: ignore SIGHUP
+	tcs: add more character sets
+
+January 18, 2006
+	fmt: fix -j implementation
+	psv: add fonts to GS_FONTPATH
+
+January 17, 2006
+	9term: start a "login" shell
+	
+January 16, 2006
+	include/fcall.h: sign fix
+
+January 11, 2006
+	libframe: stop eating the edge of the frame
+	acme: various cleanup
+	
+January 7, 2006
+	lib9: try to accomodate FreeBSD 5 disk device numbers
+	vbackup: use bigger block size
+
+January 6, 2006
+	9p: add "con" verb
+	lib9, eqn: use inttypes.h instead of not-so-stdint.h
+
+December 31, 2005
+	libip: add routines for fetching ethernet, ip interfaces
+
+December 30, 2005
+	libhtml: import changes from Plan 9
+	libmp: fix shifts, casts in mptov, mptouv
+	auxstats: FreeBSD tweak
+	eqn, grap: more 64-bit pointer fixes (Taj Khattra)
+	hget: attempt at making ftp work
+	install: split into two phases, document new installation
+	snoopy: add filter.y
+	vbackup: accomodate FreeBSD 6
+	vnfs: accept units on arguments
+
+December 29, 2005
+	9term: fix paste in hold mode, use STACK
+	eqn, grap, lex, pic, troff: 64-bit fixes
+	page: no more case problems
+	lib9: correct array size in convD2M (Marco Gaddoni)
+		set qid.vers in _p9dir (Erik Quanstrom)
+		fmt 64-bit fixes - inttypes.h and uintptr.
+	libdraw: avoid nil freeimage (Lou Kamenov)
+		do not trust gcc to do nrv optimization (Taj Khattra)
+	libmp: add mpdigit cast (Taj Khattra)
+	libthread: more OpenBSD fixes (Tim Wiess)
+	libventi: consistent uvlong vs u64int
+		
+December 26, 2005
+	ndb: add dns
+
+December 25, 2005
+	lib9: allow broadcast address in dial
+	libip: add alternate ethernet format in eipfmt
+	libndb: allow relative paths in database stanza
+	dhcpd: import from Plan 9
+	snoopy: import from Plan 9
+	tcs: add EILSEQ on OS X
+
+December 21, 2005
+	acme: turn on auto-expanding window tags by default
+
+December 18, 2005
+	yesterday: fix from Plan 9
+
+December 17, 2005
+	tcs: don't redeclare errno
+
+December 16, 2005
+	dist/moveplan9.files: more (Rafal Sulejman, Erik Quanstrom)
+	acme: integrate big tags into main branch (Paul Lalonde)
+	libdiskfs: avoid bad names on OS X
+
+December 15, 2005
+	grap: remove getpid declaration (Bengt Kleberg)
+
+December 14, 2005
+	dist/isum.awk: cope with Solaris
+
+November 29, 2005
+	9term: set initial window size correctly
+	acidtypes, libmach: more demangling fixes
+
+November 28, 2005
+	add install(1) as install.txt, add README
+	make INSTALL less chatty
+	remove Makefiles
+	acidtypes, libmach: demangling fixes
+	g: add .cs files (C#)
+
+November 27, 2005
+	libmach: name mangling, process control
+	9c, 9l: shut up OpenBSD (Geoff Collyer)
+	9term, vbackup: OS X fixes
+	acid: name mangling, process control
+	acidtypes: name mangling, process control
+	auxstats: FreeBSD 6 fix (Lou Kamenov)
+	upas/fs: correct imap service name, use role=client
+
+November 26, 2005
+	9term: add button 3 menu, fix \r
+	include: move utf.h, fmt.h from u.h to libc.h
+	dist: print summary w/ errors during INSTALL
+
+November 25, 2005
+	root: add Makefile and configure for the blind,
+		rename NOTES to README	
+
+November 21, 2005
+	lib9, 9pserve, vac: 9P2000.u fixes (Lucho Ionkov)
+
+November 15, 2005
+	libdraw: more X11 fixes
+	libc.h: sched_yield NetBSD tweak (Anselm Garbe)
+
+November 12, 2005
+	faces: fix face location
+	jpg, strings: remove references to /fd/
+
+November 12, 2005
+	various: X11 fixes
+
+November 11, 2005
+	9term: more fixes (Tim Wiess)
+
+November 10, 2005
+	9term: handle \r, other fixes (Tim Wiess)
+	auxstats: new Darwin tweaks
+
+November 9, 2005
+	libthread: fix OS X context switch code
+
+November 7, 2005
+	vbackup: various fixes
+
+November 6, 2005
+	9term: new port directly from rio
+	include/libc.h: p9syslog, not syslog in varargck
+	libauthsrv: close fd, memory leak in authdial
+	libdraw: X11 debugging helps
+	lib9: add getcallerpc-arm (Ron Minnich)
+	auxstats: Fix FreeBSD 6 build (William Josephson)
+
+November 4, 2005
+	stats: add -C to argchars (Lou Kamenov)
+	libthread: ARM fixes (Ron Minnich), getcontext fixes
+
+November 2, 2005
+	vbackup: longer timeout on BSD mount
+	libthread: Linux ARM fixes (Ron Minnich)
+
+November 1, 2005
+	various: ctype sign fixes (Tom Miller)
+	libfmt: avoid overflow on %f
+	libthread: Linux ARM fixes (Ron Minnich), FreeBSD 5 fixes
+	libventi: various cleanup
+
+October 31, 2005
+	acme: preparation for multiline tags (Paul Lalonde)
+	bc: 64-bit safe (Taj Khattra)
+	faces: initial port (John Cummings)
+	stats: add -F option (Lou Kamenov)
+	various: ctype sign fixes (Tom Miller)
+
+October 30, 2005
+	auxstats: more OS X fixes (Jeff Sickel)	
+
+October 29, 2005
+	9p: clunk fids before exiting
+	mk: handle MKSHELL type correctly
+	upas, acme mail: add initial port (John Cummings)
+	vbackup: silence compiler warnings
+	venti: silence compiler warnings
+	lib9: remove reference to ffork
+		print correct file name in truerand error
+	libdisk: add Disk routines
+	libdiskfs: silence compiler warnings
+	libframe: add noredraw flag
+	libhtml: many fixes
+	libsunrpc: silence compiler warnings
+
+October 18, 2005
+	9l: add autoframework (like autolib) for OS X (Jeff Sickel)
+	page: use "9 file" always
+	ps, psu: narrower display
+	stats: better OS X support (Jeff Sickel)
+
+October 17, 2005
+	cb: undef old type macros before redefining.
+
+October 5, 2005
+	stats: better OS X support (Jeff Sickel) 
+
+September 30, 2005
+	libhtml: more &names and numbers (Erik Quanstrom)
+
+September 29, 2005
+	libc.h: add #pragmas for varargck, #ifdef'ed out.
+
+September 26, 2005
+	libthread: print thread info on SIGQUIT, SIGINFO, logging
+	acme: add more thread names
+
+September 21, 2005
+	9term: fix SunOS typo (Bengt Kleberg, glaive)
+
+September 19, 2005
+	libhtml: more &names (Erik Quanstrom)
+
+September 19, 2005
+	lib9/truerand: OpenBSD lets you open /dev/random
+		but not read it! (Chad Dougherty, Mechiel Lukkien)
+
+September 15, 2005
+	libdraw/x11-event: Ignore unexpected events (Rob Pike)
+	jpg: do not revert to CMAP for second file (Rob Pike)
+
+September 13, 2005
+	9pserve: signedness bug
+
+September 12, 2005
+	dist: various attempts at Debian packaging
+	lib/moveplan9.sh: allow specification of old directory
+	Getdir: interpret tags with $ in them
+	mpm: use g++ as LD, add tmac.pm to tmac directory
+	include/libc.h, fcall.h: add 9P2000.u extensions
+	9pserve: add 9P2000.u extensions
+	vac: add 9P2000.u extensions, signedness bug
+
+September 9, 2005
+	lc: add -p like man page says
+	various: insert (uchar) casts for ctype arguments
+		for broken NetBSD.
+
+September 4, 2005
+	dist/main.html: note x86 OpenBSD
+
+August 31, 2005
+	file: spell IA-64 correctly (Zoltan Jarai)
+
+August 30, 2005
+	dist/debian, dist/pkg: start playing with building packages
+	dist/isum: ignore 'loop not entered at top' (SunOS cc)
+	dist/ss.html: add screen shots
+	dist/unix.html: update VN license summary
+	9l: no need to handle OpenBSD specially
+	file: handle #! scripts, ELF better
+	font/lucidasans/bold*unicode.7.font: more subfonts
+	g: search .pl, .cgi
+	hget: add hget(1)
+	lp: add preliminary lp (not expected to work yet)
+	src: use Plan 9 file(1)
+
+August 12, 2005
+	lib/moveplan9.files: add bin/stack
+	include/libc.h: use DM constants from v9fs, add DMTMP
+	libthread: add Linux-power-asm.s
+	cb: add
+
+August 11, 2005
+	various: silence warnings
+	unix/*: note new BSD license from Vita Nuova
+	libdiskfs: add UFS2 support
+	libthread: add NetBSD power assembly
+	9term: send tty's current interrupt character on DEL keystroke
+	rc: add limited rfork command, make sure errors propagate
+	venti(8): document bloom line in config
+	vftp: add get command
+	vnfs: use strtoull for arguments instead of atoi.
+
+August 10, 2005
+	src/cmd/mkfile: do not build lp yet
+	dist/addsrclinks, fixurls: use /usr/bin/env perl to find perl (NetBSD)
+	lib9/_p9dir: avoid 32-bit overflow in old Linux size calculation
+	lib9/truerand: use /dev/srandom on OpenBSD
+	libthread: annoying wrappers for OpenBSD
+	libmp: different assembly comments for old GNU as
+	9p: set exit status
+	file: add, appease gcc
+	getflags: added
+	mk: decide mtime-related race conservatively
+	postscript/text2post: added
+	rcmain: make fn cd safer for use with rc -e (in mk)
+	rio: turn off debugging prints, remove 9wm.man, fixes from Andrey
+	vbackup: NetBSD fixes for mount-BSD.c
+	venti/srv: add <sys/stat.h> header for FreeBSD
+
+July 28, 2005
+	acme: subtle winunlock bug fix
+	libdiskfs: fix double, triple indirect block reading for FFS
+	vftp: new program
+	vbackup: coalesce mount-*BSD files.
+
+July 27, 2005
+	include/u.h, src/libthread/thread.c: SunOS 10 attempt
+	libdraw: less graceful, less raceful shutdown
+	libthread: avoid C library races during threadexitsall
+	awd: cannot use hostname -s on SunOS
+	9pserve, srv: use correct type for NOFID
+
+July 26, 2005
+	various: fixes for SunOS from Bengt Kleberg
+
+July 25, 2005
+	vac: avoid infinite redirection while sniffing type of archive
+
+July 24, 2005
+	venti: many minor changes, updates
+	libdraw/init.c: start with white screen instead of black
+	man: update venti-fcall(3), venti(8), venti-fmt(8)
+
+July 22, 2005
+	lib/moveplan9.sh: better error handling if cleanname doesn't exist/work.
+	9c: do not try to process stdout, so that 9c -E works on gcc machines.
+	tar: remove anonymous structs/unions.
+	vbackup: bigger stack (oops)
+
+July 19-22, 2005
+	add OpenBSD x86 support.  many thanks to Tim Wiess.
+	
+July 21, 2005
+	9term, win: ignore window size change signals while forking shell
+	dist: update main.html
+	
+July 20, 2005
+	src/mkfile: unbugger libhttpd for venti
+	
+July 19, 2005
+	dist/*: use "9 rc" instead of just rc to avoid getting
+		/usr/local/bin/rc on systems with byron's rc installed.
+		(matters because of byron's gratuitous "if not" vs. "else" change.)
+	include/u.h: include <inttypes.h> to try to get fixed-size types
+	venti: update part.c to work on freebsd
+	vmount: default to vmount0, do not try to add udp! and !12049.
+	man: update intro(1), hist(1), venti-file(3)
+	various: pedantry from gcc 4.0, most of it unnecessary
+
+July 18, 2005
+	dict/README: change to use hget
+	page: handle troff intermediate output
+	man: add hget(1), keyboard(7), and listen1(8); edit vbackup(8)
+	src/cmd/mkfile: mark secstore as buggered, it's in auth/secstore now
+		(cvs isn't good at making sure directories go away)
+		unbugger venti
+	venti: fix usage message
+
+July 17, 2005
+	9term: better(?) CR handling
+	post9p: announce to networks
+	vmount: change default handle
+
+July 15, 2005
+	dist/isum: work around grep stupidity
+
+July 14, 2005
+	rc: ignore window size change signals
+	man: remove venti.conf(7) -- now in venti(8)
+
+July 12-13, 2005
+	various: placate gcc-4.0 on OS X.
+	src/Makefile: try to use system binaries in path
+	src/mkhdr: remove X11 guess
+	src/mkdirs: add $MKFLAGS to recursive mk
+	src/mkmk.sh: update
+	lib9/announce: cannot use unix as variable name
+	lib9/malloc: locks around all the malloc routines.
+		old Linux libc cannot be trusted.  maybe other
+		systems.  paranoia rules the day.
+	lib9/sendfd: add macros for systems without (Sun)
+	lib9pclient: better error messages
+	libdiskfs: new library
+	libdraw: crash less when display == nil.
+		look in more places for X11.
+		make nowsys-mouse and nowsys-keyboard compile.
+		handle freeing of subfonts correctly.
+		drop _x.black and _x.white.
+	libmux: better error messages
+	libsunrpc: remove some c++ comments
+	libventi: new and improved, now with manual pages
+	9l: silence nm errors during autolib
+	9term: hold mode even in raw mode (suggested by James Robinson)
+	acme: various needed casts
+		exit gracefully on error
+	dict: no more wide characters
+	diff: use +/- instead of </> in diff -c
+	grap: remove unused symtab
+	hget: remove [] in array initializers 
+	listen1: added
+	ls: cannot use global named "dirbuf"
+	man: sort pages correctly, handle troff correctly.
+	nroff: invoke plan 9 troff
+	rc: sun stupidity
+	rio: clean up code, attempt at keyboard-based window switching
+	ssh-agent: needed cast
+	vac: fix call to vtfilecreate.
+	vbackup: new file system backup program
+		with dump-like access interface.
+	venti: it returns, now with manual pages
+	
+
+June 22, 2005
+	libmach/dwarfdump: avoid bogus <nil> in path (thanks to William Josephson)
+
+May 19, 2005
+	lib9/encodefmt: handle precision==0 better
+	libsunrpc: various fixes
+	rc: set $PLAN9 at startup if necessary
+
+May 12, 2005
+	font: add new japanese fonts
+	include/sunrpc.h: add autolib
+	include/utf.h: change Runeerror
+	libsec/386: change labels in assembly to get
+		better function name boundaries in oprofile
+	libventi: add vtlognames
+	
+May 7, 2005
+	various: remove long character constants.
+	various: use full prototypes everywhere
+	dist/checkman.awk: ignore sftp(1)
+	include/u.h: preliminary OS X Tiger changes
+	lib9/_p9dialparse: set p9unix always
+	libip/udp: try to do better with headers
+	srv: check return value of auth_proxy correctly
+	web: fixes (thanks to Scott Schwartz)
+	
+
+May 2, 2005
+	libdraw/x11-itrans: correct snarf race (reported by Karl Sackett)
+	acme: row load/dump consistency fix (thanks to Peter Canning)
+	include/u.h: workaround for old gcc
+
+May 1, 2005
+	lib9/await: Mac OS X Tiger fixes (thanks to Jeff Sickel)
+	lib9/sendfd: fix alignment bug (thanks to Tim Wiess)
+	libdraw/latin1: more smiley face alt sequences (thanks to Erik Quanstrom)
+	9term: unicode in identifiers for double-click (thanks to Erik Quanstrom)
+	scat: various fixes to use standard C (thanks to Roland Kaufmann)
+	add OpenBSD/PowerPC support (thanks to Tim Wiess)
+
+March 28, 2005
+	open(3): note that open and create are macros
+	add NetBSD support (thanks to Christoph Lohmann)
+
+March 24, 2005
+	netfiles: robustness fixes
+	sftpcache: robustness fixes
+
+March 23, 2005
+	acme: fix Edit filename bug, elogapply warnings
+
+March 21, 2005
+	ndb/local: fix name of bell labs auth domain
+	9fs: use srv -a
+	9pserve: add -A, -M options
+	netfiles: work harder to generate expansion texts
+		add sftpcache
+	srv: add -a option
+
+March 20, 2005
+	acme: fix q1 computation bug in expandfile
+	factotum: fix race
+	netfiles: use sftp -b /dev/stdin, various fixes
+	
+
+March 18, 2005
+	cmd/mkfile: explicitly ignore deleted factotum (now in auth)
+	dist/addsrclinks: bug fix
+	dist/isum: ignore cp in netfiles directory
+	dist/main.html: add link to 9pm
+	font: add boldtypunicode.7.font
+	man: update INDEX files
+	tmac/tmac.anhtml: set HT to 1 when generating HTML
+	lib9: better errors for create and open when lock fails
+		notify: ignore TTIN, TTOU
+	libdraw: init with window atop image
+	libplumb: tweaks
+	libthread: add threaddata, fix Alt declaration
+		document NPTL brokenness
+		ignore TSTP, TTIN, TTOU
+	9c, 9l: even quieter
+	9fs: new command
+	9p: add ls command
+	9pserve: ignore tstp; consult $verbose9pserve
+	acid: use %#x in acid/port
+	acme: typing bug fix, ^A, ^E
+	colors: add flushimage
+	cvs: document how to make cvs -q the default
+	E: print file name in case plumb fails
+	g: allow -- to end options
+		search more file extensions
+	hget: new command (no ftp support)
+	Netfiles: new command
+	plumb: add -9 for debugging
+	png: better png reading
+	rand: document what to do if SunOS missing /dev/random
+	rc: lex bug
+		do not print on sigpipe
+		try harder to background async jobs
+		allow rc -l without -i
+	sam: bug fix from plan 9
+	samterm: ^A, ^E
+		small cleanup
+	ssh-agent: change to use fixed name
+	src: bug fix
+	srv: new command
+	tcs: silence gcc warning
+
+March 15, 2005
+	u.h: change nil to unadorned 0 on sunos
+	lib9pclient: fix ptr arith in fswrite
+	libdraw: fix syntax errors in nowsys*.c
+	libauth, libsunrpc: do not set PLAN9 in mkfile
+	9term: add signal.h for sunos
+	factotum: drop .= initializers for sunos
+	vac: tweak for sunos
+
+March 14, 2005
+	acme: add $foo names as -$
+
+March 9, 2005
+	tcs: bring in plan 9 code
+
+March 8, 2005
+	fortunes: more fortunes
+
+March 6, 2005
+	u, u.rc: new script
+	fortunes: more fortunes
+
+March 5, 2005
+	win: don't give up when it gets confused
+
+March 4, 2005
+	lib9p: make chatty9p an extern int (mac)
+
+March 1, 2005
+	9pclient: preserve error in fsopen
+		handle offset correctly in fswrite
+
+February 28, 2005
+	rcmain: extra awd to initialize 9term
+	psv: use new --options when necessary
+
+February 22, 2005
+	makefiles: set $OBJTYPE to x86_64 on FreeBSD amd64 systems
+
+February 21, 2005
+	unzip: create paths as necessary
+
+February 20, 2005
+	vac: fix from lucho
+
+February 18, 2005
+	vac: fix -d from lucho
+
+February 17, 2005
+	yacc: silence yyerrlab warning
+
+February 16, 2005
+	libhttpd: make hwrite work with chunked encoding
+	libthread: debugging assertion
+	9c: be even quieter
+	venti: add acid/venti -  routines to dump log buffers
+
+February 15, 2005
+	draw.h: add ABGR32
+	venti.h: add ventilogging, vtlognames
+	libauth: close afid in auth_freerpc
+	libthread: fix unlikely qlock bug
+	acme: ignore tty nodes; still not 100% right
+	png: add alpha writing support
+	dist: new glenda in circle logo
+
+February 14, 2005
+	add source links to man pages
+	yacc: make yaccpars more like yaccpar
+		add optional argument to yyparse
+
+February 13, 2005
+	lib9: add readcons(1)
+		add laddr, raddr to Netconninfo (see dial(3))
+		support local address in dial for tcp and udp
+		bug fix in fcallfmt
+	libauth: allow parseattr(nil)
+	libmp: add %lB for lower case
+	libsec: add x509 dsa routines
+	libthread: work around stupid linux 2.6 ps-gdb-/proc bug
+	libventi: new logging, use new nci
+	auth: move secstore, factotum into auth directory
+		add asn1, dsa, rsa pem routines
+	factotum: add rsa signatures, dsa, pass, wep, httpdigest, ...
+		more info in man page
+	rc: bug fix regarding /dev/stdin from Christoph Lohmann
+	secstore: add ipso
+	secstored: avoid zombie army of evil
+	ssh-agent: add
+	9p: bigger buffers, add rdwr verb
+	9c: more silencing of gcc
+	create log, secstore directories in $PLAN9
+
+February 12, 2005
+	9c: silence gcc chatter
+
+February 11, 2005
+	dist: fix regexp license in unix.html
+		add link to license on main page
+	lib9: add list of plan 9 services to _p9dialparse,
+		add OAPPEND for create and open,
+		format \0 as printable in fcallfmt,
+		add netcrypt, readcons, syslog
+	lib9p: fix tpost, call srv->start
+	lib9pclient: add chatty9pclient
+	libauth: add fsamount, nsamount, authdial ndb.
+	libmach: use %#x explicitly
+	libndb: add
+	libsec: use new auth_allocrpc in tlshand
+	libthread: add threadgetname prototype
+	9l: fix libsec/lib9 cycle thanks to netcrypt
+	9p: use nsamount, fsamount; add write -l
+	9pserve: quieter, auth bug fix
+	9term: treat _ as word character
+	acid: do not set %# implicitly anymore
+		add simple pthread support via acid code
+		set corpid
+	acme: bug fix in Tauth handler
+	dial: send input to net instead of back to 0
+	dict: ahd path
+	factotum: make it run and work, add secstore
+		remove top-level factotum directory
+	rc: set p->pid=-1 explicitly to avoid wait problems
+	psv: add print buttons
+	secstored, secuser: add
+	tar: add
+
+February 10, 2005
+	libmach: abortive attempt at pthread support via libthread_db
+
+February 8, 2005
+	lib9: don't fiddle with signal masks by default
+		fix typo in notify(3)
+		add DMSYMLINK etc. bits
+		add crypt (lucho)
+	lib9p*: many fixes (lucho)
+	libauth*: many fixes (lucho)
+	libdraw: avoid yet another X11 stack overflow in cursorset
+		(FC3, reported by Abhey Shah)
+	libhttpd: do not assign va_list in hio.c (lucho)
+	libthread: remove debugging >xx in mkfile
+	9l: add FreeBSD 5.2 support w/ -lkse (Sah)
+	9l, 9term: patches to run on SunOS 5.8 from Axel B.
+	9term: try to handle DEL better
+		document bash/readline brokenness in 9term(1) BUGS
+		fix paste bug
+	vac: avoid special files
+
+February 3, 2005
+	libthread: silence gcc warning in pthread.c
+
+February 2, 2005
+	INSTALL: add use of LOCAL.config
+	libdraw: add nowsys implementation
+	mk: silence archive warning if ~ $file *.a.
+
+February 1, 2005
+	lc: use 9 mc not linux mc.
+
+January 31, 2005
+	db(1): add stack to name list
+
+January 30, 2005
+	cmd/mkfile: lex files
+	unix: add ranlib to unix makefiles for mac
+	libmux: fix non-zero mintag handling (thanks to lucho)
+	libthread: osprocid now int not uint (can be -1)
+	9term, awd, win: handle sysnames in labels
+	acme: document -a, Indent
+		add errors file
+	core: do not readdir files (thanks to zoltan jarai)
+	delatex: make it better
+	diff: document -a
+	factotum: silence chap warning
+	sam: chording disabled - causes lockups
+	topng: use simpler graphics format
+
+January 29, 2005
+	diff: add -a
+
+January 28, 2005
+	lib9pclient: zero offset, mode, qid on fid alloc.
+
+January 27, 2005
+	sky: remove here; add here.sample instead, so that
+		local changes to here are not clobbered.
+	acme: remove print, fix addr handling, check fid in use.
+		fix rowdump bug; cope with unix ORCLOSE
+	sam: add -a (autoindent) and chording
+
+January 26, 2005
+	diff: add -c
+
+January 25, 2005
+	libdraw: finally fix winsize @x,y handling
+
+January 23, 2005
+	dist: bug fixes to download.html and unix.html
+
+January 23, 2005
+	suse X bug - need bigger stacks
+	add searchpath(3)
+	work on libmach + elf core dumps + threads + registers
+	change db to use libmach cmdline interface
+	add stack (see db(1))
+	s/ulong/unsigned long/ for unix mk; other makefile bugs
+	rename scheduler to procscheduler in libthread so libmach can identify it
+	add isum to install(1)
+	work around searchpath in rc; add to intro(1)
+	volatile int quiet in db
+
+January 22, 2005
+	redirect debugging output of isnptl in INSTALL
+	set SYSVERSION to 2.6.x instead of 2.6 in linux INSTALL
+		to appease other pieces of the build.
+
+January 21, 2005
+	s/mdir/mkdir/ in unix regexp makefile
+	better isnptl
+	arg count in auxclog
+
+January 20, 2005
+	add core(1) man page
+	fix exit race in samterm
+
+January 19, 2005
+	continued x86-64 support
+	bug fix to 9c on sunos - __${s}__ not __$s__
+	avoid c99 extensions in cmapcube and vacfs
+	do not name functions shutdown on mac os x
+	add dist/isum
+	include errno.h in eqn/e.h
+	use 9 yacc to build rc
+
+January 18, 2005
+	avoid closing -1 in lib9pclient
+	continued x86-64 support
+
+January 18, 2005
+	make src/libthread/pthread.c compile
+	add threadspawnl, fsseek.
+	add link to web interface in cvs(1).
+	remove hard-coded path in fixurls
+	preliminary x86-64 support
+	explain nptl in src/libthread/README.Linux
+	libventi bug fixes
+	add threadgetname to libthread
+	bigger chunking in sort(1)
+	bug fix in acid
+	add LOCAL.INSTALL
+	extract command line from elf cores
+	initial core(1) command
+	fix race in libthread proccreate
+	do not use -Wl,-rpath on Darwin
+	do not translate man pages in lib/moveplan9.sh
+
+January 17, 2005
+	thread.c tries to warn about bad pthreads on Linux
+	vacfs posts vacfs.basename
+	fix nil deref in acid
+	change 9c, 9l to detect nptl properly (not relying on running kernel version)
+	change psu to use 9 ps
+	do not call exits in threaded programs
+
+January 16, 2005
+	bring fds from daemonize down to high 20s from high 90s for NetBSD.
+	use -Wl,-rpath in gcc in 9l for NetBSD.
+	make vacfs work (patch from Lucho)
+	make vacfs use EARGF
+	add note about signal masks in TODO
+		(Taj Khattra notes that acme doesn't ^Z well)
+	add note about _x.black and _x.white in TODO
+		(noted by David Leimbach)
+	remove unixisms from dist/fixurls
+	fix bugs in dist/main.html
+	noteenable, notedisable, notifyon, notifyoff return old setting.
+	update manual indices
+	troff2html handles section (9p).
+	add note in libthread/thread.c about stack-based pthreads
+	make tmac.an's .HR better
+	tweaks to unix mkfiles
+
+January 15, 2005
+	tcolors now uses threadexitsall
+	syminit bug in mk.  (why does syminit exist?)
+	
+January 14, 2005
+	man page updates - fixurls, manweb, rio.1, cvs.1, 0intro.1.
+	add note about makecontext to TODO file (noted by Axel)
+
+January 12, 2005
+	First fully-documented release.
+

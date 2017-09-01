@@ -1,0 +1,216 @@
+.TH DICT 1
+.SH NAME
+dict, adict \- dictionary browser
+.SH SYNOPSIS
+.B dict
+[
+.B -k
+]
+[
+.B -d
+.I dictname
+]
+[
+.B -c
+.I command
+]
+[
+.I pattern
+]
+.B adict
+[
+.B -d
+.I dictname
+]
+[
+.I pattern
+]
+.SH DESCRIPTION
+.I Dict
+is a dictionary browser.
+If a
+.I pattern
+is given on the command line,
+.I dict
+prints all matching entries;
+otherwise it repeatedly accepts and executes commands.
+The options are
+.TF -d\ \fIdictname\fP
+.TP
+.BI -d " dictname"
+Use the given dictionary.
+A list of available dictionaries is printed by option
+.BR -d? .
+The default is the first dictionary on the list that is
+installed on the system.
+.TP
+.BI -c " command"
+Execute one command and quit.
+The command syntax is described below.
+.TP
+.B -k
+Print a pronunciation key.
+.PD
+.PP
+Patterns are regular expressions (see
+.IR regexp (7)),
+with an implicit leading
+.L ^
+and trailing
+.LR $ .
+Patterns are matched against an index of headwords and variants,
+to form a `match set'.
+By default, both patterns and the index are folded:
+upper case characters are mapped into their lower case equivalents,
+and Latin accented characters are mapped into their non-accented
+equivalents.
+In interactive mode, there is always a `current match set'
+and a `current entry' within the match set.
+Commands can change either or both, as well as print the entries
+or information about them.
+.PP
+Commands have an address followed by a command letter.
+Addresses have the form:
+.TF /\fIre\fP/.\fIn\fP
+.TP
+.BI / re /
+Set the match set to all entries matching the regular expression
+.IR re ,
+sorted in dictionary order.
+Set the current entry to the first of the match set.
+.TP
+.BI ! re !
+Like
+.BI / re /
+but use exact matching, i.e., without case and accent folding.
+.TP
+.I n
+An integer
+.I n
+means change the current entry to the
+.IR n th
+of the current match set.
+.TP
+.BI # n
+The integer
+.I n
+is an absolute byte offset into the raw dictionary.
+(See the
+.B A
+command, below.)
+.TP
+.IB addr +
+After setting the match set and current entry according to
+.IR addr ,
+change the match set and current entry to be the next entry
+in the dictionary (not necessarily in the match set) after
+the current entry.
+.TP
+.IB addr -
+Like
+.IB addr +
+but go to previous dictionary entry.
+.PD
+.PP
+The command letters come in pairs: a lower case and the
+corresponding upper case letter.
+The lower case version prints something about the current
+entry only, and advances the current entry to the next
+in the match set (wrapping around to the beginning after
+the last).
+The upper case version prints something about all of the
+match set and resets the current entry to the beginning of
+the set.
+.TF \fLa,A\fP
+.TP
+.BR p , P
+Print the whole entry.
+.TP
+.BR h , H
+Print only the headword(s) of the entry.
+.TP
+.BR a , A
+Print the dictionary byte offset of the entry.
+.TP
+.BR r , R
+Print the whole entry in raw format (without translating
+special characters, etc.).
+.PD
+.PP
+If no command letter is given for the first command,
+.B H
+is assumed.
+After an
+.BR H ,
+the default command is
+.BR p .
+Otherwise, the default command is the previous command.
+.PP
+.I Dict
+searches for dictionaries in the directory named by
+.B $dictpath 
+(default
+.BR \*9/dict ).
+.PP
+.I Adict
+is a dictionary browser for
+.IR acme (1).
+When run with no arguments, it creates a new
+.I acme
+window named
+.B /adict/
+listing the installed dictionaries.
+Clicking with button 3 on a dictionary name will create
+a new empty window named
+.BI /adict/ dict /.
+Typing and then clicking on a pattern in this window will
+create a new lookup window named
+.BI /adict/ dict / pattern
+containing the dictionary's definition of
+.IR pattern .
+Clicking with button 3 on any word in this new window will
+create new lookup windows.
+.PP
+If
+.I adict
+is run with a
+.I pattern ,
+it starts with the
+.BI /adict/ dict / pattern
+window.
+.PP
+If
+.I adict
+is run with no pattern but with a
+.B -d
+option,
+it starts with the
+.BI /adict/ dict /
+window.
+.SH FILES
+.TP
+.B \*9/dict
+dictionaries
+.PD
+.SH "SEE ALSO"
+.IR regexp (7)
+.SH SOURCE
+.B \*9/src/cmd/dict
+.br
+.B \*9/bin/adict
+.SH BUGS
+A font with wide coverage of the Unicode Standard
+should be used for best results.
+(Try
+.BR \*9/font/pelm/unicode.9.font .)
+.PP
+If the
+.I pattern
+doesn't begin with
+a few literal characters, matching takes a long time.
+.PP
+The dictionaries are not distributed outside Bell Labs,
+though see
+.B \*9/dict/README
+for information on using free dictionaries prepared
+by Project Gutenberg.

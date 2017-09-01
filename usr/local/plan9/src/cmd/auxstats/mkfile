@@ -1,0 +1,17 @@
+<$PLAN9/src/mkhdr
+
+TARG=auxstats
+
+OFILES=\
+	$SYSNAME.$O\
+	main.$O\
+
+HFILES=\
+	dat.h\
+
+
+<$PLAN9/src/mkone
+
+KVM=`{if uname |egrep 'BSD' | egrep -v 'OpenBSD' >/dev/null; then echo -lkvm; fi}
+LDFLAGS=$LDFLAGS $KVM
+

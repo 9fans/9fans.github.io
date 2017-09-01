@@ -1,0 +1,46 @@
+#!/usr/local/plan9/bin/rc
+
+f=getfile
+if(~ $1 -d){
+	f=getdir
+	shift
+}
+
+if(! ~ $#* 2){
+	echo 'usage: netfileget [-d] system path' >[1=2]
+	exit usage
+}
+
+. netfilelib.rc $1
+
+fn getfile9p {
+	if(! 9p read $1/$2)
+		exit 1
+}
+
+fn getdir9p {
+	9p ls -l $1/$2 | awk '{s=$NF; if($0 ~ /^d/) s=s"/"; print s}'
+}
+
+fn getfile {
+	rm -f $t
+	echo get $2 $t | runsftp -e $1
+	cat $t
+}
+
+fn getdir {
+	{echo cd $2; echo ls -l} | runsftp $1
+	awk '
+		$NF == "." || $NF == ".." { next } 
+		{
+			s = $NF
+			if($0 ~ /^d/)
+				s = s "/"
+			print s
+		}
+	' $t.sftp
+}
+
+$f $1 $2
+exit 0
+

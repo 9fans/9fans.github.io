@@ -1,0 +1,14 @@
+<$PLAN9/src/mkhdr
+
+HFILES=\
+	gzip.h\
+	zip.h\
+
+TARG=\
+	gzip\
+	gunzip\
+	zip\
+	unzip\
+
+
+<$PLAN9/src/mkmany

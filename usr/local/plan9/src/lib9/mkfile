@@ -1,0 +1,197 @@
+<$PLAN9/src/mkhdr
+
+LIB=lib9.a
+
+NUM=\
+	charstod.$O\
+	pow10.$O\
+
+# Could add errfmt, but we want to pick it up from lib9 instead.
+FMTOFILES=\
+	dofmt.$O\
+	fltfmt.$O\
+	fmt.$O\
+	fmtfd.$O\
+	fmtfdflush.$O\
+	fmtlocale.$O\
+	fmtlock2.$O\
+	fmtnull.$O\
+	fmtprint.$O\
+	fmtquote.$O\
+	fmtrune.$O\
+	fmtstr.$O\
+	fmtvprint.$O\
+	fprint.$O\
+	nan64.$O\
+	print.$O\
+	runefmtstr.$O\
+	runeseprint.$O\
+	runesmprint.$O\
+	runesnprint.$O\
+	runesprint.$O\
+	runevseprint.$O\
+	runevsmprint.$O\
+	runevsnprint.$O\
+	seprint.$O\
+	smprint.$O\
+	snprint.$O\
+	sprint.$O\
+	strtod.$O\
+	vfprint.$O\
+	vseprint.$O\
+	vsmprint.$O\
+	vsnprint.$O\
+	$NUM\
+
+UTFOFILES=\
+	rune.$O\
+	runestrcat.$O\
+	runestrchr.$O\
+	runestrcmp.$O\
+	runestrcpy.$O\
+	runestrdup.$O\
+	runestrlen.$O\
+	runestrecpy.$O\
+	runestrncat.$O\
+	runestrncmp.$O\
+	runestrncpy.$O\
+	runestrrchr.$O\
+	runestrstr.$O\
+	runetype.$O\
+	utfecpy.$O\
+	utflen.$O\
+	utfnlen.$O\
+	utfrrune.$O\
+	utfrune.$O\
+	utfutf.$O\
+
+LIB9OFILES=\
+	_exits.$O\
+	_p9dialparse.$O\
+	_p9dir.$O\
+	announce.$O\
+	argv0.$O\
+	atexit.$O\
+	atoi.$O\
+	atol.$O\
+	atoll.$O\
+	atnotify.$O\
+	await.$O\
+	cistrcmp.$O\
+	cistrncmp.$O\
+	cistrstr.$O\
+	cleanname.$O\
+	convD2M.$O\
+	convM2D.$O\
+	convM2S.$O\
+	convS2M.$O\
+	create.$O\
+	crypt.$O\
+	ctime.$O\
+	dial.$O\
+	dirfstat.$O\
+	dirfwstat.$O\
+	dirmodefmt.$O\
+	dirread.$O\
+	dirstat.$O\
+	dirwstat.$O\
+	dup.$O\
+	encodefmt.$O\
+	errstr.$O\
+	exec.$O\
+	execl.$O\
+	exitcode.$O\
+	fcallfmt.$O\
+	get9root.$O\
+	getcallerpc-$OBJTYPE.$O\
+	getenv.$O\
+	getfields.$O\
+	getnetconn.$O\
+	getns.$O\
+	getuser.$O\
+	getwd.$O\
+	jmp.$O\
+	lrand.$O\
+	lnrand.$O\
+	main.$O\
+	malloc.$O\
+	malloctag.$O\
+	mallocz.$O\
+	nan.$O\
+	needsrcquote.$O\
+	needstack.$O\
+	netcrypt.$O\
+	netmkaddr.$O\
+	notify.$O\
+	nrand.$O\
+	nulldir.$O\
+	open.$O\
+	opentemp.$O\
+	pin.$O\
+	pipe.$O\
+	post9p.$O\
+	postnote.$O\
+	qlock.$O\
+	quote.$O\
+	rand.$O\
+	read9pmsg.$O\
+	readcons.$O\
+	readn.$O\
+	rfork.$O\
+	searchpath.$O\
+	seek.$O\
+	sendfd.$O\
+	sleep.$O\
+	strdup.$O\
+	strecpy.$O\
+	sysfatal.$O\
+	syslog.$O\
+	sysname.$O\
+	time.$O\
+	tm2sec.$O\
+	tokenize.$O\
+	truerand.$O\
+	u16.$O\
+	u32.$O\
+	u64.$O\
+	unsharp.$O\
+	wait.$O\
+	waitpid.$O\
+	write.$O\
+	zoneinfo.$O\
+
+OFILES=\
+	$LIB9OFILES\
+	$FMTOFILES\
+	$UTFOFILES\
+
+HFILES=\
+	$PLAN9/include/lib9.h\
+
+<$PLAN9/src/mksyslib
+
+%.$O: fmt/%.c
+	$CC $CFLAGS -Ifmt fmt/$stem.c
+
+%.$O: utf/%.c
+	$CC $CFLAGS utf/$stem.c
+
+XLIB=$PLAN9/lib/$LIB
+
+testfmt: testfmt.$O $XLIB
+	$LD -o $target testfmt.$O
+
+testfltfmt: testfltfmt.$O $XLIB
+	$LD -o $target testfltfmt.$O
+
+testprint: testprint.$O $XLIB
+	$LD -o $target testprint.$O
+
+# debugging only - should go away (5/22/2006)
+testgoogfmt: testfltfmt.$O googfmt.$O $XLIB
+	$LD -o $target testfltfmt.$O googfmt.$O
+
+testgoogprint: testprint.$O googfmt.$O $XLIB
+	$LD -o $target testprint.$O googfmt.$O
+
+ctime.$O tm2sec.$O zoneinfo.$O: zoneinfo.h

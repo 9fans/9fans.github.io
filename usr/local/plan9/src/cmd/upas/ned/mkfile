@@ -1,0 +1,15 @@
+<$PLAN9/src/mkhdr
+
+TARG=nedmail
+
+LIB=../common/libcommon.a
+
+HFILES=../common/common.h
+
+OFILES=nedmail.$O
+
+BIN=$BIN/upas
+
+<$PLAN9/src/mkone
+CFLAGS=$CFLAGS -I../common
+

@@ -1,0 +1,15 @@
+<$PLAN9/src/mkhdr
+
+TARG=htmlfmt
+OFILES=\
+	main.$O\
+	html.$O\
+	util.$O\
+
+HFILES=\
+	dat.h\
+	$PLAN9/include/html.h\
+
+
+<$PLAN9/src/mkone
+

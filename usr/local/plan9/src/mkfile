@@ -1,0 +1,61 @@
+<mkhdr
+
+BUGGERED='fs|fmt|utf'
+LIBDIRS=`ls -ld lib* | sed -n 's/^d.* //p' |egrep -v "^lib($BUGGERED)$"`
+
+DIRS=\
+	$LIBDIRS\
+	cmd\
+
+<mkdirs
+
+libs:V: libs-all
+
+libs-%:V:
+	for i in $LIBDIRS
+	do
+		(cd $i; echo cd `pwd`';' mk $MKFLAGS $stem; mk $MKFLAGS $stem)
+	done
+
+MKDIRS=\
+	libbio\
+	libregexp\
+	cmd/mk\
+
+mkmk.sh:VD:
+	(
+		echo '# AUTOMATICALLY GENERATED - DO NOT EDIT'
+		echo cd lib9
+		echo 'echo cd `pwd`'
+		(cd lib9; mk -n -a install)
+		echo cd ..
+		for i in libbio libregexp cmd/mk
+		do	
+			(cd $i; echo cd $i; echo 'echo cd `pwd`'; mk -n -a install)
+			echo cd ..
+		done
+	) | sed '
+		s/'$SYSNAME'/$SYSNAME/g
+		s/'$OBJTYPE'/$OBJTYPE/g
+		s;'$PLAN9';$PLAN9;g
+		s/9[ac] *getcallerpc-.*/9c getcallerpc-$OBJTYPE.c || 9a getcallerpc-$OBJTYPE.s/
+		s/^9[ac] *tas-.*/9a tas-$OBJTYPE.s || 9c tas-$OBJTYPE.c/
+	' >$target
+
+testmkmk:V:
+	mk mkmk.sh
+	rm -f ../lib/lib*.a
+	mv ../bin/mk ../bin/_mk
+	sh -ex mkmk.sh
+	ls -l ../bin/mk
+
+testcvs:V:
+	(cd ..; cvs up -dAP)
+	cp ../bin/_mk ../bin/mk
+	mk clean
+	rm ../lib/*.a
+	mv ../bin/mk ../bin/_mk
+	rm ../bin/*
+	PLAN9="`pwd`/.." export PLAN9
+	PATH=$PLAN9/bin:$PATH export PATH
+

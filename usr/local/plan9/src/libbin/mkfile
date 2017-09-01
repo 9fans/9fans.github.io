@@ -1,0 +1,10 @@
+<$PLAN9/src/mkhdr
+
+LIB=libbin.a
+
+OFILES=\
+	bin.$O\
+
+HFILES=$PLAN9/include/bin.h
+
+<$PLAN9/src/mksyslib

@@ -1,0 +1,12 @@
+<$PLAN9/src/mkhdr
+
+<|sh ../devdraw/mkwsysrules.sh
+
+TARG=snarfer
+OFILES=$WSYSTYPE-snarfer.$O
+HFILES=
+
+<$PLAN9/src/mkone
+
+x11-snarfer.$O: snarfer.c
+osx-snarfer.$O: snarfer.c

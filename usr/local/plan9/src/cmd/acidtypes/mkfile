@@ -1,0 +1,23 @@
+<$PLAN9/src/mkhdr
+
+TARG=acidtypes
+
+OFILES=\
+	dwarf.$O\
+	main.$O\
+	stabs.$O\
+	sym.$O\
+	type.$O\
+	util.$O\
+
+HFILES=\
+	dat.h\
+	$PLAN9/include/mach.h\
+	../../libmach/elf.h\
+	../../libmach/dwarf.h\
+	../../libmach/stabs.h\
+
+CFLAGS=-I../../libmach $CFLAGS
+
+<$PLAN9/src/mkone
+

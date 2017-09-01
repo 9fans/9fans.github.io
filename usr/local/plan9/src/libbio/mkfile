@@ -1,0 +1,31 @@
+<$PLAN9/src/mkhdr
+
+LIB=libbio.a
+
+OFILES=\
+	bbuffered.$O\
+	bfildes.$O\
+	bflush.$O\
+	bgetc.$O\
+	bgetrune.$O\
+	bgetd.$O\
+	binit.$O\
+	boffset.$O\
+	bprint.$O\
+	bputc.$O\
+	bputrune.$O\
+	brdline.$O\
+	brdstr.$O\
+	bread.$O\
+	bseek.$O\
+	bvprint.$O\
+	bwrite.$O\
+
+HFILES=\
+	$PLAN9/include/bio.h\
+
+<$PLAN9/src/mksyslib
+
+bcat: bcat.$O $PLAN9/lib/$LIB
+	$LD -o bcat bcat.$O -lbio -l9
+

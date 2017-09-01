@@ -1,0 +1,34 @@
+<$PLAN9/src/mkhdr
+
+LIB=libndb.a
+OFILES=\
+#	csgetval.$O\
+#	csipinfo.$O\
+#	dnsquery.$O\
+	ipattr.$O\
+	ndbaux.$O\
+	ndbcache.$O\
+	ndbcat.$O\
+	ndbconcatenate.$O\
+	ndbdiscard.$O\
+	ndbfree.$O\
+	ndbgetipaddr.$O\
+	ndbgetval.$O\
+	ndbhash.$O\
+	ndbipinfo.$O\
+	ndblookval.$O\
+	ndbopen.$O\
+	ndbparse.$O\
+	ndbreorder.$O\
+	ndbsubstitute.$O\
+	sysdnsquery.$O\
+
+HFILES=\
+	$PLAN9/include/ndb.h\
+	ndbhf.h
+
+<$PLAN9/src/mksyslib
+
+testdns: testdns.$O $LIBDIR/$LIB
+	$LD -o $target $prereq
+

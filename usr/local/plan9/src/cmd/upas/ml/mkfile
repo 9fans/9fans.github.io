@@ -1,0 +1,32 @@
+<$PLAN9/src/mkhdr
+
+TARG=ml\
+	mlowner\
+	mlmgr\
+
+OFILES=\
+	common.$O\
+
+LIB=../common/libcommon.av\
+
+UHFILES= ../common/common.h\
+	../common/sys.h\
+	dat.h\
+
+HFILES=$UHFILES\
+	../smtp/rfc822.tab.h\
+
+LIB=../common/libcommon.a
+
+BIN=$BIN/upas
+<$PLAN9/src/mkmany
+CFLAGS=$CFLAGS -I../common
+
+$O.ml: ../smtp/rfc822.tab.$O
+$O.mlowner: ../smtp/rfc822.tab.$O
+
+../smtp/rfc822.tab.h ../smtp/rfc822.tab.$O:
+	(
+		cd ../smtp
+		mk rfc822.tab.$O
+	)

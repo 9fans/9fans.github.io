@@ -1,0 +1,98 @@
+.TH WINTEXT 1
+.SH NAME
+wintext, ", "" \- access text in current window
+.ds x \C'"'
+.ds xx \C'"'\^\^\^\^\C'"'
+.ds y \*x\ 
+.ds yy \*(xx\ 
+.SH SYNOPSIS
+.B wintext
+.br
+.B \*x\ 
+[
+.I prefix
+]
+.br
+.B \*(xx\ 
+[
+.I prefix
+]
+.SH DESCRIPTION
+.I Wintext
+prints the text of the current
+.I win
+(see
+.IR acme (1))
+or
+.IR 9term (1)
+window to standard output.
+.PP
+.I \*y
+searches the window text for commands typed with a particular prefix
+and prints them, indented, to standard output.
+.I Prefix
+is a regular expression that is matched against the beginning of the command-line.
+If
+.I prefix
+is omitted,
+.I \*y
+prints the last command executed.
+.I \*(yy
+prints the last command that
+.I \*y
+would print and then executes it by piping it into 
+.IR rc (1).
+.PP
+Both
+.I \*y
+and
+.I \*(yy
+identify commands in the window text by looking for lines
+beginning with a shell prompt.
+Prompts are assumed to be an unindented sequence of
+non-whitespace characters followed by one of the
+characters
+.BR % ,
+.BR ; ,
+.BR $ ,
+or
+.BR # .
+.SH EXAMPLES
+Print the
+.IR ls (1)
+and
+.I lc
+commands executed in this window:
+.IP
+.EX
+.ta +4n
+% \*x 'l[sc]'
+	% ls -l /tmp/qq*
+	# ls -lrt /etc
+	% lc r*
+%
+.EE
+.PP
+Execute the most recent
+.I lc
+command again:
+.IP
+.EX
+.ta +4n
+% \*(xx lc
+	% lc r*
+ramfs   rc      read    rio     rm
+% 
+.EE
+.SH SEE ALSO
+.IR 9term (1),
+.IR acme (1)
+.SH SOURCE
+.B \*9/bin
+.SH BUGS
+.I \*y
+and
+.I \*(yy
+are hard to type in shells other than
+.IR rc (1).
+.\" and in troff!

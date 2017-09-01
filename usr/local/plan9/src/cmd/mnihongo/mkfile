@@ -1,0 +1,8 @@
+<$PLAN9/src/mkhdr
+
+
+TARG=mnihongo
+OFILES=mnihongo.$O
+
+<$PLAN9/src/mkone
+

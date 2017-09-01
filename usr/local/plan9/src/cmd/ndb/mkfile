@@ -1,0 +1,34 @@
+<$PLAN9/src/mkhdr
+
+TARG=\
+	dns\
+	dnsquery\
+	dnsdebug\
+	dnstcp\
+	ndbmkdb\
+	ndbquery\
+	ndbmkhash\
+	ndbmkhosts\
+	ndbipquery\
+
+LIB=$PLAN9/lib/libndb.a
+
+<$PLAN9/src/mkmany
+
+DNSOFILES=\
+	convDNS2M.$O\
+	convM2DNS.$O\
+	dblookup.$O\
+	dnarea.$O\
+	dn.$O\
+	dnresolve.$O\
+	dnserver.$O\
+	dntcpserver.$O\
+	runproc.$O\
+
+$DNSOFILES dns.$O dnstcp.$O dnsdebug.$O: dns.h
+
+$O.dns: $DNSOFILES dnnotify.$O dnudpserver.$O
+$O.dnstcp: $DNSOFILES
+$O.dnsdebug: $DNSOFILES
+

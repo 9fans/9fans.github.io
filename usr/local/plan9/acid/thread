@@ -1,0 +1,302 @@
+//
+// pthread-specific access functions
+// avoid complicated libthread_db interface
+//
+
+include("pthread-"+systype+"-"+objtype);
+
+// pick apart system mcontext_t structures
+defn mcontext(m)
+{
+	complex mcontext_t m;
+
+	if systype == "linux" then {
+		m = m\X;
+		return {"PC", m[14], "SP", m[7], "BP", m[6]};
+	} else if systype == "freebsd" then {
+		return {"PC", m.mc_eip, "SP", m.mc_esp, "BP", m.mc_ebp};
+	} else
+		error("do not know how to read mcontext_t on system "+systype);
+}
+
+//
+// plan 9 thread library support
+// 
+defn context(c)
+{
+	c = (Context)c;
+	return mcontext(c.uc.uc_mcontext);
+}
+
+defn contextstk(c)
+{
+	_stk(context(c), 0);
+}
+
+defn contextlstk(c)
+{
+	_stk(context(c), 1);
+}
+
+defn altfmt(A){
+	local i, s, yes;
+	complex Alt A;
+
+	s = "alt(";
+	s = s + "tag(*" + itoa(A.tag, "%#x") + "=" + itoa(*A.tag, "%#x") + ") ";
+	i = 0;
+	yes = 0;
+	while A.op != CHANEND && A.op != CHANNOBLK do{
+		if A.op != CHANNOP then{
+			if yes then s = s + " ";
+			s = s + itoa(i, "%d");
+			s = s + ":";
+			if A.op == CHANSND then s = s + "send";
+			if A.op == CHANRCV then s = s + "recv";
+			s = s + "(channel(";
+			s = s + itoa(A.c, "%#x");
+			s = s + "))";
+			yes = 1;
+		}
+		i = i + 1;
+		A = (Alt)(A + sizeofAlt);
+	}
+	if A.op==CHANNOBLK then{
+		if yes then s = s + " ";
+		s = s + "noblock";
+	}
+	s = s + ")";
+	return s;
+}
+
+defn alt(A){
+	print(altfmt(A), "\n");
+}
+
+defn channel(C) {
+	complex Channel C;
+	local i, p;
+
+	print("channel ", C\X, " // ", *(C.name\s));
+	if C.freed then {
+		print(" (moribund)");
+	}
+	print("\n");
+	print("\telemsize=", C.elemsize\D, " bufsize=", C.bufsize, "\n");
+	if C.bufsize then {
+		print("\t", C.nbuf\D, " values in channel:\n");
+		print("\t");
+		p = C.buf+C.off*C.elemsize;
+		loop 1,C.nbuf do {
+			if C.elemsize==4 then {
+				print(*p\X, " ");
+			}else {
+				print("data(", p\X, ") ");
+			}
+			p = p+C.elemsize;
+			if p == C.buf+C.bufsize*C.elemsize then {
+				p = C.buf;
+			}
+		}
+	}
+	print("\n");
+	print(" senders:\n");
+	_altarray(C.asend);
+	print(" recvers:\n");
+	_altarray(C.arecv);
+}
+
+defn _altarray(aa)
+{
+	local i, a, t;
+
+	i = 0;
+	aa = (_Altarray)aa;
+	while i < aa.n do {
+		a = (Alt)aa.a[i];
+		print("\t"+threadstkline(a.thread)+"\n");
+		i++;
+	}
+}
+
+defn fnname(a){
+	local sym, s;
+
+	s = symbols;
+	while s do {
+		sym = head s;
+		if sym[2] == a then
+			return sym[0];
+		s = tail s;
+	}
+	return itoa(a, "%#x");
+}
+
+stkignorelist = {};
+defn stkignore(s){
+	append stkignorelist, s;
+}
+
+defn threadstkline(T){
+	local stk, frame, pc, pc0, file, s, sym, i, stop, P, mainpid;
+
+	T = (_Thread)T;
+	P = (Proc)T.proc;
+	if P.thread == T then {
+		mainpid = pid;
+		setproc(pthread2tid(P.osprocid));
+		stk = strace({});
+		setproc(mainpid);
+	} else
+		stk = strace(context(T.context));
+
+	stop = 0;
+	while stk && !stop do {
+		frame = head stk;
+		stk = tail stk;
+		pc = frame[2];
+		pc0 = frame[0];
+		file = pcfile(pc);
+		if !regexp("plan9/src/lib9/", file)
+		&& !regexp("plan9/src/libthread/", file) 
+		&& file != "?file?"
+		&& match(file, stkignore)==-1 then
+			stop = 1;
+	}
+	file = pcfile(pc);
+	s = file+":"+itoa(pcline(pc), "%d");
+	if pc0 != 0 then 
+		s = s + " "+fnname(pc0);
+	return s;
+}
+
+defn threadfmt(T){
+	complex _Thread T;
+	local P, s, name;
+
+	P = (Proc)T.proc;
+	s = "t=(_Thread)"+itoa(T, "%#-10x")+" // ";
+
+	if P.thread == T then
+		s = s + "Running    ";
+	else
+		s = s + "Sleeping   ";
+	s = s + threadstkline(T);
+
+	name = T+392;	// T+offsetof(_Thread, name);
+	if *(name\b) != 0 then
+		s = s + " ["+*(name\s)+"]";
+	return s;
+}
+
+defn thread(T){
+	print(threadfmt(T), "\n");
+}
+
+defn procthreads(P){
+	complex Proc P;
+	local T;
+
+	T = (_Thread)P.allthreads.$head;
+	while T != 0 do{
+		print("\t");
+		thread(T);
+		T = (_Thread)T.allnext;
+	}
+}
+
+defn prociter(x) {
+	local P;
+
+	P = (Proc)*_threadprocs;
+	while P != 0 do{
+		if P != (Proc)*_threadprocs then print("\n");
+		proc(P);
+		if x == 1 then 
+			procthreads(P);
+		if x == 2 then
+			threadstks(P);
+		P = (Proc)P.next;
+	}
+}
+
+defn procs() {
+	prociter(0);
+}
+
+defn threads() {
+	prociter(1);
+}
+
+defn stacks() {
+	prociter(2);
+}
+
+threadstkignore = {
+	"plan9/src/libthread/",
+	"plan9/src/lib9/",
+	"plan9/src/lib9/(fmt|utf)/",
+};
+defn threadstks(P){
+	complex Proc P;
+	local T,  mainpid, pref, ign;
+
+	pref = stkprefix;
+	stkprefix = pref+"\t\t";
+	ign = stkignore;
+	stkignore = threadstkignore;
+	T = (_Thread)P.allthreads.$head;
+	while T != 0 do{
+		print("\t");
+		thread(T);
+		threadstk(T);
+		T = (_Thread)T.allnext;
+		print("\n");
+	}
+	stkprefix = pref;
+	stkignore = ign;
+}
+
+defn proc(P){
+	complex Proc P;
+
+	print("p=(Proc)", itoa(P, "%#-10x"), "  // pthread ", P.osprocid\X, " pid ", pthread2tid(P.osprocid)\D, " ");
+	if P.thread==0 then
+		print(" Sched");
+	else
+		print(" Running");
+	print("\n");
+}
+
+defn threadlstk(T){
+	complex _Thread T;
+	local P, mainpid;
+
+	P = (Proc)T.proc;
+	mainpid = pid;
+	setproc(pthread2tid(P.osprocid));
+
+	if P.thread == T then
+		lstk();
+	else
+		contextlstk(T.context);
+	setproc(mainpid);
+}
+
+defn threadstk(T){
+	complex _Thread T;
+	local P, mainpid;
+
+	P = (Proc)T.proc;
+	mainpid = pid;
+	setproc(pthread2tid(P.osprocid));
+
+	if P.thread == T then
+		stk();
+	else 
+		contextstk(T.context);
+
+	setproc(mainpid);
+}
+
+print(acidfile);

@@ -1,0 +1,34 @@
+HTML=\
+	isalpharune3.html\
+	rune3.html\
+	runestrcat3.html\
+	utf7.html\
+	print3.html\
+	fmtinstall3.html\
+	quote3.html\
+	fmtstrtod3.html\
+	bio3.html\
+	regexp93.html\
+	regexp97.html\
+	mk1.html\
+
+all:V: $HTML
+
+title='Ported from Plan 9'
+MKSHELL=$PLAN9/bin/rc
+
+%1.html:D: %.1
+	whatis title
+	9 troff -manhtml $prereq | troff2html -t $title > $target
+	./fixurls $target
+
+%3.html:D: %.3
+	9 troff -manhtml $prereq | troff2html -t $title > $target
+	./fixurls $target
+
+%7.html:D: %.7
+	9 troff -manhtml $prereq | troff2html -t $title > $target
+	./fixurls $target
+
+push:V:
+	cp *.html $9fansweb/plan9port/unix/man

@@ -1,0 +1,141 @@
+.TH EXEC 3
+.SH NAME
+exec, execl \- execute a file
+.SH SYNOPSIS
+.B #include <u.h>
+.br
+.B #include <libc.h>
+.PP
+.nf
+.B
+int exec(char *name, char* argv[])
+.PP
+.B
+int execl(char *name, ...)
+.fi
+.SH DESCRIPTION
+.I Exec
+and
+.I execl
+overlay the calling process with the named file, then
+transfer to the entry point of the image of the file.
+.PP
+.I Name
+points to the name of the file
+to be executed; it must not be a directory, and the permissions
+must allow the current user to execute it
+(see
+.IR stat (3)).
+It should also be a valid binary image, as defined by the local
+operating system, or a shell script
+(see
+.IR rc (1)).
+The first line of a
+shell script must begin with
+.L #!
+followed by the name of the program to interpret the file
+and any initial arguments to that program, for example
+.IP
+.EX
+#!/bin/rc
+ls | mc
+.EE
+.PP
+When a C program is executed,
+it is called as follows:
+.IP
+.EX
+void main(int argc, char *argv[])
+.EE
+.PP
+.I Argv
+is a copy of the array of argument pointers passed to
+.IR exec ;
+that array must end in a null pointer, and
+.I argc
+is the number of elements before the null pointer.
+By convention, the first argument should be the name of
+the program to be executed.
+.I Execl
+is like
+.I exec
+except that
+.I argv
+will be an array of the parameters that follow
+.I name
+in the call.  The last argument to
+.I execl
+must be a null pointer.
+.PP
+For a file beginning
+.BR #! ,
+the arguments passed to the program
+.RB ( /bin/rc
+in the example above) will be the name of the file being
+executed, any arguments on the
+.B #!
+line, the name of the file again,
+and finally the second and subsequent arguments given to the original
+.I exec
+call.
+The result honors the two conventions of a program accepting as argument
+a file to be interpreted and
+.B argv[0]
+naming the file being
+executed.
+.PP
+Most attributes of the calling process are carried
+into the result; in particular,
+files remain open across
+.I exec
+(except those opened with
+.B OCEXEC
+OR'd
+into the open mode; see
+.IR open (3));
+and the working directory and environment
+(see
+.IR getenv (3))
+remain the same.
+However, a newly
+.I exec'ed
+process has no notification handlers
+(see
+.IR notify (3)).
+.SH SOURCE
+.B \*9/src/lib9/exec.c
+.br
+.B \*9/src/lib9/execl.c
+.SH SEE ALSO
+.IR prof (1),
+.IR intro (3),
+.IR stat (3)
+.SH DIAGNOSTICS
+If these functions fail, they return and set
+.IR errstr .
+There can be no return from a successful
+.I exec
+or
+.IR execl ;
+the calling image is lost.
+.SH BUGS
+On Unix, unlike on Plan 9,
+.I exec
+and
+.I execl
+use the user's current path to locate
+.IR prog .
+This is a clumsy way to deal with Unix's lack of
+a union directory for
+.BR /bin .
+.PP
+To avoid name conflicts with the underlying system,
+.I exec
+and
+.I execl
+are preprocessor macros defined as
+.I p9exec
+and
+.IR p9execl ;
+see
+.IR intro (3).

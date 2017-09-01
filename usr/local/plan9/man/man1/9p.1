@@ -1,0 +1,178 @@
+.TH 9P 1
+.SH NAME
+9p \- read and write files on a 9P server
+.SH SYNOPSIS
+.B 9p
+[
+.I options
+]
+.B read
+.I path
+.br
+.B 9p
+[
+.I options
+]
+.B readfd
+.I path
+.PP
+.B 9p
+[
+.I options
+]
+.B write
+[
+.B -l
+]
+.I path
+.br
+.B 9p
+[
+.I options
+]
+.B writefd
+.I path
+.PP
+.B 9p
+[
+.I options
+]
+.B stat
+.I path
+.PP
+.B 9p
+[
+.I options
+]
+.B rdwr
+.I path
+.PP
+.B 9p
+[
+.I options
+]
+.B ls
+[
+.B -dl
+]
+.I path...
+.SH DESCRIPTION
+.I 9p
+is a trivial 9P client that can access a single file on a 9P server.
+It can be useful for manual interaction with a 9P server or for
+accessing simple 9P services from within shell scripts.
+The common options are:
+.TP
+.B -a\fI addr
+dial
+the server at
+.I addr
+.TP
+.B -A\fI aname
+attach to the file system named
+.I aname
+.TP
+.B -n
+mount without authentication
+.PP
+The first argument is a command, one of:
+.TP
+.B read
+print the contents of
+.I path 
+to standard output
+.TP
+.B write
+write data on standard input to
+.IR path ;
+the 
+.B -l
+option causes
+.I write
+to write one line at a time
+.TP
+.BR readfd ", " writefd
+like
+.B read
+and 
+.B write
+but use
+.IR openfd (9p)
+instead of
+.IR open ;
+this masks errors and is mainly useful for debugging
+the implementation of
+.I openfd
+.TP
+.B stat
+execute
+.I stat (9p)
+on 
+.I path
+and print the result
+.TP
+.B rdwr
+Open
+.I path
+for reading and writing.
+Then repeat until end-of-file on standard input:
+copy a line from the file to standard output,
+copy a line from standard input to the file.
+Print errors, but don't give up.
+.B Rdwr
+is useful for interacting with servers like
+.IR factotum (4).
+.TP
+.B ls
+Print a directory listing in the format of
+.IR ls (1).
+The
+.B -d
+and
+.B -l
+flags have the same meaning as in
+.IR ls .
+.PD
+.PP
+.I 9p
+dials
+.I address
+to connect to the 9P server.
+If the
+.B -a
+option is not given,
+.I 9p
+requires the
+.I path
+to be of the form
+.IB service / subpath \fR;
+it connects to the Unix domain socket
+.I service
+in the name space directory
+(see
+.IR intro (4))
+and then accesses
+.IR subpath .
+.SH EXAMPLE
+To update
+.IR plumber (4)'s
+copy of your plumbing rules after editing
+.BR $HOME/lib/plumbing :
+.IP
+.EX
+cat $HOME/lib/plumbing | 9p write plumb/rules
+.EE
+.PP
+To display the contents of the current
+.IR acme (4)
+window:
+.IP
+.EX
+9p read acme/$winid/body
+.EE
+.SH SOURCE
+.B \*9/src/cmd/9p.c
+.SH SEE ALSO
+.IR intro (4),
+.IR intro (9p),
+.IR 9pclient (3)

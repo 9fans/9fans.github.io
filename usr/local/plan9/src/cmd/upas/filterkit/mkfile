@@ -1,0 +1,14 @@
+<$PLAN9/src/mkhdr
+
+TARG=\
+	token\
+	list\
+	deliver\
+
+LIB=../common/libcommon.a
+OFILES=readaddrs.$O
+
+BIN=$BIN/upas
+<$PLAN9/src/mkmany
+
+CFLAGS=$CFLAGS -I../common

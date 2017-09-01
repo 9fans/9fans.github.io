@@ -1,0 +1,18 @@
+PROG=$O.$TARG
+
+all:V:	$PROG
+
+$PROG:	$OFILES $LIB # ${SHORTLIB:%=$LIBDIR/lib%.a}
+	$LD -o $target $prereq $LDFLAGS
+
+install:V: $TARG.install
+%.install:V:	$BIN/%
+
+$BIN/%:	$O.%
+	$INSTALL $O.$stem $BIN/$stem
+
+CLEANFILES=$CLEANFILES $PROG
+NUKEFILES=$NUKEFILES $BIN/$TARG
+
+<$PLAN9/src/mkcommon
+

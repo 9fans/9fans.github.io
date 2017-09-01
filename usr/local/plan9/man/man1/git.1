@@ -1,0 +1,85 @@
+.TH GIT 1
+.SH NAME 
+git, hg, cvs, codereview \- introduction to using plan9port Git repository
+.SH SYNOPSIS
+.B git
+.B clone
+.B https://9fans.github.io/plan9port
+.B plan9
+.PP
+.B git
+.B pull
+.PP
+.B git
+.B diff
+.I revision
+[
+.I path ...
+]
+.PP
+.B gitk 
+.PP
+.B web
+.B https://9fans.github.io/plan9port
+.SH DESCRIPTION
+The master source tree for Plan 9 from User Space is maintained
+using the source control system Git.
+.PP
+The first argument to
+.I git
+is a command, which determines the form of the rest of the command line.
+.PP
+The
+.B clone
+command downloads a copy of the tree into the directory
+.BR plan9 ,
+which it will create.
+After
+.B git
+.BR clone ,
+the other commands listed 
+should be run within the
+.B plan9
+directory tree.
+.PP
+Git downloads the entire revision history
+of Plan 9 from User Space 
+in addition to the current tree.
+.PP
+.I Git
+.I pull
+incorporates changes from the master repository
+into the local revision history and applies them to the
+current file tree.
+.PP
+.I Git
+.I diff
+runs Unix's
+.IR diff (1)
+to compare the files in the local tree with the corresponding
+files in the revision history.
+The special revision
+.B HEAD
+refers to the most recent version in the version history.
+.PP
+.I Gitk
+starts an interactive history viewer.
+.PP
+The Git tree can be inspected on the web at
+.HR https://github.com/9fans/plan9port "" .
+.SH FILES
+.TP
+.B \*9/.git
+directory containing Git local repository
+.TP
+.B .gitignore
+list of files and wildcards to exclude from Git operations
+.SH SEE ALSO
+Unix's
+\fIgit\fR(1),
+.HR http://git-scm.com/doc
+.PP
+.HR https://9fans.github.io/plan9port/
+.SH BUGS
+Plan 9 from User Space is no longer accessible using CVS or Mercurial;
+you must use Git.

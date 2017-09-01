@@ -1,0 +1,28 @@
+%.$O:	$HFILES			# don't combine with following %.$O rules
+
+%.$O:	%.c
+	$CC $CFLAGS $stem.c
+
+%.$O:	%.cc
+	$CC $CFLAGS $stem.cc
+
+%.$O:	%.s
+	$AS $AFLAGS $stem.s
+
+y.tab.h y.tab.c:	$YFILES
+	$YACC $YFLAGS $prereq
+
+nuke:V: nuke-common
+clean:V: clean-common
+%.clean:V: %.clean-common
+
+nuke-common:V:
+	rm -f *.[$OS] [$OS].out $CLEANFILES y.tab.[ch] $NUKEFILES
+
+clean-common:
+	rm -f *.[$OS] [$OS].out $CLEANFILES y.tab.[ch]
+
+%.clean-common:V:
+	rm -f $stem.[$OS] [$OS].$stem $stem.acid $stem
+
+

@@ -1,0 +1,6 @@
+#!/usr/local/plan9/bin/rc
+sender=$1
+shift
+addr=$1
+shift
+qer $PLAN9/mail/queue mail $sender $addr $* && runq $PLAN9/mail/queue $PLAN9/mail/lib/remotemail

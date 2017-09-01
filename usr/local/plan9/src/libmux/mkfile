@@ -1,0 +1,15 @@
+<$PLAN9/src/mkhdr
+
+LIB=libmux.a
+
+OFILES=\
+	io.$O\
+	mux.$O\
+	queue.$O\
+	thread.$O\
+
+HFILES=\
+	$PLAN9/include/mux.h\
+
+<$PLAN9/src/mksyslib
+
