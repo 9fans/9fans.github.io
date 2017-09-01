@@ -1,0 +1,142 @@
+<head>
+<title>venti-server(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-SERVER(3)</b><td align=right><b>VENTI-SERVER(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    vtsrvhello, vtlisten, vtgetreq, vtrespond &ndash; Venti server<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    typedef struct VtReq<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            VtFcall tx;<br>
+            VtFcall rx;<br>
+            ...<br>
+            
+        </table>
+        
+    </table>
+    } VtReq;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    int &nbsp;&nbsp;&nbsp;&nbsp;vtsrvhello(VtConn *z)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtSrv* vtlisten(char *addr)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtReq* vtgetreq(VtSrv *srv)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;vtrespond(VtReq *req)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines execute the server side of the <a href="../man7/venti.html"><i>venti</i>(7)</a> protocol.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtsrvhello</i> executes the server side of the initial <tt><font size=+1>hello</font></tt> transaction.
+    It sets <i>z</i><tt><font size=+1>&#8722;&gt;</font></tt><i>uid</i> with the user name claimed by the other side. Each
+    new connection must be initialized by running <i>vtversion</i> and then
+    <i>vtsrvhello</i>. The framework below takes care of this detail automatically;
+    <i>vtsrvhello</i> is provided for programs that do not use the functions
+    below. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtlisten</i>, <i>vtgetreq</i>, and <i>vtrespond</i> provide a simple framework for
+    writing Venti servers. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtlisten</i> announces at the network address <i>addr</i>, returning a fresh
+    <tt><font size=+1>VtSrv</font></tt> structure representing the service. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtgetreq</i> waits for and returns the next <tt><font size=+1>read</font></tt>, <tt><font size=+1>write</font></tt>, <tt><font size=+1>sync</font></tt>, or
+    <tt><font size=+1>ping</font></tt> request from any client connected to the service <i>srv</i>. <tt><font size=+1>Hello</font></tt>
+    and <tt><font size=+1>goodbye</font></tt> messages are handled internally and not returned to
+    the client. The interface does not distinguish between the different
+    clients that may be connected at any given time. The request can
+    be found in the <i>tx</i> field
+    of the returned <tt><font size=+1>VtReq</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Once a request has been served and a response stored in <i>r</i><tt><font size=+1>&#8722;&gt;rx</font></tt>,
+    the server should call <i>vtrespond</i> to send the response to the client.
+    <i>Vtrespond</i> frees the structure <i>r</i> as well as the packets <i>r</i><tt><font size=+1>&#8722;&gt;tx.data</font></tt>
+    and <i>r</i><tt><font size=+1>&#8722;&gt;rx.data</font></tt>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/">/usr/local/plan9/src/</a>venti/cmd</font></tt> contains two simple Venti servers
+    <tt><font size=+1>ro.c</font></tt> and <tt><font size=+1>devnull.c</font></tt> written using these routines. <i>Ro</i> is a read-only
+    Venti proxy (it rejects <tt><font size=+1>write</font></tt> requests). <i>Devnull</i> is a dangerous
+    write-only Venti server: it discards all blocks written to it
+    and returns error on all reads.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>, <a href="../man3/venti-packet.html"><i>venti-packet</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a>, <a href="../man8/venti.html"><i>venti</i>(8)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

@@ -1,0 +1,222 @@
+<head>
+<title>smugfs(4) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>SMUGFS(4)</b><td align=right><b>SMUGFS(4)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    smugfs &ndash; file system access to SmugMug photo sharing<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>smugfs</font></tt> [ <tt><font size=+1>&#8722;DFH</font></tt> ] [ <tt><font size=+1>&#8722;k</font></tt> <i>keypattern</i> ] [ <tt><font size=+1>&#8722;m</font></tt> <i>mtpt</i> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>srvname</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Smugfs</i> is a user-level file system that provides access to images
+    stored on the SmugMug photo sharing service. It logs in after
+    obtaining a password from <a href="../man4/factotum.html"><i>factotum</i>(4)</a> using <tt><font size=+1>server=smugmug.com</font></tt>
+    and <i>keypattern</i> (if any) as key criteria (see <a href="../man3/auth.html"><i>auth</i>(3)</a>). Then <i>smugfs</i>
+    serves a virtual directory tree mounted at <i>mtpt</i> (default <tt><font size=+1>/n/smug</font></tt>)
+    and posted at <i>srvname
+    ,</i> if the <tt><font size=+1>&#8722;s</font></tt> option is given. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The directory tree is arranged in five levels: root, user, category,
+    album, and image. For example, <tt><font size=+1>/n/smug/cmac/</font></tt> is a user directory,
+    <tt><font size=+1>/n/smug/cmac/People/</font></tt> is a category directory, <tt><font size=+1>/n/smug/cmac/People/Friends/</font></tt>
+    is an album directory, and <tt><font size=+1>/n/smug/cmac/albums/Friends/2631/</font></tt> is
+    an image directory. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    SmugMug allows fine-grained classification via subcategories,
+    but subcategories are not yet implemented. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    All directories contain a special control file named <tt><font size=+1>ctl</font></tt>; text
+    commands written to <tt><font size=+1>ctl</font></tt> change <i>smugfs</i>&#8217;s behavior or implement
+    functionality that does not fit nicely into the file system interface.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Smugfs</i> caches information about users, categories, albums, and
+    images. If changes are made outside of <i>smugfs</i> (for example, using
+    a web browser), the cache may need to be discarded. Writing the
+    string <tt><font size=+1>sync</font></tt> to a directory&#8217;s <tt><font size=+1>ctl</font></tt> file causes <i>smugfs</i> to discard
+    all cached information used to present that directory and its
+    children. Thus, writing <tt><font size=+1>sync</font></tt> to
+    the root <tt><font size=+1>ctl</font></tt> file discards all of <i>smugfs &#8217;s</i> cached information.<br>
+    <p><font size=+1><b>Root directory     </b></font><br>
+    The root directory contains directories named after users. By
+    default, it contains only a directory for the logged-in user,
+    but other directories will be created as needed to satisfy directory
+    lookups. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    In addition to user directories, the root directory contains three
+    special files: <tt><font size=+1>ctl</font></tt>, <tt><font size=+1>rpclog</font></tt>, and <tt><font size=+1>uploads</font></tt>. Reading <tt><font size=+1>rpclog</font></tt> returns
+    a list of recent RPCs issued to the SmugMug API server. Reads
+    at the end of the file block until a new RPC is issued. The <tt><font size=+1>uploads</font></tt>
+    file lists the file upload queue (q.v.).<br>
+    <p><font size=+1><b>User directories     </b></font><br>
+    User directories contain category directories named after the
+    categories. SmugMug pre-defines a variety of categories, so it
+    is common to have many categories that do not contain albums.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    In a user directory, creating a new directory creates a new category
+    on SmugMug. Similarly, renaming or removing a category directory
+    renames or removes the category on SmugMug. Categories cannot
+    be removed if they contain albums. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    User directories also contain a directory named <tt><font size=+1>albums</font></tt> that itself
+    contains all of that user&#8217;s albums.<br>
+    <p><font size=+1><b>Category directories     </b></font><br>
+    Each category directory contains album directories named using
+    the album&#8217;s title. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    In a category directory, creating a new directory creates a new
+    album on SmugMug. Similarly, renaming or removing an album directory
+    renames or removes the album on SmugMug. Albums cannot be removed
+    if they contain images.<br>
+    <p><font size=+1><b>Album directories     </b></font><br>
+    Each album directory contains image directories named using the
+    image&#8217;s decimal SmugMug ID. Image directories cannot be created
+    or renamed, but they can be removed. Removing an image directory
+    removes the image from the album on SmugMug. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Album directories also contain three special files, <tt><font size=+1>ctl</font></tt>, <tt><font size=+1>settings</font></tt>,
+    and <tt><font size=+1>url</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>settings</font></tt> file contains the album settings in textual form,
+    one setting per line. Each line represents a single setting and
+    is formatted as an alphabetic setting name followed by a single
+    tab followed by the value. Many settings can be changed by writing
+    new setting lines, in the same format, to the <tt><font size=+1>settings</font></tt> file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Copying a file into the album directory queues it for uploading
+    to SmugMug to be added to the album. Files disappear from the
+    album directory once they have finished uploading, replaced by
+    new image directories. The <tt><font size=+1>uploads</font></tt> file in the root directory
+    lists all pending uploads, which are stored temporarily in <tt><font size=+1>/var/tmp</font></tt>.
+    <p><font size=+1><b>Image directories     </b></font><br>
+    Each image directory contains an image file, named with its original
+    name, if available. If the image belongs to another user, SmugMug
+    does not expose the original name, so the file is named <i>nnnn</i><tt><font size=+1>.jpg</font></tt>,
+    where <i>nnnn</i> is the SmugMug image ID number. The file content is
+    the original image or else the largest image available. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The directory contains a <tt><font size=+1>settings</font></tt> file holding per-image settings,
+    similar to the file in the album directory; and a <tt><font size=+1>url</font></tt> file, containing
+    URLs to the various sized images on the SmugMug server.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Mount <i>smugfs</i> on <tt><font size=+1>/n/smug</font></tt>; the current user must have write access
+    to <tt><font size=+1>/n/smug</font></tt> and <tt><font size=+1>/dev/fuse</font></tt>.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% smugfs<br>
+        </font></tt>Watch API calls as they execute:<br>
+        <tt><font size=+1>% cat /n/smug/rpclog &amp;<br>
+        </font></tt>Create a new album in the Vacation category and fill it with photos:<br>
+        <tt><font size=+1>% mkdir /n/smug/you/Vacation/Summer<br>
+        % cp *.jpg /n/smug/you/Vacation/Summer<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The photos are now uploading in the background. Wait for the uploads
+    to finish:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% while(test &#8722;s /n/smug/uploads) sleep 60<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Make the album publicly viewable and share it.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% echo public 1 &gt;/n/smug/you/Vacation/Summer/settings<br>
+        % cat /n/smug/you/Vacation/Summer/url | mail friends<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/smugfs">/usr/local/plan9/src/cmd/smugfs</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    SmugMug, <a href="http://smugmug.com/"><tt><font size=+1>http://smugmug.com/</font></tt></a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    If multiple categories or albums have the same name, only one
+    will be accessible via the file system interface. Renaming the
+    accessible one via Unix&#8217;s <a href="../man1/mv.html"><i>mv</i>(1)</a> will resolve the problem. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Boolean values appear as <tt><font size=+1>true</font></tt> and <tt><font size=+1>false</font></tt> in settings files but
+    must be changed using <tt><font size=+1>1</font></tt> and <tt><font size=+1>0</font></tt>.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

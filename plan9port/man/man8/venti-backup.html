@@ -1,0 +1,138 @@
+<head>
+<title>venti-backup(8) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-BACKUP(8)</b><td align=right><b>VENTI-BACKUP(8)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    rdarena, wrarena &ndash; copy arenas between venti servers<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>venti/rdarena</font></tt> [ <tt><font size=+1>&#8722;qv</font></tt> ] <i>arenapart arenaname 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>venti/wrarena</font></tt> [ <tt><font size=+1>&#8722;o</font></tt> <i>fileoffset</i> ] [ <tt><font size=+1>&#8722;h</font></tt> <i>host</i> ] <i>arenafile</i> [ <i>clumpoffset</i>
+    ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Rdarena</i> extracts the named <i>arena</i> from the arena partition <i>arenapart</i>
+    and writes this arena to standard output. This command is typically
+    used to back up an arena to external media. The <tt><font size=+1>&#8722;v</font></tt> option generates
+    more verbose output on standard error; <tt><font size=+1>&#8722;q</font></tt> generates only errors
+    on standard error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Wrarena</i> writes the blocks contained in the arena <i>arenafile</i> (typically,
+    the output of <i>rdarena</i>) to a Venti server. It is typically used
+    to reinitialize a Venti server from backups of the arenas. For
+    example,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>venti/rdarena /dev/sdC0/arenas arena.0 &gt;external.media<br>
+        venti/wrarena &#8722;h venti2 external.media<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    writes the blocks contained in <tt><font size=+1>arena.0</font></tt> to the Venti server <tt><font size=+1>venti2</font></tt>
+    (typically not the one using <tt><font size=+1>/dev/sdC0/arenas</font></tt>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;o</font></tt> option specifies that the arena starts at byte <i>fileoffset</i>
+    (default <tt><font size=+1>0</font></tt>) in <i>arenafile .</i> This is useful for reading directly
+    from the Venti arena partition:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>venti/wrarena &#8722;h venti2 &#8722;o 335872 /dev/sdC0/arenas<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    (In this example, 335872 is the offset shown in the Venti server&#8217;s
+    index list (344064) minus one block (8192). You will need to substitute
+    your own arena offsets and block size.) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Finally, the optional <i>offset</i> argument specifies that the writing
+    should begin with the clump starting at <i>offset</i> within the arena.
+    <i>Wrarena</i> prints the offset it stopped at (because there were no
+    more data blocks). This could be used to incrementally back up
+    a Venti server to another Venti server:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>last=`{cat last}<br>
+        venti/wrarena &#8722;h venti2 &#8722;o 335872 /dev/sdC0/arenas $last &gt;output<br>
+        awk '/^end offset/ { print $3 }' offset &gt;last<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Of course, one would need to add wrapper code to keep track of
+    which arenas have been processed. See <tt><font size=+1>/sys/src/cmd/venti/words/backup.example</font></tt>
+    for a version that does this.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/venti/srv">/usr/local/plan9/src/cmd/venti/srv</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man7/venti.html"><i>venti</i>(7)</a>, <a href="../man8/venti.html"><i>venti</i>(8)</a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Wrarena</i> can&#8217;t read a pipe or network connection containing an
+    arena; it needs a file already containing the entire arena.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

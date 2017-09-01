@@ -1,0 +1,87 @@
+<head>
+<title>venti-zero(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-ZERO(3)</b><td align=right><b>VENTI-ZERO(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    vtzerotruncate, vtzeroextend, vtzeroscore &ndash; Venti block truncation<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    uint vtzerotruncate(int type, uchar *buf, uint size) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void vtzeroextend(int type, uchar *buf, uint size, uint newsize)
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>extern uchar vtzeroscore[VtScoreSize];<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These utility functions compute how to truncate or replace trailing
+    zeros (for data blocks) or trailing zero scores (for pointer blocks)
+    to canonicalize the blocks before storing them to Venti. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtzerotruncate</i> returns the size of the <i>size</i>-byte buffer pointed
+    to by <i>buf</i> ignoring trailing zeros or zero scores, according to
+    the given <i>type</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtzeroextend</i> pads <i>buf</i> with zeros or zero scores, according to
+    the given <i>type</i>, to grow it from <i>size</i> bytes to <i>newsize</i> bytes. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtzeroscore</i> is the score of the zero-length block.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi/zero.c">/usr/local/plan9/src/libventi/zero.c</a><br>
+    <a href="/usr/local/plan9/src/libventi/zeroscore.c">/usr/local/plan9/src/libventi/zeroscore.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

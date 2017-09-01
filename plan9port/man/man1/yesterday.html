@@ -1,0 +1,155 @@
+<head>
+<title>yesterday(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>YESTERDAY(1)</b><td align=right><b>YESTERDAY(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    yesterday &ndash; print file names from the dump<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>yesterday</font></tt> [ <tt><font size=+1>&#8722;cCd</font></tt> ] [ <tt><font size=+1>&#8722;n</font></tt> <i>daysago</i> ] [ <i>&ndash;date</i> ] <i>files ...<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Yesterday</i> prints the names of the <i>files</i> from the most recent dump.
+    Since dumps are done early in the morning, yesterday&#8217;s files are
+    really in today&#8217;s dump. For example, if today is February 11,
+    2003,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>yesterday /home/am3/rsc/.profile<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    prints<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>/dump/am/2003/0211/home/am3/rsc/.profile<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    In fact, the implementation is to select the most recent dump
+    in the current year, so the dump selected may not be from today.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>yesterday</i> prints the names of the dump files corresponding
+    to the named files. The first set of options changes this behavior.<br>
+    <tt><font size=+1>&#8722;c</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Copy the dump files over the named files.<br>
+    <tt><font size=+1>&#8722;C</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Copy the dump files over the named files only when they differ.<br>
+    <tt><font size=+1>&#8722;d</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Run <tt><font size=+1>diff</font></tt> to compare the dump files with the named files. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>date</i> option selects other day&#8217;s dumps, with a format of 1,
+    2, 4, 6, or 8 digits of the form <i>d,</i> <i>dd</i>, <i>mmdd</i>, <i>yymmdd</i>, or <i>yyyymmdd</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;n</font></tt> option selects the dump <i>daysago</i> prior to the current day.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Yesterday</i> does not guarantee that the string it prints represents
+    an existing file.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    See what&#8217;s changed in the last week in your profile:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>yesterday &#8722;d &#8722;n 7 ~/.profile<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Restore your profile from yesterday:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>yesterday &#8722;c ~/.profile<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <tt><font size=+1>/dump</font></tt> by convention, root of the dump file system<br>
+            
+        </table>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/bin/yesterday">/usr/local/plan9/bin/yesterday</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/diff.html"><i>diff</i>(1)</a>, <a href="../man1/hist.html"><i>hist</i>(1)</a>, <a href="../man8/vbackup.html"><i>vbackup</i>(8)</a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    It&#8217;s hard to use this command without singing.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

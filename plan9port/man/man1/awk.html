@@ -1,0 +1,460 @@
+<head>
+<title>awk(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>AWK(1)</b><td align=right><b>AWK(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    awk &ndash; pattern-directed scanning and processing language<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>awk</font></tt> [ <tt><font size=+1>&#8722;F</font></tt> <i>fs</i> ] [ <tt><font size=+1>&#8722;d</font></tt> ] [ <tt><font size=+1>&#8722;mf</font></tt> <i>n</i> ] [ <tt><font size=+1>&#8722;mr</font></tt> <i>n</i> ] [ <tt><font size=+1>&#8722;safe</font></tt> ] [ <tt><font size=+1>&#8722;v</font></tt> <i>var=value</i>
+    ] [ <tt><font size=+1>&#8722;f</font></tt> <i>progfile</i> | <i>prog</i> ] [ <i>file ...</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Awk</i> scans each input <i>file</i> for lines that match any of a set of
+    patterns specified literally in <i>prog</i> or in one or more files specified
+    as <tt><font size=+1>&#8722;f</font></tt> <i>progfile</i>. With each pattern there can be an associated action
+    that will be performed when a line of a <i>file</i> matches the pattern.
+    Each line is matched against the pattern portion of every pattern-action
+    statement; the
+    associated action is performed for each matched pattern. The file
+    name <tt><font size=+1>&#8722;</font></tt> means the standard input. Any <i>file</i> of the form <i>var=value</i>
+    is treated as an assignment, not a file name, and is executed
+    at the time it would have been opened if it were a file name.
+    The option <tt><font size=+1>&#8722;v</font></tt> followed by <i>var=value</i> is an assignment to be done
+    before the program is executed;
+    any number of <tt><font size=+1>&#8722;v</font></tt> options may be present. <tt><font size=+1>&#8722;F</font></tt> <i>fs</i> option defines
+    the input field separator to be the regular expression <i>fs</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    An input line is normally made up of fields separated by white
+    space, or by regular expression <tt><font size=+1>FS</font></tt>. The fields are denoted <tt><font size=+1>$1</font></tt>,
+    <tt><font size=+1>$2</font></tt>, ..., while <tt><font size=+1>$0</font></tt> refers to the entire line. If <tt><font size=+1>FS</font></tt> is null, the
+    input line is split into one field per character. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    To compensate for inadequate implementation of storage management,
+    the <tt><font size=+1>&#8722;mr</font></tt> option can be used to set the maximum size of the input
+    record, and the <tt><font size=+1>&#8722;mf</font></tt> option to set the maximum number of fields.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;safe</font></tt> option causes <i>awk</i> to run in &#8220;safe mode,&#8221; in which it
+    is not allowed to run shell commands or open files and the environment
+    is not made available in the <tt><font size=+1>ENVIRON</font></tt> variable. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A pattern-action statement has the form<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <i>pattern</i> <tt><font size=+1>{</font></tt> <i>action</i> <tt><font size=+1>} 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    A missing <tt><font size=+1>{</font></tt> <i>action</i> <tt><font size=+1>}</font></tt> means print the line; a missing pattern always
+    matches. Pattern-action statements are separated by newlines or
+    semicolons. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    An action is a sequence of statements. A statement can be one
+    of the following: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>if(</font></tt> <i>expression</i> <tt><font size=+1>)</font></tt> <i>statement</i> [ <tt><font size=+1>else</font></tt> <i>statement</i> ]<br>
+    <tt><font size=+1>while(</font></tt> <i>expression</i> <tt><font size=+1>)</font></tt> <i>statement<br>
+    </i><tt><font size=+1>for(</font></tt> <i>expression</i> <tt><font size=+1>;</font></tt> <i>expression</i> <tt><font size=+1>;</font></tt> <i>expression</i> <tt><font size=+1>)</font></tt> <i>statement<br>
+    </i><tt><font size=+1>for(</font></tt> <i>var</i> <tt><font size=+1>in</font></tt> <i>array</i> <tt><font size=+1>)</font></tt> <i>statement<br>
+    </i><tt><font size=+1>do</font></tt> <i>statement</i> <tt><font size=+1>while(</font></tt> <i>expression</i> <tt><font size=+1>)<br>
+    break<br>
+    continue<br>
+    {</font></tt> [ <i>statement ...</i> ] <tt><font size=+1>}<br>
+    </font></tt><i>expression </i><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</font></tt> commonly <i>var = expression<br>
+    </i><tt><font size=+1>print</font></tt> [ <i>expression-list</i> ] [ <tt><font size=+1>&gt;</font></tt> <i>expression</i> ]<br>
+    <tt><font size=+1>printf</font></tt> <i>format</i> [ <tt><font size=+1>,</font></tt> <i>expression-list</i> ] [ <tt><font size=+1>&gt;</font></tt> <i>expression</i> ]<br>
+    <tt><font size=+1>return</font></tt> [ <i>expression</i> ]<br>
+    <tt><font size=+1>next &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</font></tt> skip remaining patterns on this input line<br>
+    <tt><font size=+1>nextfile &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</font></tt> skip rest of this file, open next, start at top<br>
+    <tt><font size=+1>delete</font></tt> <i>array</i><tt><font size=+1>[</font></tt> <i>expression</i> <tt><font size=+1>] &nbsp;&nbsp;&nbsp;#</font></tt> delete an array element<br>
+    <tt><font size=+1>delete</font></tt> <i>array </i><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</font></tt> delete all elements of array<br>
+    <tt><font size=+1>exit</font></tt> [ <i>expression</i> ] <tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#</font></tt> exit immediately; status is <i>expression<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    Statements are terminated by semicolons, newlines or right braces.
+    An empty <i>expression-list</i> stands for <tt><font size=+1>$0</font></tt>. String constants are quoted
+    <tt><font size=+1>&quot; &quot;</font></tt>, with the usual C escapes recognized within. Expressions take
+    on string or numeric values as appropriate, and are built using
+    the operators <tt><font size=+1>+ &ndash; * / % ^</font></tt> (exponentiation), and concatenation (indicated
+    by white
+    space). The operators <tt><font size=+1>! ++ &ndash;&ndash; += &ndash;= *= /= %= ^= &gt; &gt;= &lt; &lt;= == != ?:</font></tt> are
+    also available in expressions. Variables may be scalars, array
+    elements (denoted <i>x</i><tt><font size=+1>[</font></tt><i>i</i><tt><font size=+1>]</font></tt><i>)</i> or fields. Variables are initialized to
+    the null string. Array subscripts may be any string, not necessarily
+    numeric; this allows for a form of associative memory. Multiple
+    subscripts such as <tt><font size=+1>[i,j,k]</font></tt> are permitted; the constituents are
+    concatenated, separated by the value of <tt><font size=+1>SUBSEP</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>print</font></tt> statement prints its arguments on the standard output
+    (or on a file if <tt><font size=+1>&gt;</font></tt><i>file</i> or <tt><font size=+1>&gt;&gt;</font></tt><i>file</i> is present or on a pipe if <tt><font size=+1>|</font></tt><i>cmd</i>
+    is present), separated by the current output field separator,
+    and terminated by the output record separator. <i>file</i> and <i>cmd</i> may
+    be literal names or parenthesized expressions; identical string
+    values in different statements denote the
+    same open file. The <tt><font size=+1>printf</font></tt> statement formats its expression list
+    according to the format (see <i>fprintf</i>(3))<i>.</i> The built-in function
+    <tt><font size=+1>close(</font></tt><i>expr</i><tt><font size=+1>)</font></tt> closes the file or pipe <i>expr</i>. The built-in function
+    <tt><font size=+1>fflush(</font></tt><i>expr</i><tt><font size=+1>)</font></tt> flushes any buffered output for the file or pipe
+    <i>expr</i>. If <i>expr</i> is omitted or is a null string, all open files are
+    flushed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The mathematical functions <tt><font size=+1>exp</font></tt>, <tt><font size=+1>log</font></tt>, <tt><font size=+1>sqrt</font></tt>, <tt><font size=+1>sin</font></tt>, <tt><font size=+1>cos</font></tt>, and <tt><font size=+1>atan2</font></tt>
+    are built in. Other built-in functions:<br>
+    <tt><font size=+1>length</font></tt>&nbsp;&nbsp;&nbsp;If its argument is a string, the string&#8217;s length is returned.
+    If its argument is an array, the number of subscripts in the array
+    is returned. If no argument, the length of <tt><font size=+1>$0</font></tt> is returned.<br>
+    <tt><font size=+1>rand</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;random number on (0,1)<br>
+    <tt><font size=+1>srand</font></tt>&nbsp;&nbsp;&nbsp;sets seed for <tt><font size=+1>rand</font></tt> and returns the previous seed.<br>
+    <tt><font size=+1>int</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;truncates to an integer value<br>
+    <tt><font size=+1>utf</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;converts its numerical argument, a character number, to a UTF
+    string<br>
+    <tt><font size=+1>substr(</font></tt><i>s</i><tt><font size=+1>,</font></tt> <i>m</i><tt><font size=+1>,</font></tt> <i>n</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            the <i>n</i>-character substring of <i>s</i> that begins at position <i>m</i> counted
+            from 1.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>index(</font></tt><i>s</i><tt><font size=+1>,</font></tt> <i>t</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            the position in <i>s</i> where the string <i>t</i> occurs, or 0 if it does not.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>match(</font></tt><i>s</i><tt><font size=+1>,</font></tt> <i>r</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            the position in <i>s</i> where the regular expression <i>r</i> occurs, or 0
+            if it does not. The variables <tt><font size=+1>RSTART</font></tt> and <tt><font size=+1>RLENGTH</font></tt> are set to the
+            position and length of the matched string.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>split(</font></tt><i>s</i><tt><font size=+1>,</font></tt> <i>a</i><tt><font size=+1>,</font></tt> <i>fs</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            splits the string <i>s</i> into array elements <i>a</i><tt><font size=+1>[1]</font></tt>, <i>a</i><tt><font size=+1>[2]</font></tt>, ..., <i>a</i><tt><font size=+1>[</font></tt><i>n</i><tt><font size=+1>]</font></tt>,
+            and returns <i>n</i>. The separation is done with the regular expression
+            <i>fs</i> or with the field separator <tt><font size=+1>FS</font></tt> if <i>fs</i> is not given. An empty
+            string as field separator splits the string into one array element
+            per character.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>sub(</font></tt><i>r</i><tt><font size=+1>,</font></tt> <i>t</i><tt><font size=+1>,</font></tt> <i>s</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            substitutes <i>t</i> for the first occurrence of the regular expression
+            <i>r</i> in the string <i>s</i>. If <i>s</i> is not given, <tt><font size=+1>$0</font></tt> is used.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>gsub</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;same as <tt><font size=+1>sub</font></tt> except that all occurrences of the regular expression
+    are replaced; <tt><font size=+1>sub</font></tt> and <tt><font size=+1>gsub</font></tt> return the number of replacements.<br>
+    <tt><font size=+1>sprintf(</font></tt><i>fmt</i><tt><font size=+1>,</font></tt> <i>expr</i><tt><font size=+1>,</font></tt> <i>...</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            the string resulting from formatting <i>expr ...</i> according to the
+            <i>printf</i> format <i>fmt<br>
+            </i>
+        </table>
+        
+    </table>
+    <tt><font size=+1>system(</font></tt><i>cmd</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            executes <i>cmd</i> and returns its exit status<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>tolower(</font></tt><i>str</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            returns a copy of <i>str</i> with all upper-case characters translated
+            to their corresponding lower-case equivalents.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>toupper(</font></tt><i>str</i><tt><font size=+1>)<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            returns a copy of <i>str</i> with all lower-case characters translated
+            to their corresponding upper-case equivalents. 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+            
+        </table>
+        
+    </table>
+    The &#8220;function&#8221; <tt><font size=+1>getline</font></tt> sets <tt><font size=+1>$0</font></tt> to the next input record from the
+    current input file; <tt><font size=+1>getline &lt;</font></tt><i>file</i> sets <tt><font size=+1>$0</font></tt> to the next record from
+    <i>file</i>. <tt><font size=+1>getline</font></tt> <i>x</i> sets variable <i>x</i> instead. Finally, <i>cmd</i> <tt><font size=+1>| getline</font></tt>
+    pipes the output of <i>cmd</i> into <tt><font size=+1>getline</font></tt>; each call of <tt><font size=+1>getline</font></tt> returns
+    the next line of output from <i>cmd</i>. In all cases, <tt><font size=+1>getline</font></tt> returns
+    1 for a successful input,
+    0 for end of file, and &ndash;1 for an error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Patterns are arbitrary Boolean combinations (with <tt><font size=+1>! || &amp;&amp;</font></tt>) of regular
+    expressions and relational expressions. Regular expressions are
+    as in <a href="../man7/regexp.html"><i>regexp</i>(7)</a>. Isolated regular expressions in a pattern apply
+    to the entire line. Regular expressions may also occur in relational
+    expressions, using the operators <tt><font size=+1>~</font></tt> and <tt><font size=+1>!~</font></tt>. <tt><font size=+1>/</font></tt><i>re</i><tt><font size=+1>/</font></tt> is a constant
+    regular expression;
+    any string (constant or variable) may be used as a regular expression,
+    except in the position of an isolated regular expression in a
+    pattern. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A pattern may consist of two patterns separated by a comma; in
+    this case, the action is performed for all lines from an occurrence
+    of the first pattern though an occurrence of the second. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A relational expression is one of the following:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <i>expression matchop regular-expression<br>
+        expression relop expression<br>
+        expression</i> <tt><font size=+1>in</font></tt> <i>array-name<br>
+        </i><tt><font size=+1>(</font></tt><i>expr</i><tt><font size=+1>,</font></tt><i>expr,...</i><tt><font size=+1>) in</font></tt> <i>array-name 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </i>
+        
+    </table>
+    where a <i>relop</i> is any of the six relational operators in C, and
+    a <i>matchop</i> is either <tt><font size=+1>~</font></tt> (matches) or <tt><font size=+1>!~</font></tt> (does not match). A conditional
+    is an arithmetic expression, a relational expression, or a Boolean
+    combination of these. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The special patterns <tt><font size=+1>BEGIN</font></tt> and <tt><font size=+1>END</font></tt> may be used to capture control
+    before the first input line is read and after the last. <tt><font size=+1>BEGIN</font></tt>
+    and <tt><font size=+1>END</font></tt> do not combine with other patterns. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Variable names with special meanings:<br>
+    <tt><font size=+1>CONVFMT</font></tt>&nbsp;&nbsp;&nbsp;conversion format used when converting numbers (default
+    <tt><font size=+1>%.6g</font></tt>)<br>
+    <tt><font size=+1>FS</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;regular expression used to separate fields; also settable by
+    option <tt><font size=+1>&ndash;F</font></tt><i>fs</i>.<br>
+    <tt><font size=+1>NF</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number of fields in the current record<br>
+    <tt><font size=+1>NR</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ordinal number of the current record<br>
+    <tt><font size=+1>FNR</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ordinal number of the current record in the current file<br>
+    <tt><font size=+1>FILENAME</font></tt>&nbsp;&nbsp;&nbsp;the name of the current input file<br>
+    <tt><font size=+1>RS</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input record separator (default newline)<br>
+    <tt><font size=+1>OFS</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output field separator (default blank)<br>
+    <tt><font size=+1>ORS</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output record separator (default newline)<br>
+    <tt><font size=+1>OFMT</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output format for numbers (default <tt><font size=+1>%.6g</font></tt>)<br>
+    <tt><font size=+1>SUBSEP</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;separates multiple subscripts (default 034)<br>
+    <tt><font size=+1>ARGC</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;argument count, assignable<br>
+    <tt><font size=+1>ARGV</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;argument array, assignable; non-null members are taken as
+    file names<br>
+    <tt><font size=+1>ENVIRON</font></tt>&nbsp;&nbsp;&nbsp;array of environment variables; subscripts are names. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Functions may be defined (at the position of a pattern-action
+    statement) thus:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>function foo(a, b, c) { ...; return x } 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Parameters are passed by value if scalar and by reference if array
+    name; functions may be called recursively. Parameters are local
+    to the function; all other variables are global. Thus local variables
+    may be created by providing excess parameters in the function
+    definition.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>length($0) &gt; 72<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Print lines longer than 72 characters.<br>
+        
+    </table>
+    <tt><font size=+1>{ print $2, $1 }<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Print first two fields in opposite order. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    <tt><font size=+1>BEGIN { FS = &quot;,[ \t]*|[ \t]+&quot; }<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        { print $2, $1 }<br>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Same, with input fields separated by comma and/or blanks and tabs.
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        <tt><font size=+1>{ s += $1 }<br>
+        </font></tt>
+    </table>
+    <tt><font size=+1>END &nbsp;&nbsp;&nbsp;{ print &quot;sum is&quot;, s, &quot; average is&quot;, s/NR }<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Add up first column, print sum and average.<br>
+        
+    </table>
+    <tt><font size=+1>/start/, /stop/<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Print all lines between start/stop pairs. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    <tt><font size=+1>BEGIN { &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Simulate echo(1)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for (i = 1; i &lt; ARGC; i++) printf &quot;%s &quot;, ARGV[i]<br>
+        printf &quot;\n&quot;<br>
+        exit }<br>
+        
+    </table>
+    </font></tt>
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/awk">/usr/local/plan9/src/cmd/awk</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/sed.html"><i>sed</i>(1)</a>, <a href="../man7/regexp.html"><i>regexp</i>(7)</a>,<br>
+    A. V. Aho, B. W. Kernighan, P. J. Weinberger, <i>The AWK Programming
+    Language,</i> Addison-Wesley, 1988. ISBN 0-201-07981-X<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    There are no explicit conversions between numbers and strings.
+    To force an expression to be treated as a number add 0 to it;
+    to force it to be treated as a string concatenate <tt><font size=+1>&quot;&quot;</font></tt> to it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The scope rules for variables in functions are a botch; the syntax
+    is worse. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    UTF is not always dealt with correctly, though <i>awk</i> does make an
+    attempt to do so. The <i>split</i> function with an empty string as final
+    argument now copes with UTF in the string being split.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

@@ -1,0 +1,113 @@
+<head>
+<title>tapefs(4) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>TAPEFS(4)</b><td align=right><b>TAPEFS(4)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    32vfs, cpiofs, tapfs, tarfs, tpfs, v6fs, v10fs, zipfs &ndash; mount archival
+    file systems<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>fs/32vfs</font></tt> [ <tt><font size=+1>&#8722;b</font></tt> <i>blocksize</i> ] [ <tt><font size=+1>&#8722;m</font></tt> <i>mountpoint</i> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>passwd</i> ] [ <tt><font size=+1>&#8722;g</font></tt>
+    <i>group</i> ] <i>file<br>
+    </i><tt><font size=+1>fs/cpiofs<br>
+    fs/tapfs<br>
+    fs/tarfs<br>
+    fs/tpfs<br>
+    fs/v6fs<br>
+    fs/v10fs<br>
+    fs/zipfs<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These commands interpret data from traditional tape or file system
+    formats stored in <i>file</i>, and mount their contents (read-only) into
+    a Plan 9 file system. The optional <tt><font size=+1>&#8722;p</font></tt> and <tt><font size=+1>&#8722;g</font></tt> flags specify Unix-format
+    password (respectively group) files that give the mapping between
+    the numeric user- and group-ID numbers on the media and the strings
+    reported by
+    Plan 9 status inquiries. The <tt><font size=+1>&#8722;m</font></tt> flag introduces the name at which
+    the new file system should be attached; the default is <tt><font size=+1>/n/tapefs</font></tt>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>32vfs</i> interprets raw disk images of 32V systems, which are ca.
+    1978 research Unix systems for the VAX (512 byte block size, the
+    default), and also pre-FFS Berkeley VAX systems (1KB block size).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Cpiofs</i> interprets <tt><font size=+1>cpio</font></tt> tape images (constructed with <tt><font size=+1>cpio</font></tt><i>&#8217;s</i> <tt><font size=+1>c</font></tt>
+    flag). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Tarfs</i> interprets <i>tar</i> tape images. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Tpfs</i> interprets <i>tp</i> tapes from the Fifth through Seventh Edition
+    research Unix systems. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Tapfs</i> interprets <i>tap</i> tapes from the pre-Fifth Edition era. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>V6fs</i> interprets disk images from the Fifth and Sixth edition research
+    Unix systems (512B block size). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>V10fs</i> interprets disk images from the Tenth Edition research Unix
+    systems (4KB block size). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Zipfs</i> interprets zip archives (see <a href="../man1/gzip.html"><i>gzip</i>(1)</a>).<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These commands are constructed in a highly stereotyped way using
+    the files <i>fs.c</i> and <i>util.c</i> in <tt><font size=+1><a href="/usr/local/plan9/src/cmd/tapefs">/usr/local/plan9/src/cmd/tapefs</a></font></tt>,
+    which in turn derive substantially from <a href="../man4/ramfs.html"><i>ramfs</i>(4)</a>.<br>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man7/intro.html"><i>intro</i>(7)</a>, <a href="../man4/ramfs.html"><i>ramfs</i>(4)</a>.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

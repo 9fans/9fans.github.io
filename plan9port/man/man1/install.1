@@ -1,0 +1,154 @@
+.TH INSTALL 1
+.SH NAME
+install \- notes about Plan 9 from User Space installation
+.SH SYNOPSIS
+.B
+cd \*9; ./INSTALL
+[
+.B -b
+|
+.B -c
+] [
+.B -r
+.I path
+]
+.SH DESCRIPTION
+To obtain the Plan 9 tree, use Git
+(see
+.IR git (1))
+or download a tar file from
+.HR http://swtch.com/plan9port "" .
+.PP
+The tree can be unpacked anywhere, but the
+usual place is
+.BR /usr/local/plan9 .
+In the root of the tree, run
+.BR ./INSTALL .
+This script builds the Plan 9 build program
+.IR mk (1)
+if necessary,
+cleans all previously built object files and libraries out of the tree,
+rebuilds and installs everything, and then cleans up.
+.PP
+There are a few files in tree which have the root
+hard-coded in them.
+After the build, 
+.I INSTALL
+edits these files to replace the string
+.B /usr/local/plan9
+with the name of the root of the current tree.
+.PP
+Finally,
+.I INSTALL
+builds an HTML version of the manual and installs it in
+.BR \*9/man .
+.PP
+The installation can be thought of as two steps:
+build all the binaries, and then edit files as necessary
+to fix the references to the installation root.
+If necessary, these can be run separately.
+Given the
+.B -b
+flag,
+.I INSTALL
+performs only the first step.
+Given the
+.B -c
+flag,
+.I INSTALL
+performs only the second step.
+The first step can be done with the tree in a temporary work directory,
+but the second step must be done once the tree is in its final location.
+If you want to build the project in one location and then install into
+another location, use
+.B -r
+.I path
+to specify the
+.I final
+location of Plan9 tree.
+These flags are only necessary when trying to conform to the
+expectations of certain package management systems.
+.PP
+At the end of the installation,
+.I INSTALL
+prints suggested settings for the environment variables 
+.B $PLAN9
+and
+.BR $PATH .
+.PP
+Plan 9 from User Space uses different threading implementations on Linux 2.6 and
+later kernels than on 2.4 and earlier;
+and on FreeBSD 5 and later kernels than on FreeBSD 4 and earlier.
+Running binaries from one class on another will not work.
+.PP
+Some Linux 2.6 systems (e.g., Gentoo) do not use the new NPTL pthread library
+even though the kernel supports them.  On these systems, plan9port must 
+fall back on the threading code intended for Linux 2.4.  To accomplish this,
+.I INSTALL
+checks whether the running system uses NPTL and sets
+.B SYSVERSION
+in
+.B \*9/config
+accordingly.
+The file
+.B \*9/LOCAL.config
+is appended to
+.B config
+after this auto-detection and can be used to override the choices.
+If 
+.B LOCAL.config
+contains a line
+.B WSYSTYPE=nowsys
+then the system is built without using X11.
+.PP
+On most Linux systems, the X11 header packages need to be installed
+to build using X11.  On Debian. the required packages are
+libx11-dev, libxext-dev, and libxt-dev.
+On Ubuntu, it suffices to install xorg-dev.
+.PP
+.I INSTALL
+can safely be repeated to rebuild the system from scratch.
+.PP
+Once the system is built for the first time,
+it can be maintained and rebuilt using 
+.IR mk (1).
+To rebuild individual commands or libraries,
+run
+.B mk
+.B install
+and
+.B mk
+.B clean
+in the appropriate source directory
+(see
+.IR src (1)).
+.SH FILES
+.TP
+.B \*9/lib/moveplan9.files
+the list of files that need to have
+.B /usr/local/plan9
+edited out of them
+.TP
+.B \*9/lib/moveplan9.sh
+the script that edits the files
+.TP
+.B \*9/src/mkmk.sh
+the shell script used to build
+.IR mk (1)
+.TP
+.B \*9/dist/manweb
+the shell script that builds the HTML manual
+.TP
+.B \*9/man/index.html
+the top-level page in the HTML version of the manual
+.TP
+.B \*9/install.log
+logged output from the last run of
+.I INSTALL
+.TP
+.B \*9/install.sum
+a summary of
+.B install.log
+.SH SEE ALSO
+.IR intro (1),
+.IR git (1)

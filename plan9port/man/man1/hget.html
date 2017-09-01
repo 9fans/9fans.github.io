@@ -1,0 +1,90 @@
+<head>
+<title>hget(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>HGET(1)</b><td align=right><b>HGET(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    hget &ndash; retrieve a web page corresponding to a url<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>hget</font></tt> [ <tt><font size=+1>&#8722;dhv</font></tt> ][ <tt><font size=+1>&#8722;o</font></tt> <i>ofile</i> ][ <tt><font size=+1>&#8722;p</font></tt> <i>body</i> ][ <tt><font size=+1>&#8722;x</font></tt> <i>netmntpt</i> ] <i>url<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Hget</i> retrieves the web page specified by the URL <i>url</i> and writes
+    it, absent the <tt><font size=+1>&#8722;o</font></tt> option, to standard output. The only supported
+    URL type is http. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If <i>url</i> is of type HTTP and the <tt><font size=+1>&#8722;p</font></tt> option is specified, then an
+    HTTP POST is performed with <i>body</i> as the data to be posted. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;o</font></tt> option is used to keep a local file in sync with a web
+    page. If the web page has been modified later than the file, it
+    is copied into the file. If the file is up to date but incomplete,
+    <i>hget</i> will fetch the missing bytes. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Option <tt><font size=+1>&#8722;h</font></tt> causes HTTP headers to be printed to standard output
+    in addition to the transferred web page. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Option <tt><font size=+1>&#8722;d</font></tt> turns on debugging written to standard error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Normally, <i>hget</i> uses the IP stack mounted under <tt><font size=+1>/net</font></tt>. The <tt><font size=+1>&#8722;x</font></tt> option
+    can be used to specify the mount point of a different IP stack
+    to use. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Option <tt><font size=+1>&#8722;v</font></tt> writes progress lines to standard output once a second.
+    Each line contains two numbers, the bytes transferred so far and
+    the total length to be transferred. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the environment variable <tt><font size=+1>httpproxy</font></tt> is set, it is used as a
+    URL denoting an HTTP proxy server. All HTTP accesses use this
+    server to get the page instead of calling the destination server.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/hget.c">/usr/local/plan9/src/cmd/hget.c</a><br>
+    </font></tt>
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

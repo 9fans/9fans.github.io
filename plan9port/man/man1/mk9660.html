@@ -1,0 +1,159 @@
+<head>
+<title>mk9660(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>MK9660(1)</b><td align=right><b>MK9660(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    dump9660, mk9660 &ndash; create an ISO-9660 CD image<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>mk9660</font></tt> [ <tt><font size=+1>&#8722;:D</font></tt> ] [ <tt><font size=+1>&#8722;9cjr</font></tt> ] [ <tt><font size=+1>&#8722;b</font></tt> <i>bootfile</i> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>proto</i> ] [ <tt><font size=+1>&#8722;s</font></tt> src
+    ] [ <tt><font size=+1>&#8722;v</font></tt> volume ] <i>image 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>dump9660</font></tt> [ <tt><font size=+1>&#8722;:D</font></tt> ] [ <tt><font size=+1>&#8722;9cjr</font></tt> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>proto</i> ] [ <tt><font size=+1>&#8722;s</font></tt> src ] [ <tt><font size=+1>&#8722;v</font></tt> volume
+    ] [ <tt><font size=+1>&#8722;m</font></tt> <i>maxsize</i> ] [ <tt><font size=+1>&#8722;n</font></tt> <i>now</i> ] <i>image<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Mk9660</i> writes to the random access file <i>image</i> an ISO-9660 CD image
+    containing the files named in <i>proto</i> (by default, <tt><font size=+1><a href="/usr/local/plan9/proto/allproto">/usr/local/plan9/proto/allproto</a></font></tt>)
+    from the file tree <i>src</i> (by default, the current directory). The
+    <i>proto</i> file is formatted as described in <a href="../man3/proto.html"><i>proto</i>(3)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The created CD image will be in ISO-9660 format, but by default
+    the file names will be stored in UTF-8 with no imposed length
+    or character restrictions. The <tt><font size=+1>&#8722;c</font></tt> flag causes <i>mk9660</i> to use only
+    file names in &#8220;8.3&#8221; form that use digits, letters, and underscore.
+    File names that do not conform are changed to <tt><font size=+1>D</font></tt><i>nnnnnn</i> (for directories)
+    or <tt><font size=+1>F</font></tt><i>nnnnnn</i> (for files); a
+    key file <tt><font size=+1>_CONFORM.MAP</font></tt> is created in the root directory to ease
+    the reverse process. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the <tt><font size=+1>&#8722;9</font></tt> flag is given, the system use fields at the end of each
+    directory entry will be populated with Plan directory information
+    (owner, group, mode, full name); this is interpreted by <i>9660srv</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the <tt><font size=+1>&#8722;j</font></tt> flag is given, the usual directory tree is written,
+    but an additional tree in Microsoft Joliet format is also added.
+    This second tree can contain long Unicode file names, and can
+    be read by <i>9660srv</i> as well as most versions of Windows and many
+    Unix clones. The characters <tt><font size=+1>*</font></tt>, <tt><font size=+1>:</font></tt>, <tt><font size=+1>;</font></tt>, <tt><font size=+1>?</font></tt>, and <tt><font size=+1>\</font></tt> are allowed in Plan
+    9 file names but not in Joliet file
+    names; non-conforming file names are translated and a <tt><font size=+1>_CONFORM.MAP</font></tt>
+    file written as in the case of the <tt><font size=+1>&#8722;c</font></tt> option. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the <tt><font size=+1>&#8722;r</font></tt> flag is given, Rock Ridge extensions are written in
+    the format of the system use sharing protocol; this format provides
+    Posix-style file metadata and is common on Unix platforms. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The options <tt><font size=+1>&#8722;c</font></tt>, <tt><font size=+1>&#8722;9</font></tt>, <tt><font size=+1>&#8722;j</font></tt>, and <tt><font size=+1>&#8722;r</font></tt> may be mixed freely with the exception
+    that <tt><font size=+1>&#8722;9</font></tt> and <tt><font size=+1>&#8722;r</font></tt> are mutually exclusive. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;v</font></tt> flag sets the volume title; if unspecified, the base name
+    of <i>proto</i> is used. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;:</font></tt> flag causes <tt><font size=+1>mk9660</font></tt> to replace colons in scanned file names
+    with spaces; this is the inverse of the map applied by Plan 9&#8217;s
+    <i>dossrv</i>(4) and is useful for writing Joliet CDs containing data
+    from FAT file systems. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;b</font></tt> option creates a bootable CD. Bootable CDs contain pointers
+    to floppy images which are loaded and booted by the BIOS. <i>Bootfile</i>
+    should be the name of the floppy image to use; it is a path relative
+    to the root of the created CD. That is, the boot floppy image
+    must be listed in the <i>proto</i> file already: the <tt><font size=+1>&#8722;b</font></tt> flag just creates
+    a pointer to it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;D</font></tt> flag creates immense amounts of debugging output on standard
+    error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Dump9660</i> is similar in specification to <i>mk9660</i> but creates and
+    updates backup CD images in the style of the <i>dump</i> file system
+    (see Plan 9&#8217;s <i>fs</i>(4)). The dump is file-based rather than block-based:
+    if a file&#8217;s contents have not changed since the last backup, only
+    its directory entry will be rewritten. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;n</font></tt> option specifies a time (in seconds since January 1, 1970)
+    to be used for naming the dump directory. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;m</font></tt> option specifies a maximum size for the image; if a backup
+    would cause the image to grow larger than <i>maxsize</i>, it will not
+    be written, and <i>dump9660</i> will exit with a non-empty status.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Create an image of the Plan 9 source tree, including a conformant
+    ISO-9660 directory tree, Plan 9 extensions in the system use fields,
+    and a Joliet directory tree.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>mk9660 &#8722;9cj &#8722;s /n/bootes &#8722;p srcproto cdimage<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="/usr/local/plan9/src/cmd/9660">/usr/local/plan9/src/cmd/9660</a><br>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/proto.html"><i>proto</i>(3)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

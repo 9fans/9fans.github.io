@@ -1,0 +1,72 @@
+<head>
+<title>openfd(9P) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>OPENFD(9P)</b><td align=right><b>OPENFD(9P)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    openfd &ndash; prepare a fid for I/O using a file descriptor<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>size</i>[4] <tt><font size=+1>Topenfd</font></tt> <i>tag</i>[2] <i>fid</i>[4] <i>mode</i>[1]<br>
+    <i>size</i>[4] <tt><font size=+1>Ropenfd</font></tt> <i>tag</i>[2] <i>qid</i>[13] <i>iounit</i>[4] <i>unixfd</i>[4]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The <i>openfd</i> request behaves like open, except that it prepares
+    and returns a Unix file descriptor corresponding to the opened
+    fid. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    After a successful <i>open</i> transaction, <i>fid</i> is considered by the
+    client to have been clunked and can be reused. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The returned Unix file descriptor is one end of a Unix pipe. A
+    proxy process at the other end transfers data between the pipe
+    and the 9P server. Because it is a pipe, errors on reads and writes
+    are discarded and <i>mode</i> must be <tt><font size=+1>OREAD</font></tt> or <tt><font size=+1>OWRITE</font></tt>; it cannot be <tt><font size=+1>ORDWR</font></tt>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Openfd</i> is implemented by <a href="../man4/9pserve.html"><i>9pserve</i>(4)</a>. 9P servers that post their
+    services using <a href="../man4/9pserve.html"><i>9pserve</i>(4)</a> (or indirectly via <a href="../man3/post9pservice.html"><i>post9pservice</i>(3)</a>)
+    will never see a <tt><font size=+1>Topenfd</font></tt> message.<br>
+    
+</table>
+<p><font size=+1><b>ENTRY POINTS    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Fsopenfd</i> (see <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a>) generates an <tt><font size=+1>openfd</font></tt> message.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

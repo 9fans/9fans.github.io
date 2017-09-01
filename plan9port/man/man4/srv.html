@@ -1,0 +1,126 @@
+<head>
+<title>srv(4) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>SRV(4)</b><td align=right><b>SRV(4)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    srv, 9fs &ndash; start network file service<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>srv</font></tt> [ <tt><font size=+1>&#8722;an</font></tt> ] [ <tt><font size=+1>&#8722;k</font></tt> <i>keypattern</i> ] <i>address</i> [ <i>srvname</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>9fs</font></tt> <i>system<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Srv</i> dials the given address and initializes the connection to
+    serve the 9P protocol. It then posts the resulting connection
+    in the current name space (see <a href="../man4/intro.html"><i>intro</i>(4)</a>) as <i>srvname</i> (default <i>address</i>).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;a</font></tt> option causes <i>srv</i> to post a pre-authenticated connection
+    to the file system <i>aname</i> (by default, the empty string; see <a href="../man9/attach.html"><i>attach</i>(9p)</a>).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;n</font></tt> option causes <i>srv</i> to reject authentication attempts by
+    clients, useful if the remote server is known not to require authentication.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Srv</i> authenticates over the 9P connection to establish a valid
+    auth fid. <i>Keypattern</i>, if specified, is used to select the key
+    used for authentication. Client attach requests are rewritten
+    to use the specified <i>aname</i> and auth fid. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>9fs</i> command executes the <i>srv</i> necessary to make available the
+    files of <i>system</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>9fs</i> recognizes some special names, such as <tt><font size=+1>sources</font></tt> to make the
+    file server <i>sources.cs.bell-labs.com</i> available as service <i>sources</i>.
+    <i>9fs</i> is an <a href="../man1/rc.html"><i>rc</i>(1)</a> script; examine it to see what local conventions
+    apply.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    List the root directory on <i>sources</i>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>9fs sources<br>
+        9p ls sources<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Mount a remote file server <i>bootes</i> on Linux using the kernel 9P
+    mount driver, with <i>srv</i> handling authentication:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>srv &#8722;a sources.cs.bell&#8722;labs.com sources<br>
+        sudo mount &#8722;t 9p &#8722;o trans=unix,uname=$USER,dfltuid=`id &#8722;u`,dfltgid=`id
+        &#8722;g`<br>
+         
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            `namespace`/sources /n/sources<br>
+            
+        </table>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/srv.c">/usr/local/plan9/src/cmd/srv.c</a><br>
+    <a href="/usr/local/plan9/bin/9fs">/usr/local/plan9/bin/9fs</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/dial.html"><i>dial</i>(3)</a>, <a href="../man4/intro.html"><i>intro</i>(4)</a>, <a href="../man1/netfiles.html"><i>netfiles</i>(1)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

@@ -1,0 +1,110 @@
+<head>
+<title>mount(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>MOUNT(1)</b><td align=right><b>MOUNT(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    mount, unmount &ndash; change name space<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>mount</font></tt> <i>servename mtpt 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>unmount</font></tt> <i>mtpt<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Mount</i> mounts a 9P server&#8217;s files into the file system. <i>Servename</i>
+    is typically either the name of a Unix domain socket (see <a href="../man1/namespace.html"><i>namespace</i>(1)</a>)
+    or the name or IP address of a machine serving 9P over TCP port
+    564. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Unmount</i> undoes the effects of the <i>mount</i> command. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    9P services can be mounted on Unix systems in multiple ways. On
+    Linux, <i>mount</i> uses the native 9P kernel module when present. Otherwise
+    it tries to use <a href="../man4/9pfuse.html"><i>9pfuse</i>(4)</a> with the FUSE file system module. Using
+    the 9P kernel module requires root access. FUSE can often be used
+    by regular users. On FreeBSD, <i>mount</i> tries to use FUSE. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Since Unix already has a <i>mount</i> command, the version described
+    in this manual page should be invoked as <tt><font size=+1>9 mount</font></tt>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Mount <a href="../man4/acme.html"><i>acme</i>(4)</a> onto <tt><font size=+1>/mnt/acme :<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        9 mount `namespace`/acme /mnt/acme<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        
+    </table>
+    View your plumbing rules:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>9 mount `namespace`/plumb /mnt/plumb<br>
+        cat /mnt/plumb/rules<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/bin/mount">/usr/local/plan9/bin/mount</a><br>
+    <a href="/usr/local/plan9/bin/unmount">/usr/local/plan9/bin/unmount</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man4/intro.html"><i>intro</i>(4)</a>, <a href="../man9/intro.html"><i>intro</i>(9p)</a>, <a href="../man4/9pfuse.html"><i>9pfuse</i>(4)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

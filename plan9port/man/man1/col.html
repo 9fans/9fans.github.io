@@ -1,0 +1,91 @@
+<head>
+<title>col(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>COL(1)</b><td align=right><b>COL(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    col &ndash; column alignment<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>col</font></tt> [ <tt><font size=+1>&#8722;bfx</font></tt> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Col</i> overlays lines to expunge reverse line feeds (ESC-7) and half
+    line feeds (ESC-9 and ESC-8) as produced by <i>nroff</i> for .2C in <a href="../man7/ms.html"><i>ms</i>(7)</a>
+    or <a href="../man7/man.html"><i>man</i>(7)</a> and for <a href="../man1/tbl.html"><i>tbl</i>(1)</a>. <i>Col</i> is a pure filter. It normally emits
+    only full line feeds; option <tt><font size=+1>&#8722;f</font></tt> (fine) allows half line feeds
+    too. Option <tt><font size=+1>&#8722;b</font></tt> removes backspaces, printing just one of each pile
+    of overstruck characters. <i>Col
+    </i>normally converts white space to tabs; option <tt><font size=+1>&#8722;x</font></tt> overrides this
+    feature. Other escaped characters and non-printing characters
+    are ignored.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>tbl file | nroff &#8722;ms | col | p<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Format some tables for printing on typewriters; use <i>col</i> to remove
+        reverse line feeds, and paginate the output.<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/col.c">/usr/local/plan9/src/cmd/col.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/pr.html"><i>pr</i>(1)</a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Col</i> can&#8217;t back up more than 128 lines or handle more than 800
+    characters per line, and understands <tt><font size=+1>VT</font></tt> (013) as reverse line
+    feed.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

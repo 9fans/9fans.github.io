@@ -1,0 +1,163 @@
+<head>
+<title>avl(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>AVL(3)</b><td align=right><b>AVL(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    mkavltree, insertavl, lookupavl, deleteavl, avlwalk, avlnext,
+    avlprev, endwalk - AVL tree routines<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;avl.h&gt;<br>
+    typedef struct Avl Avl;<br>
+    struct Avl<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*p;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* parent */<br>
+            Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*n[2];  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* children */<br>
+            int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bal;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* balance bits */<br>
+            
+        </table>
+        
+    </table>
+    };<br>
+    Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*avlnext(Avlwalk *walk);<br>
+    Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*avlprev(Avlwalk *walk);<br>
+    Avlwalk &nbsp;&nbsp;&nbsp;*avlwalk(Avltree *tree);<br>
+    void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleteavl(Avltree *tree, Avl *key, Avl **oldp);<br>
+    void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;endwalk(Avlwalk *walk);<br>
+    void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;insertavl(Avltree *tree, Avl *new, Avl **oldp);<br>
+    Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*lookupavl(Avltree *tree, Avl *key);<br>
+    Avl &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*searchavl(Avltree *tree, Avl *key, int neighbor);<br>
+    Avltree &nbsp;&nbsp;&nbsp;*mkavltree(int(*cmp)(Avl*, Avl*));<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    An AVL tree is a self-balancing binary search tree. These routines
+    allow creation and maintenance of in-memory AVL trees. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    An empty AVL tree is created by calling <i>mkavltree</i> with a comparison
+    function as argument. This function should take two pointers to
+    <tt><font size=+1>Avl</font></tt> objects and return -1, 0 or 1 as the first is respectively
+    less than, equal to, or greater than, the second. <i>Insertavl</i> adds
+    a <i>new</i> tree node into <i>tree</i>. If <i>oldp</i> is non-nil upon return, it
+    points to storage for an old node with
+    the same key that may now be freed. <i>Lookupavl</i> returns the <i>tree</i>
+    node that matches <i>key</i> by <i>tree</i>&#8217;s comparison function, or <tt><font size=+1>nil</font></tt> if
+    none. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Searchavl</i> returns the <i>tree</i> node that matches <i>key</i> by <i>tree</i>&#8217;s comparison
+    function, if it exists. If it does not, and <i>neighbor</i> is positive,
+    it returns the nearest node whose <i>key</i> is greater or <tt><font size=+1>nil</font></tt> if there
+    is none and, if <i>neighbor</i> is negative, it returns the nearest node
+    whose <i>key</i> is less or <tt><font size=+1>nil</font></tt> if there is none. It is an error to set
+    <i>neighbor</i> to values other than &ndash;1, 0,
+    or +1. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Deleteavl</i> removes the node matching <i>key</i> from <i>tree</i>; <i>oldp</i> is handled
+    as per <i>insertavl</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Avlwalk</i> returns a pointer to a newly-allocated <tt><font size=+1>Avlwalk</font></tt> object.
+    <i>Endwalk</i> frees such an object. <i>Avlnext</i> and <i>avlprev</i> walk the tree
+    associated with <i>walk</i>, returning the next (respectively, previous)
+    tree node in the comparison order defined by the comparison function
+    associated with the tree associated with <i>walk</i>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Intended usage seems to be to make an anonymous <tt><font size=+1>Avl</font></tt> the first
+    member of the application&#8217;s tree-node structure, then pass these
+    routines tree-node pointers instead of <tt><font size=+1>Avl*</font></tt>s.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>typedef struct Node {<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Avl;<br>
+            uchar &nbsp;&nbsp;&nbsp;&nbsp;score[VtScoreSize];<br>
+            int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type;<br>
+            
+        </table>
+        } Node;<br>
+        Avltree *tree;<br>
+        Avl *res;<br>
+        Node *np;<br>
+        </font></tt><i>...<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <tt><font size=+1>res = lookupavl(tree, np);<br>
+            </font></tt>
+        </table>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libavl">/usr/local/plan9/src/libavl</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    G. M. Adelson-Velsky, E. M. Landis, &#8220;An algorithm for the organization
+    of information&#8221;, <i>Soviet Mathematics</i>, Vol. 3, pp. 1256&#8212;1263.<br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Functions returning pointers return <tt><font size=+1>nil</font></tt> on error.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

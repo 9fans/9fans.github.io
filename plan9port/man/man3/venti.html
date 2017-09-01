@@ -1,0 +1,109 @@
+<head>
+<title>venti(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI(3)</b><td align=right><b>VENTI(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    venti &ndash; archival storage server<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt;<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The Venti library provides support for writing Venti servers and
+    clients. This manual page describes general utility functions.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Other manual pages describe the library functions in detail. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-cache.html"><i>Venti-cache</i>(3)</a> describes a simple in-memory block cache to help
+    clients. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-conn.html"><i>Venti-conn</i>(3)</a> describes routines for manipulating network connections
+    between Venti clients and servers. <a href="../man3/venti-client.html"><i>Venti-client</i>(3)</a> and <a href="../man3/venti-server.html"><i>venti-server</i>(3)</a>
+    describe routines for writing clients and servers on top of these.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-fcall.html"><i>Venti-fcall</i>(3)</a> describes the C representation of Venti protocol
+    messages and data structures. It also describes routines that
+    convert between the C representation and the network and disk
+    representations. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-file.html"><i>Venti-file</i>(3)</a> describes routines for writing clients that manipulate
+    Venti file trees (see <a href="../man7/venti.html"><i>venti</i>(7)</a>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-log.html"><i>Venti-log</i>(3)</a> describes routines to access in-memory log buffers
+    as well as the logging that is done automatically by the library.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-mem.html"><i>Venti-mem</i>(3)</a> describes wrappers around the canonical <i>malloc</i>(3)
+    routines that abort on error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-packet.html"><i>Venti-packet</i>(3)</a> describes routines for manipulating zero-copy
+    chains of data buffers. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti-zero.html"><i>Venti-zero</i>(3)</a> describes routines to zero truncate and zero extend
+    blocks (see <a href="../man7/venti.html"><i>venti</i>(7)</a>).<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/venti.html"><i>venti</i>(1)</a>, <a href="../man3/venti-cache.html"><i>venti-cache</i>(3)</a>, <a href="../man3/venti-client.html"><i>venti-client</i>(3)</a>, <a href="../man3/venti-fcall.html"><i>venti-fcall</i>(3)</a>, <a href="../man3/venti-file.html"><i>venti-file</i>(3)</a>
+    <a href="../man3/venti-log.html"><i>venti-log</i>(3)</a>, <a href="../man3/venti-mem.html"><i>venti-mem</i>(3)</a>, <a href="../man3/venti-packet.html"><i>venti-packet</i>(3)</a>, <a href="../man3/venti-server.html"><i>venti-server</i>(3)</a>,
+    <a href="../man3/venti-zero.html"><i>venti-zero</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a>, <a href="../man8/venti.html"><i>venti</i>(8)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

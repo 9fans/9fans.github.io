@@ -1,0 +1,47 @@
+.TH GETENV 3
+.SH NAME
+getenv, putenv \- access environment variables
+.SH SYNOPSIS
+.B #include <u.h>
+.br
+.B #include <libc.h>
+.PP
+.nf
+.B
+char* getenv(char *name)
+.br
+.B
+int   putenv(char *name, char *val)
+.fi
+.SH DESCRIPTION
+.I Getenv
+fetches the environment value associated with
+.I name
+into memory allocated with
+.IR malloc (3),
+0-terminates it,
+and returns a pointer to that area.
+If no file exists, 0
+is returned.
+.PP
+.I Putenv
+sets the environment value associated with
+.I name
+to
+.IR val .
+.SH SOURCE
+.B \*9/src/lib9/getenv.c
+.SH DIAGNOSTICS
+Sets
+.IR errstr .
+.SH BUGS
+To avoid name conflicts with the underlying system,
+.I getenv
+and
+.I putenv
+are preprocessor macros defined as
+.I p9getenv
+and
+.IR p9putenv ;
+see
+.IR intro (3).

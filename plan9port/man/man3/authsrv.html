@@ -1,0 +1,201 @@
+<head>
+<title>authsrv(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>AUTHSRV(3)</b><td align=right><b>AUTHSRV(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    authdial, passtokey, nvcsum, readnvram, convT2M, convM2T, convTR2M,
+    convM2TR, convA2M, convM2A, convPR2M, convM2PR, _asgetticket,
+    _asrdresp &ndash; routines for communicating with authentication servers<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;authsrv.h&gt;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    int &nbsp;&nbsp;&nbsp;&nbsp;authdial(char *netroot, char *ad); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;passtokey(char key[DESKEYLEN], char *password) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uchar nvcsum(void *mem, int len) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;readnvram(Nvrsafe *nv, int flag); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;convT2M(Ticket *t, char *msg, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;convM2T(char *msg, Ticket *t, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;convA2M(Authenticator *a, char *msg, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;convM2A(char *msg, Authenticator *a, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;convTR2M(Ticketreq *tr, char *msg) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;convM2TR(char *msg, Ticketreq *tr) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;convPR2M(Passwordreq *pr, char *msg, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;convM2PR(char *msg, Passwordreq *pr, char *key) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;_asgetticket(int fd, char *trbuf, char *tbuf); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;_asrdresp(int fd, char *buf, int len);<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Authdial</i> dials an authentication server over the network rooted
+    at <i>net</i>, default <tt><font size=+1>/net</font></tt>. The authentication domain, <i>ad</i>, specifies
+    which server to call. If <i>ad</i> is non-nil, the network database (see
+    <a href="../man1/ndb.html"><i>ndb</i>(1)</a>) is queried for an entry which contains <tt><font size=+1>authdom=</font></tt><i>ad</i> or <tt><font size=+1>dom=</font></tt><i>ad</i>,
+    the former having precedence, and which also contains an <tt><font size=+1>auth</font></tt>
+    attribute. The string dialed
+    is then <i>netroot</i>!<i>server</i>!ticket where <i>server</i> is the value of the
+    <tt><font size=+1>auth</font></tt> attribute. If no entry is found, the error string is set
+    to &#8220;no authentication server found&#8221; and -1 is returned. If <i>authdom</i>
+    is nil, the string <i>netroot</i><tt><font size=+1>!$auth!</font></tt><i>ticket</i> is used to make the call.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Passtokey</i> converts <i>password</i> into a DES key and stores the result
+    in <i>key</i>. It returns 0 if <i>password</i> could not be converted, and 1
+    otherwise. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Readnvram</i> reads authentication information into the structure:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>struct Nvrsafe<br>
+        {<br>
+         
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            char &nbsp;&nbsp;&nbsp;machkey[DESKEYLEN];<br>
+             uchar machsum;<br>
+             char &nbsp;&nbsp;&nbsp;authkey[DESKEYLEN];<br>
+             uchar authsum;<br>
+             char &nbsp;&nbsp;&nbsp;config[CONFIGLEN];<br>
+             uchar configsum;<br>
+             char &nbsp;&nbsp;&nbsp;authid[ANAMELEN];<br>
+             uchar authidsum;<br>
+             char &nbsp;&nbsp;&nbsp;authdom[DOMLEN];<br>
+             uchar authdomsum;<br>
+            
+        </table>
+        };<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    On Sparc, MIPS, and SGI machines this information is in non-volatile
+    ram, accessible in the file <tt><font size=+1>#r/nvram</font></tt>. On x86s and Alphas <i>readnvram</i>
+    successively opens the following areas stopping with the first
+    to succeed: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    &ndash; the partition named by the <tt><font size=+1>$nvram</font></tt> environment variable<br>
+    &ndash; the partition <tt><font size=+1>#S/sdC0/nvram<br>
+    </font></tt>&ndash; a file called <tt><font size=+1>plan9.nvr</font></tt> in the partition <tt><font size=+1>#S/sdC0/9fat<br>
+    </font></tt>&ndash; the partition <tt><font size=+1>#S/sd00/nvram<br>
+    </font></tt>&ndash; a file called <tt><font size=+1>plan9.nvr</font></tt> in the partition <tt><font size=+1>#S/sd00/9fat<br>
+    </font></tt>&ndash; a file called <tt><font size=+1>plan9.nvr</font></tt> on a DOS floppy in drive 0<br>
+    &ndash; a file called <tt><font size=+1>plan9.nvr</font></tt> on a DOS floppy in drive 1 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>nvcsum</i>s of the fields <tt><font size=+1>machkey</font></tt>, <tt><font size=+1>authid</font></tt>, and <tt><font size=+1>authdom</font></tt> must match
+    their respective checksum or that field is zeroed. If <i>flag</i> is
+    <tt><font size=+1>NVwrite</font></tt> or at least one checksum fails and <i>flag</i> is <tt><font size=+1>NVwriteonerr</font></tt>,
+    <i>readnvram</i> will prompt for new values on <tt><font size=+1>#c/cons</font></tt> and then write
+    them back to the storage area. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>ConvT2M</i>, <i>convA2M</i>, <i>convTR2M</i>, and <i>convPR2M</i> convert tickets, authenticators,
+    ticket requests, and password change request structures into transmittable
+    messages. <i>ConvM2T</i>, <i>convM2A</i>, <i>convM2TR</i>, and <i>convM2PR</i> are used to
+    convert them back. <i>Key</i> is used for encrypting the message before
+    transmission and decrypting after reception. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The routine <i>_asgetresp</i> receives either a character array or an
+    error string. On error, it sets errstr and returns -1. If successful,
+    it returns the number of bytes received. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The routine <i>_asgetticket</i> sends a ticket request message and then
+    uses <i>_asgetresp</i> to recieve an answer.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libauthsrv">/usr/local/plan9/src/libauthsrv</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/passwd.html"><i>passwd</i>(1)</a>, <a href="../man3/dial.html"><i>dial</i>(3)</a>, Plan 9&#8217;s <i>authsrv</i>(6).<br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines set <i>errstr</i>. Integer-valued functions return -1
+    on error.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

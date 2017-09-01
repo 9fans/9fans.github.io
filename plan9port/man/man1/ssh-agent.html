@@ -1,0 +1,161 @@
+<head>
+<title>ssh-agent(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>SSH-AGENT(1)</b><td align=right><b>SSH-AGENT(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    ssh-agent &ndash; SSH authentication agent<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>ssh&#8722;agent</font></tt> [ <tt><font size=+1>&#8722;l</font></tt> ] <i>factotum-service<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Ssh-agent</i> presents <a href="../man4/factotum.html"><i>factotum</i>(4)</a> using the interface that <i>ssh</i>(1)
+    requires. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Once <i>ssh-agent</i> and <i>factotum</i> are running, the standard Unix SSH
+    client can use <i>ssh-agent</i> (and, indirectly, <i>factotum</i>) to authenticate
+    to remote systems using RSA or DSA keys. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ssh</i> accesses <i>ssh-agent</i> via a Unix socket named <tt><font size=+1>ssh&#8722;agent.socket</font></tt>
+    in the name space directory (see <a href="../man4/intro.html"><i>intro</i>(4)</a>). Note that although
+    the socket is posted in the name space directory, it is not for
+    9P conversations. <i>Ssh</i> expects the name of this socket to be in
+    the environment as <tt><font size=+1>$SSH_AGENT_SOCK</font></tt>, and expects the agent to be
+    running with process id
+    <tt><font size=+1>$SSH_AGENT_PID</font></tt>. <i>Ssh-agent</i> prints shell commands to set these two
+    variables before forking itself into the background. It is typically
+    invoked inside a shell <tt><font size=+1>eval</font></tt> construct; see the examples below.
+    The <tt><font size=+1>&#8722;e</font></tt> option causes <i>ssh-agent</i> to include <tt><font size=+1>export</font></tt> commands to put
+    the variables into the environment of future programs. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the <tt><font size=+1>&#8722;l</font></tt> option is given, <i>ssh-agent</i> lists the usable <i>factotum</i>
+    keys in the standard SSH format, suitable for creating an <tt><font size=+1>authorized_keys</font></tt>
+    file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ssh-agent</i> connects to <i>factotum</i> by accessing <i>factotum-service</i> (default
+    &#8216;<tt><font size=+1>factotum</font></tt>&#8217;) in the current name space. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    There is a Unix program called <i>ssh-agent</i> that manages SSH keys
+    itself. Invoke this one with <tt><font size=+1>9 ssh&#8722;agent</font></tt>; see <a href="../man1/9.html"><i>9</i>(1)</a>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Assume <a href="../man4/factotum.html"><i>factotum</i>(4)</a> is already running and initialized with keys.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Start a new agent, copying the commands by hand:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>$ 9 ssh&#8722;agent &#8722;e<br>
+        SSH_AUTH_SOCK=/tmp/ssh&#8722;405795003d7ee27a/agent.4233;<br>
+        export SSH_AUTH_SOCK;<br>
+        SSH_AGENT_PID=4233;<br>
+        export SSH_AGENT_PID;<br>
+        $ SSH_AUTH_SOCK=/tmp/ssh&#8722;405795003d7ee27a/agent.4233;<br>
+        $ export SSH_AUTH_SOCK;<br>
+        $ SSH_AGENT_PID=4233;<br>
+        $ export SSH_AGENT_PID;<br>
+        $ <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Start the agent from <i>sh</i>(1):<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>$ eval `9 ssh&#8722;agent &#8722;e`<br>
+        $ <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Start the agent from <a href="../man1/rc.html"><i>rc</i>(1)</a>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% eval `{9 ssh&#8722;agent}<br>
+        % <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Use the agent to connect to a remote system:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% ssh tux<br>
+        tux% ^D<br>
+        % <br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/auth/ssh-agent.c">/usr/local/plan9/src/cmd/auth/ssh&#8722;agent.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>ssh</i>(1), <a href="../man1/rsa.html"><i>rsa</i>(1)</a>, <a href="../man4/factotum.html"><i>factotum</i>(4)</a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A surprise rather than a bug: <i>ssh-agent</i> connects to factotum on
+    demand, so it can be started before <i>factotum</i> is running and need
+    not be restarted just because <i>factotum</i> is.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

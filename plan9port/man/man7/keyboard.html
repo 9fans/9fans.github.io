@@ -1,0 +1,188 @@
+<head>
+<title>keyboard(7) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>KEYBOARD(7)</b><td align=right><b>KEYBOARD(7)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    keyboard &ndash; how to type characters<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Keyboards are idiosyncratic. It should be obvious how to type
+    ordinary ASCII characters, backspace, tab, escape, and newline.
+    In Plan 9, the key labeled <tt><font size=+1>Return</font></tt> or <tt><font size=+1>Enter</font></tt> generates a newline
+    (<tt><font size=+1>0x0A</font></tt>); if there is a key labeled <tt><font size=+1>Line Feed</font></tt>, it generates a carriage
+    return (<tt><font size=+1>0x0D</font></tt>); Plan 9 eschews CRLFs. All control characters are
+    typed in the usual way; in
+    particular, control-J is a line feed and control-M a carriage
+    return. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The down arrow, used by <a href="../man1/9term.html"><i>9term</i>(1)</a>, <a href="../man1/acme.html"><i>acme</i>(1)</a>, and <a href="../man1/sam.html"><i>sam</i>(1)</a>, causes
+    windows to scroll forward. The up arrow scrolls backward. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Characters in Plan 9 are runes (see <a href="../man7/utf.html"><i>utf</i>(7)</a>). Any 16-bit rune can
+    be typed using a compose key followed by several other keys. The
+    compose key is also generally near the lower right of the main
+    key area: the <tt><font size=+1>NUM PAD</font></tt> key on the Gnot, the <tt><font size=+1>Alternate</font></tt> key on the
+    Next, the <tt><font size=+1>Compose</font></tt> key on the SLC, the <tt><font size=+1>Option</font></tt> key on the Magnum,
+    and either <tt><font size=+1>Alt</font></tt> key
+    on the PC. After typing the compose key, type a capital <tt><font size=+1>X</font></tt> and
+    exactly four hexadecimal characters (digits and <tt><font size=+1>a</font></tt> to <tt><font size=+1>f</font></tt>) to type
+    a single rune with the value represented by the typed number.
+    There are shorthands for many characters, comprising the compose
+    key followed by a two- or three-character sequence. The full list
+    is too long to repeat here, but is
+    contained in the file <tt><font size=+1><a href="/usr/local/plan9/lib/keyboard">/usr/local/plan9/lib/keyboard</a></font></tt> in a format
+    suitable for <a href="../man1/grep.html"><i>grep</i>(1)</a> or <a href="../man1/look.html"><i>look</i>(1)</a>. To add a sequence, edit that
+    file and then rebuild <a href="../man1/devdraw.html"><i>devdraw</i>(1)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    There are several rules guiding the design of the sequences, as
+    illustrated by the following examples.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        A repeated symbol gives a variant of that symbol, e.g., <tt><font size=+1>??</font></tt> yields
+        &iquest;.<br>
+        ASCII digraphs for mathematical operators give the corresponding
+        operator, e.g., <tt><font size=+1>&lt;=</font></tt> yields &le;.<br>
+        Two letters give the corresponding ligature, e.g., <tt><font size=+1>AE</font></tt> yields &AElig;.<br>
+        Mathematical and other symbols are given by abbreviations for
+        their names, e.g., <tt><font size=+1>pg</font></tt> yields &para;.<br>
+        Chess pieces are given by a <tt><font size=+1>w</font></tt> or <tt><font size=+1>b</font></tt> followed by a letter for the
+        piece (<tt><font size=+1>k</font></tt> for king, <tt><font size=+1>q</font></tt> for queen, <tt><font size=+1>r</font></tt> for rook, <tt><font size=+1>n</font></tt> for knight, <tt><font size=+1>b</font></tt> for
+        bishop, or <tt><font size=+1>p</font></tt> for pawn), e.g., <tt><font size=+1>wk</font></tt> for a white king.<br>
+        Greek letters are given by an asterisk followed by a corresponding
+        latin letter, e.g., <tt><font size=+1>*d</font></tt> yields &#948;.<br>
+        Cyrillic letters are given by an at sign followed by a corresponding
+        latin letter or letters, e.g., <tt><font size=+1>@ya</font></tt> yields &#1103;.<br>
+        Script letters are given by a dollar sign followed by the corresponding
+        regular letter, e.g., <tt><font size=+1>$F</font></tt> yields &#8497;.<br>
+        A digraph of a symbol followed by a letter gives the letter with
+        an accent that looks like the symbol, e.g., <tt><font size=+1>,c</font></tt> yields &ccedil;.<br>
+        Two digits give the fraction with that numerator and denominator,
+        e.g., <tt><font size=+1>12</font></tt> yields &frac12;.<br>
+        The letter s followed by a character gives that character as a
+        superscript, e.g., <tt><font size=+1>s1</font></tt> yields &#8305;. These characters are taken from
+        the Unicode block 0x2070; the 1, 2, and 3 superscripts in the
+        Latin-1 block are available by using a capital S instead of s.<br>
+        Sometimes a pair of characters give a symbol related to the superimposition
+        of the characters, e.g., <tt><font size=+1>cO</font></tt> yields &copy;.<br>
+        A mnemonic letter followed by $ gives a currency symbol, e.g.,
+        <tt><font size=+1>l$</font></tt> yields &pound;. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    Note the difference between &szlig; (ss) and &micro; (micron) and the Greek
+    &#946; and &#956;.<br>
+    <p><font size=+1><b>X WINDOWS     </b></font><br>
+    Under X Windows, both the Alt key and the &#8220;Multi key&#8221; can begin
+    a compose sequence in a Plan 9 program. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    It is also possible to configure X Windows to use the same keystroke
+    mappings as the Plan 9 programs. First, generate an XCompose sequence
+    list by using <i>mklatinkbd</i>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>mklatinkbd &#8722;x $PLAN9/lib/keyboard &gt;$HOME/.XCompose<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Second, configure a &#8220;Multi key&#8221; by running<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>xmodmap &#8722;e 'keysym Super_L = Multi_key'<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    (The name <tt><font size=+1>Super_L</font></tt> typically denotes the Windows key on recent
+    keyboards.) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Third, set these environment variables so that GTK- and QT-based
+    programs will use the compose sequences:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>export GTK_IM_MODULE=xim<br>
+        export QT_IM_MODULE=xim<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Finally, start a new GTK- or QT-based program:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>gnome&#8722;terminal &amp;<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    In that terminal, typing the key sequence &#8216;<tt><font size=+1>Windows * a</font></tt>&#8217; should
+    be interpreted as the Greek letter <tt><font size=+1>&#945;</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If using the GNOME Window Manager, put the <tt><font size=+1>xmodmap</font></tt> and <tt><font size=+1>export</font></tt>
+    commands into the file <tt><font size=+1>$HOME/.gnomerc</font></tt> to run them automatically
+    at startup.<br>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/lib/keyboard">/usr/local/plan9/lib/keyboard</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        sorted table of characters and keyboard sequences<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/intro.html"><i>intro</i>(1)</a>, <a href="../man1/ascii.html"><i>ascii</i>(1)</a>, <a href="../man1/tcs.html"><i>tcs</i>(1)</a>, <a href="../man1/9term.html"><i>9term</i>(1)</a>, <a href="../man1/acme.html"><i>acme</i>(1)</a>, <a href="../man1/sam.html"><i>sam</i>(1)</a>, <a href="../man7/utf.html"><i>utf</i>(7)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

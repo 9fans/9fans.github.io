@@ -1,0 +1,335 @@
+<head>
+<title>acme(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>ACME(3)</b><td align=right><b>ACME(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Event, Win, eventfmt, newwin, pipetowin, pipewinto, sysrun, winaddr,
+    winclosefiles, winctl, windel, windeleteall, windows, wineventchan,
+    winfd, winfree, winmread, winname, winopenfd, winprint, winread,
+    winreadaddr, winreadevent, winseek, winwrite, winwriteevent &ndash; acme
+    client library<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;thread.h&gt;<br>
+    #include &lt;9pclient.h&gt;<br>
+    #include &lt;acme.h&gt;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    struct Event<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        int &nbsp;&nbsp;&nbsp;c1;<br>
+        int &nbsp;&nbsp;&nbsp;c2;<br>
+        int &nbsp;&nbsp;&nbsp;q0;<br>
+        int &nbsp;&nbsp;&nbsp;q1;<br>
+        int &nbsp;&nbsp;&nbsp;oq0;<br>
+        int &nbsp;&nbsp;&nbsp;oq1;<br>
+        int &nbsp;&nbsp;&nbsp;flag;<br>
+        int &nbsp;&nbsp;&nbsp;nb;<br>
+        int &nbsp;&nbsp;&nbsp;nr;<br>
+        char text[];<br>
+        char arg[];<br>
+        char loc[];<br>
+        
+    </table>
+    };<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventfmt(Fmt *fmt)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Win* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newwin(void)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Win* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;openwin(int id, CFid *ctlfid)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pipetowin(Win *w, char *file, int fderr, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pipewinto(Win *w, char *file, int fdout, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sysrun(char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winaddr(Win *w, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winclosefiles(Win *w)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winctl(Win *w, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windel(Win *w, int sure)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;windeleteall(void)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Channel* &nbsp;&nbsp;&nbsp;wineventchan(Win *w)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winfd(Win *w, char *name, int mode)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winfree(Win *w)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winmread(Win *w, char *file)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winname(Win *w, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winopenfd(Win *w, char *name, int mode)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winprint(Win *w, char *file, char *fmt, ...)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winread(Win *w, char *file, void *a, int n)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winreadaddr(Win *w, uint *q1)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winreadevent(Win *w, Event *e)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winseek(Win *w, char *file, int off, int type)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winwrite(Win *w, char *file, void *a, int n)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;winwriteevent(Win *w, Event *e)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emalloc(uint n)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;erealloc(void *v, uint n)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;estrdup(char *s)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;evsmprint(char *fmt, va_list arg)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Libacme</i> provides a simple C interface for interacting with <a href="../man1/acme.html"><i>acme</i>(1)</a>
+    windows. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A <tt><font size=+1>Win</font></tt> structure represents a single window and its control files.
+    The contents of the structure should not be accessed directly.
+    <i>Newwin</i> creates a new window and returns a structure corresponding
+    to that window. <i>Openwin</i> allocates a structure corresponding to
+    the existing window with the given <i>id</i>. If <i>ctlfid</i> is non-nil, <i>openwin</i>
+    assumes it is a file
+    descriptor open for writing to the window&#8217;s <tt><font size=+1>ctl</font></tt> file. Ownership
+    of <i>ctlfid</i> passes to the library. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Most of the library routines access files in the window&#8217;s <i>acme</i>
+    directory. See <a href="../man4/acme.html"><i>acme</i>(4)</a> for details. Many library routines take
+    a format string <i>fmt</i> followed by a variable list of arguments.
+    In the discussion below, the notation <i>fmt</i>, <i>...</i> denotes the result
+    of formatting the string and arguments using <i>smprint</i> (see <a href="../man3/print.html"><i>print</i>(3)</a>).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Pipetowin</i> runs the <a href="../man1/rc.html"><i>rc</i>(1)</a> command line <i>fmt</i>, <i>...</i> with <tt><font size=+1>/dev/null</font></tt>
+    on standard input and the window&#8217;s <i>file</i> on standard output. If
+    <i>fderr</i> is non-zero (sic), it is used as standard error. Otherwise
+    the command inherits the caller&#8217;s standard error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Pipewinto</i> runs the <a href="../man1/rc.html"><i>rc</i>(1)</a> command line <i>fmt</i>, <i>...</i> with the window&#8217;s
+    <i>file</i> on standard input. The command runs with <i>fdout</i> as its standard
+    output and standard error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Sysrun</i> runs the <i>rc</i> command line <i>fmt</i>, <i>...</i> and returns a pointer
+    to the first kilobyte of output, NUL-terminated. The buffer holding
+    the output is reused on each call. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winaddr</i> writes <i>fmt</i>, <i>...</i> to the window&#8217;s <tt><font size=+1>addr</font></tt> file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winclosefiles</i> closes all the open file descriptors associated
+    with the window. (These file descriptors are maintained from the
+    library and cached across calls to <i>winctl</i>, <i>etc</i>.) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winctl</i> writes <i>fmt</i>, <i>...</i> to the window&#8217;s <tt><font size=+1>ctl</font></tt> file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Windel</i> deletes the window, writing <tt><font size=+1>del</font></tt> (or, if <i>sure</i> is set, <tt><font size=+1>delete)</font></tt>
+    to the window&#8217;s <tt><font size=+1>ctl</font></tt> file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winfd</i> returns a file descriptor for the window&#8217;s <i>file</i> opened for
+    <i>mode</i>. The caller is responsible for closing the file descriptor.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winmread</i> reads the contents of the window&#8217;s <i>file</i> into a dynamically
+    allocated buffer and returns it. The caller is responsible for
+    freeing the buffer. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winname</i> sets the name of the window to <i>fmt</i>, <i>...</i> by writing to
+    the <tt><font size=+1>ctl</font></tt> file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winprint</i> prints <i>fmt</i>, <i>...</i> to the window&#8217;s <i>file</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winread</i> reads at most <i>n</i> bytes from the window&#8217;s <i>file</i> into the
+    buffer pointed at by <i>a</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winreadaddr</i> reads the window&#8217;s <tt><font size=+1>addr</font></tt> file, which contains two integers.
+    It returns the first and stores the second in <tt><font size=+1>*</font></tt><i>q1</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winseek</i> seeks the file descriptor for the window&#8217;s <i>file</i> to position
+    <i>off</i> relative to <i>type</i> (see <a href="../man3/seek.html"><i>seek</i>(3)</a>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winwrite</i> writes the <i>n</i> bytes pointed at by <i>a</i> to the window&#8217;s <i>file</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    An <tt><font size=+1>Event</font></tt> structure represents an event originating in a particular
+    window. The fields correspond to the fields in <i>acme</i>&#8217;s event messages.
+    See <a href="../man4/acme.html"><i>acme</i>(4)</a> for detailed explanations. The fields are:<br>
+    <tt><font size=+1>c1</font></tt>, <tt><font size=+1>c2</font></tt>The two event characters, indicating origin and type of
+    action.<br>
+    <tt><font size=+1>q0</font></tt>, <tt><font size=+1>q1</font></tt>The character addresses of the action. If the original event
+    had an empty selection (<tt><font size=+1>q0</font></tt>=<tt><font size=+1>q1</font></tt>) and was accompanied by an expansion
+    (the 2 bit is set in the flag), then <tt><font size=+1>q0</font></tt> and <tt><font size=+1>q1</font></tt> will indicate the
+    expansion rather than original event.<br>
+    <tt><font size=+1>oq0</font></tt>, <tt><font size=+1>oq1<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        The <tt><font size=+1>q0</font></tt> and <tt><font size=+1>q1</font></tt> of the original event, even if it was expanded.
+        If there was no expansion, <tt><font size=+1>oq0</font></tt>=<tt><font size=+1>q0</font></tt> and <tt><font size=+1>oq1</font></tt>=<tt><font size=+1>q1</font></tt>.<br>
+        
+    </table>
+    <tt><font size=+1>flag</font></tt>&nbsp;&nbsp;&nbsp;The flag.<br>
+    <tt><font size=+1>nr</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;The number of characters (UTF sequences) included in the optional
+    text.<br>
+    <tt><font size=+1>text</font></tt>&nbsp;&nbsp;&nbsp;The optional text itself, encoded in UTF.<br>
+    <tt><font size=+1>nb</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;The number of bytes included in the optional text.<br>
+    <tt><font size=+1>arg</font></tt>&nbsp;&nbsp;&nbsp;The chorded argument, if present (the 8 bit is set in the flag).<br>
+    <tt><font size=+1>loc</font></tt>&nbsp;&nbsp;&nbsp;The chorded location, if present (the 8 bit is set in the flag).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winreadevent</i> reads the next event (q.v.) from the window&#8217;s <tt><font size=+1>event</font></tt>
+    file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Winwriteevent</i> writes an event back to the window&#8217;s <tt><font size=+1>event</font></tt> file,
+    indicating to <i>acme</i> that it should be handled internally. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Wineventchan</i> returns a pointer to a <tt><font size=+1>Channel</font></tt> (see <a href="../man3/thread.html"><i>thread</i>(3)</a>) on
+    which event structures (not pointers) can be read. The first call
+    to <i>wineventchan</i> allocates a channel and starts a new thread that
+    loops calling <i>winreadevent</i> and copying the events into the channel.
+    Subsequent calls return the same channel. Clients should not call
+    <i>winreadevent</i> after
+    calling <i>wineventchan</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Emalloc</i>, <i>erealloc</i>, <i>estrdup</i>, and <i>evsmprint</i> are like <i>malloc</i>(3),
+    <i>realloc</i>, <i>strdup</i> (see <a href="../man3/strcat.html"><i>strcat</i>(3)</a>), and <i>vsmprint</i> (see <a href="../man3/print.html"><i>print</i>(3)</a>),
+    but they call <a href="../man3/sysfatal.html"><i>sysfatal</i>(3)</a> on error rather than returning nil.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libacme">/usr/local/plan9/src/libacme</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/acme.html"><i>acme</i>(1)</a>, <a href="../man4/acme.html"><i>acme</i>(4)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

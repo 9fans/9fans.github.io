@@ -1,0 +1,141 @@
+<head>
+<title>mpictures(7) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>MPICTURES(7)</b><td align=right><b>MPICTURES(7)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    mpictures &ndash; picture inclusion macros<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>troff &#8722;mpictures</font></tt> [ <i>options</i> ] <i>file ...<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Mpictures</i> macros insert PostScript pictures into <a href="../man1/troff.html"><i>troff</i>(1)</a> documents.
+    The macros are:<br>
+    <tt><font size=+1>.BP</font></tt> <i>source height width position offset flags label<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Define a frame and place a picture in it. Null arguments, represented
+        by <tt><font size=+1>&quot;&quot;</font></tt>, are interpreted as defaults. The arguments are:<br>
+        <i>source</i>Name of a PostScript picture file, optionally suffixed with
+        (<i>n</i>) to select page number <i>n</i> from the file (first page by default).<br>
+        <i>height</i>Vertical size of the frame, default <tt><font size=+1>3.0i</font></tt>.<br>
+        <i>width</i>&nbsp;&nbsp;&nbsp;Horizontal size of the frame, current line length by default.<br>
+        <i>position<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <tt><font size=+1>l</font></tt> (default), <tt><font size=+1>c</font></tt>, or <tt><font size=+1>r</font></tt> to left-justify, center, or right-justify
+            the frame.<br>
+            
+        </table>
+        <i>offset</i>Move the frame horizontally from the original <i>position</i> by
+        this amount, default <tt><font size=+1>0i</font></tt>.<br>
+        <i>flags</i>&nbsp;&nbsp;&nbsp;One or more of:<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <tt><font size=+1>a</font></tt><i>d</i>&nbsp;&nbsp;&nbsp;&nbsp;Rotate the picture clockwise <i>d</i> degrees, default <i>d</i>=90.<br>
+            <tt><font size=+1>o</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Outline the picture with a box.<br>
+            <tt><font size=+1>s</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Freely scale both picture dimensions.<br>
+            <tt><font size=+1>w</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;White out the area to be occupied by the picture.<br>
+            <tt><font size=+1>l</font></tt>,<tt><font size=+1>r</font></tt>,<tt><font size=+1>t</font></tt>,<tt><font size=+1>b</font></tt>Attach the picture to the left right, top, or bottom of
+            the frame.<br>
+            
+        </table>
+        <i>label</i>&nbsp;&nbsp;&nbsp;Place <i>label</i> at distance <tt><font size=+1>1.5v</font></tt> below the frame. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        If there&#8217;s room, <tt><font size=+1>.BP</font></tt> fills text around the frame. Everything destined
+        for either side of the frame goes into a diversion to be retrieved
+        when the accumulated text sweeps past the trap set by <tt><font size=+1>.BP</font></tt> or when
+        the diversion is explicitly closed by <tt><font size=+1>.EP</font></tt>.<br>
+        
+    </table>
+    <tt><font size=+1>.PI</font></tt> <i>source height</i><tt><font size=+1>,</font></tt><i>width</i><tt><font size=+1>,</font></tt><i>yoffset</i>,<i>xoffset flags.<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        This low-level macro, used by <tt><font size=+1>.BP</font></tt>, can help do more complex things.
+        The two arguments not already described are:<br>
+        <i>xoffset</i>Offset the frame from the left margin by this amount, default
+        <tt><font size=+1>0i</font></tt>.<br>
+        <i>yoffset</i>Offset the frame from the current baseline, measuring positive
+        downward, default <tt><font size=+1>0i</font></tt>.<br>
+        
+    </table>
+    <tt><font size=+1>.EP</font></tt>&nbsp;&nbsp;&nbsp;End a picture started by <tt><font size=+1>.BP</font></tt>; <tt><font size=+1>.EP</font></tt> is usually called implicitly
+    by a trap at frame bottom. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If a PostScript file lacks page-delimiting comments, the entire
+    file is included. If no <tt><font size=+1>%%BoundingBox</font></tt> comment is present, the
+    picture is assumed to fill an 8.5&#215;11-inch page. Nothing prevents
+    the picture from being placed off the page.<br>
+    
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/troff.html"><i>troff</i>(1)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A picture file that can&#8217;t be read by the PostScript postprocessor
+    is replaced by white space.<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A picture and associated text silently disappear if a diversion
+    trap set by <tt><font size=+1>.BP</font></tt> isn&#8217;t reached. Call <tt><font size=+1>.EP</font></tt> at the end of the document
+    to retrieve it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Macros in other packages may break the adjustments made to the
+    line length and indent when text is being placed around a picture.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A missing or improper <tt><font size=+1>%%BoundingBox</font></tt> comment may cause the frame
+    to be filled incorrectly.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

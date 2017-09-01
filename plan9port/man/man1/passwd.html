@@ -1,0 +1,86 @@
+<head>
+<title>passwd(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>PASSWD(1)</b><td align=right><b>PASSWD(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    passwd, netkey &ndash; change user password<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>passwd</font></tt> [ <i>username</i>[@<i>domain</i>] ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>netkey<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Passwd</i> changes the invoker&#8217;s Plan 9 password and/or APOP secret.
+    The Plan 9 password is used to login to a terminal while the APOP
+    secret is used for a number of external services: POP3, IMAP,
+    and VPN access. The optional argument specifies the user name
+    and authentication domain to use if different than the one associated
+    with the machine
+    <i>passwd</i> is run on. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The program first prompts for the old Plan 9 password in the specified
+    domain to establish identity. It then prompts for changes to the
+    password and the secret. New passwords and secrets must be typed
+    twice, to forestall mistakes. New passwords must be sufficiently
+    hard to guess. They may be of any length greater than seven characters.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netkey</i> prompts for a password to encrypt network challenges. It
+    is a substitute for a SecureNet box.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/netkey.c">/usr/local/plan9/src/cmd/netkey.c</a><br>
+    <a href="/usr/local/plan9/src/cmd/auth/passwd.c">/usr/local/plan9/src/cmd/auth/passwd.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/encrypt.html"><i>encrypt</i>(3)</a> 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Robert Morris and Ken Thompson, &#8220;UNIX Password Security,&#8221; <i>AT&amp;T
+    Bell Laboratories Technical Journal</i> Vol 63 (1984), pp. 1649-1672<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

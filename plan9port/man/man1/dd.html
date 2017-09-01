@@ -1,0 +1,126 @@
+<head>
+<title>dd(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>DD(1)</b><td align=right><b>DD(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    dd &ndash; convert and copy a file<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>dd</font></tt> [ <i>option value</i> ] ...<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Dd</i> copies the specified input file to the specified output with
+    possible conversions. The standard input and output are used by
+    default. The input and output block size may be specified to take
+    advantage of raw physical I/O. The options are<br>
+    <tt><font size=+1>&#8722;if</font></tt> <i>f</i>&nbsp;&nbsp;&nbsp;&nbsp;Open file <i>f</i> for input.<br>
+    <tt><font size=+1>&#8722;of</font></tt> <i>f</i>&nbsp;&nbsp;&nbsp;&nbsp;Open file <i>f</i> for output.<br>
+    <tt><font size=+1>&#8722;ibs</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;&nbsp;Set input block size to <i>n</i> bytes (default 512).<br>
+    <tt><font size=+1>&#8722;obs</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;&nbsp;Set output block size (default 512).<br>
+    <tt><font size=+1>&#8722;bs</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;&nbsp;Set both input and output block size, superseding <i>ibs</i> and
+    <i>obs</i>. If no conversion is specified, preserve the input block size
+    instead of packing short blocks into the output buffer. This is
+    particularly efficient since no in-core copy need be done.<br>
+    <tt><font size=+1>&#8722;cbs</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;&nbsp;Set conversion buffer size.<br>
+    <tt><font size=+1>&#8722;skip</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;Skip <i>n</i> input records before copying.<br>
+    <tt><font size=+1>&#8722;iseek</font></tt> <i>n</i>Seek <i>n</i> records forward on input file before copying.<br>
+    <tt><font size=+1>&#8722;files</font></tt> <i>n</i>Catenate <i>n</i> input files (useful only for magnetic tape
+    or similar input device).<br>
+    <tt><font size=+1>&#8722;oseek</font></tt> <i>n</i>Seek <i>n</i> records from beginning of output file before copying.<br>
+    <tt><font size=+1>&#8722;count</font></tt> <i>n</i>Copy only <i>n</i> input records.<br>
+    <tt><font size=+1>&#8722;trunc</font></tt> <i>n</i>By default, <i>dd</i> truncates the output file when it opens
+    it; <tt><font size=+1>&#8722;trunc 0</font></tt> opens it without truncation.<br>
+    <tt><font size=+1>&#8722;quiet</font></tt> <i>n</i>By default, <i>dd</i> prints the number of blocks read and written
+    once it is finished. <tt><font size=+1>&#8722;quiet 1</font></tt> silences this summary.<br>
+    <tt><font size=+1>&#8722;conv ascii   </font></tt> Convert EBCDIC to ASCII.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ebcdic</font></tt>&nbsp;&nbsp;&nbsp;Convert ASCII to EBCDIC.<br>
+        <tt><font size=+1>ibm</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Like <tt><font size=+1>ebcdic</font></tt> but with a slightly different character map.<br>
+        <tt><font size=+1>block</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Convert variable length ASCII records to fixed length.<br>
+        <tt><font size=+1>unblock</font></tt>&nbsp;&nbsp;&nbsp;Convert fixed length ASCII records to variable length.<br>
+        <tt><font size=+1>lcase</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Map alphabetics to lower case.<br>
+        <tt><font size=+1>ucase</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Map alphabetics to upper case.<br>
+        <tt><font size=+1>swab</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swap every pair of bytes.<br>
+        <tt><font size=+1>noerror</font></tt>&nbsp;&nbsp;&nbsp;Do not stop processing on an error.<br>
+        <tt><font size=+1>sync</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pad every input record to <i>ibs</i> bytes.<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    Where sizes are specified, a number of bytes is expected. A number
+    may end with <tt><font size=+1>k</font></tt> or <tt><font size=+1>b</font></tt> to specify multiplication by 1024 or 512 respectively;
+    a pair of numbers may be separated by <tt><font size=+1>x</font></tt> to indicate a product.
+    Multiple conversions may be specified in the style: <tt><font size=+1>&#8722;conv ebcdic,ucase</font></tt>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>Cbs</font></tt> is used only if <tt><font size=+1>ascii</font></tt>, <tt><font size=+1>unblock</font></tt>, <tt><font size=+1>ebcdic</font></tt>, <tt><font size=+1>ibm</font></tt>, or <tt><font size=+1>block</font></tt> conversion
+    is specified. In the first two cases, <i>n</i> characters are copied
+    into the conversion buffer, any specified character mapping is
+    done, trailing blanks are trimmed and new-line is added before
+    sending the line to the output. In the latter three cases, characters
+    are read into the
+    conversion buffer and blanks are added to make up an output record
+    of size <i>n</i>. If <tt><font size=+1>cbs</font></tt> is unspecified or zero, the <tt><font size=+1>ascii</font></tt>, <tt><font size=+1>ebcdic</font></tt>, and
+    <tt><font size=+1>ibm</font></tt> options convert the character set without changing the block
+    structure of the input file; the <tt><font size=+1>unblock</font></tt> and <tt><font size=+1>block</font></tt> options become
+    a simple file copy.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/dd.c">/usr/local/plan9/src/cmd/dd.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>cp</i>(1)<br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Dd</i> reports the number of full + partial input and output blocks
+    handled.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

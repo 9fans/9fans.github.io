@@ -1,0 +1,422 @@
+<head>
+<title>venti(8) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI(8)</b><td align=right><b>VENTI(8)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    venti &ndash; archival storage server<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>venti/venti</font></tt> [ <tt><font size=+1>&#8722;Ldrs</font></tt> ] [ <tt><font size=+1>&#8722;a</font></tt> <i>address</i> ] [ <tt><font size=+1>&#8722;B</font></tt> <i>blockcachesize</i> ] [ <tt><font size=+1>&#8722;c</font></tt>
+    <i>config</i> ] [ <tt><font size=+1>&#8722;C</font></tt> <i>lumpcachesize</i> ] [ <tt><font size=+1>&#8722;h</font></tt> <i>httpaddress</i> ] [ <tt><font size=+1>&#8722;I</font></tt> <i>indexcachesize</i>
+    ] [ <tt><font size=+1>&#8722;W</font></tt> <i>webroot</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Venti</i> is a SHA1-addressed archival storage server. See <a href="../man7/venti.html"><i>venti</i>(7)</a>
+    for a full introduction to the system. This page documents the
+    structure and operation of the server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A venti server requires multiple disks or disk partitions, each
+    of which must be properly formatted before the server can be run.<br>
+    <p><font size=+1><b>Disk     </b></font><br>
+    The venti server maintains three disk structures, typically stored
+    on raw disk partitions: the append-only <i>data log</i>, which holds,
+    in sequential order, the contents of every block written to the
+    server; the <i>index</i>, which helps locate a block in the data log
+    given its score; and optionally the <i>bloom filter</i>, a concise summary
+    of which scores are present in the
+    index. The data log is the primary storage. To improve the robustness,
+    it should be stored on a device that provides RAID functionality.
+    The index and the bloom filter are optimizations employed to access
+    the data log efficiently and can be rebuilt if lost or damaged.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The data log is logically split into sections called <i>arenas</i>, typically
+    sized for easy offline backup (e.g., 500MB). A data log may comprise
+    many disks, each storing one or more arenas. Such disks are called
+    <i>arena partitions</i>. Arena partitions are filled in the order given
+    in the configuration. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The index is logically split into block-sized pieces called <i>buckets</i>,
+    each of which is responsible for a particular range of scores.
+    An index may be split across many disks, each storing many buckets.
+    Such disks are called <i>index sections</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The index must be sized so that no bucket is full. When a bucket
+    fills, the server must be shut down and the index made larger.
+    Since scores appear random, each bucket will contain approximately
+    the same number of entries. Index entries are 40 bytes long. Assuming
+    that a typical block being written to the server is 8192 bytes
+    and compresses to
+    4096 bytes, the active index is expected to be about 1% of the
+    active data log. Storing smaller blocks increases the relative
+    index footprint; storing larger blocks decreases it. To allow
+    variation in both block size and the random distribution of scores
+    to buckets, the suggested index size is 5% of the active data
+    log. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The (optional) bloom filter is a large bitmap that is stored on
+    disk but also kept completely in memory while the venti server
+    runs. It helps the venti server efficiently detect scores that
+    are <i>not</i> already stored in the index. The bloom filter starts out
+    zeroed. Each score recorded in the bloom filter is hashed to choose
+    <i>nhash</i> bits to set in the bloom filter. A
+    score is definitely not stored in the index of any of its <i>nhash</i>
+    bits are not set. The bloom filter thus has two parameters: <i>nhash</i>
+    (maximum 32) and the total bitmap size (maximum 512MB, 232 bits).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The bloom filter should be sized so that <i>nhash </i>&#215; <i>nblock </i><= 0.7 &#215; <i>b</i>,
+    where <i>nblock</i> is the expected number of blocks stored on the server
+    and <i>b</i> is the bitmap size in bits. The false positive rate of the
+    bloom filter when sized this way is approximately 2&ndash;<i>nblock</i>. <i>Nhash</i>
+    less than 10 are not very useful; <i>nhash</i> greater than 24 are probably
+    a waste of memory.
+    <i>Fmtbloom</i> (see <a href="../man8/venti-fmt.html"><i>venti-fmt</i>(8)</a>) can be given either <i>nhash</i> or <i>nblock</i>;
+    if given <i>nblock</i>, it will derive an appropriate <i>nhash</i>.<br>
+    <p><font size=+1><b>Memory     </b></font><br>
+    Venti can make effective use of large amounts of memory for various
+    caches. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>lump cache</i> holds recently-accessed venti data blocks, which
+    the server refers to as <i>lumps</i>. The lump cache should be at least
+    1MB but can profitably be much larger. The lump cache can be thought
+    of as the level-1 cache: read requests handled by the lump cache
+    can be served instantly. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>block cache</i> holds recently-accessed <i>disk</i> blocks from the arena
+    partitions. The block cache needs to be able to simultaneously
+    hold two blocks from each arena plus four blocks for the currently-filling
+    arena. The block cache can be thought of as the level-2 cache:
+    read requests handled by the block cache are slower than those
+    handled by the lump
+    cache, since the lump data must be extracted from the raw disk
+    blocks and possibly decompressed, but no disk accesses are necessary.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>index cache</i> holds recently-accessed or prefetched index entries.
+    The index cache needs to be able to hold index entries for three
+    or four arenas, at least, in order for prefetching to work properly.
+    Each index entry is 50 bytes. Assuming 500MB arenas of 128,000
+    blocks that are 4096 bytes each after compression, the minimum
+    index cache size is
+    about 6MB. The index cache can be thought of as the level-3 cache:
+    read requests handled by the index cache must still go to disk
+    to fetch the arena blocks, but the costly random access to the
+    index is avoided. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The size of the index cache determines how long venti can sustain
+    its &#8216;burst&#8217; write throughput, during which time the only disk
+    accesses on the critical path are sequential writes to the arena
+    partitions. For example, if you want to be able to sustain 10MB/s
+    for an hour, you need enough index cache to hold entries for 36GB
+    of blocks. Assuming 8192-byte
+    blocks, you need room for almost five million index entries. Since
+    index entries are 50 bytes each, you need 250MB of index cache.
+    If the background index update process can make a single pass
+    through the index in an hour, which is possible, then you can
+    sustain the 10MB/s indefinitely (at least until the arenas are
+    all filled). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>bloom filter</i> requires memory equal to its size on disk, as
+    discussed above. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A reasonable starting allocation is to divide memory equally (in
+    thirds) between the bloom filter, the index cache, and the lump
+    and block caches; the third of memory allocated to the lump and
+    block caches should be split unevenly, with more (say, two thirds)
+    going to the block cache.<br>
+    <p><font size=+1><b>Network     </b></font><br>
+    The venti server announces two network services, one (conventionally
+    TCP port <tt><font size=+1>venti</font></tt>, 17034) serving the venti protocol as described
+    in <a href="../man7/venti.html"><i>venti</i>(7)</a>, and one serving HTTP (conventionally TCP port <tt><font size=+1>http</font></tt>,
+    80). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The venti web server provides the following URLs for accessing
+    status information:<br>
+    <tt><font size=+1>/index</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;A summary of the usage of the arenas and index sections.<br>
+    <tt><font size=+1>/xindex</font></tt>&nbsp;&nbsp;&nbsp;An XML version of <tt><font size=+1>/index</font></tt>.<br>
+    <tt><font size=+1>/storage</font></tt>&nbsp;&nbsp;&nbsp;Brief storage totals.<br>
+    <tt><font size=+1>/set</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Disable the values of all variables. Variables are: <tt><font size=+1>compress</font></tt>,
+    whether or not to compress blocks (for debugging); <tt><font size=+1>logging</font></tt>, whether
+    to write entries to the debugging logs; <tt><font size=+1>stats</font></tt>, whether to collect
+    run-time statistics; <tt><font size=+1>icachesleeptime</font></tt>, the time in milliseconds
+    between successive updates of megabytes of the index cache;
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <tt><font size=+1>arenasumsleeptime</font></tt>, the time in milliseconds between reads while
+            checksumming an arena in the background. The two sleep times should
+            be (but are not) managed by venti; they exist to provide more
+            experience with their effects. The other variables exist only
+            for debugging and performance measurement.
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>/set?name=</font></tt><i>variable<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Show the current setting of <i>variable</i>.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>/set?name=</font></tt><i>variable</i><tt><font size=+1>&amp;value=</font></tt><i>value<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Set <i>variable</i> to <i>value</i>.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>/graph/</font></tt><i>name</i><tt><font size=+1>/</font></tt><i>param</i><tt><font size=+1>/</font></tt><i>param<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            A PNG image graphing the named run-time statistic over time. The
+            details of names and parameters are undocumented; see <tt><font size=+1>httpd.c</font></tt>
+            in the venti sources.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>/log</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A list of all debugging logs present in the server&#8217;s memory.<br>
+    <tt><font size=+1>/log/</font></tt><i>name</i>The contents of the debugging log with the given <i>name</i>.<br>
+    <tt><font size=+1>/flushicache<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Force venti to begin flushing the index cache to disk. The request
+            response will not be sent until the flush has completed.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>/flushdcache<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Force venti to begin flushing the arena block cache to disk. The
+            request response will not be sent until the flush has completed.
+            
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+            
+        </table>
+        
+    </table>
+    Requests for other files are served by consulting a directory
+    named in the configuration file (see <tt><font size=+1>webroot</font></tt> below).<br>
+    <p><font size=+1><b>Configuration File    </b></font><br>
+    A venti configuration file enumerates the various index sections
+    and arenas that constitute a venti system. The components are
+    indicated by the name of the file, typically a disk partition,
+    in which they reside. The configuration file is the only location
+    that file names are used. Internally, venti uses the names assigned
+    when the components were
+    formatted with <i>fmtarenas</i> or <i>fmtisect</i> (see <a href="../man8/venti-fmt.html"><i>venti-fmt</i>(8)</a>). In particular,
+    only the configuration needs to be changed if a component is moved
+    to a different file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The configuration file consists of lines in the form described
+    below. Lines starting with <tt><font size=+1>#</font></tt> are comments.<br>
+    <tt><font size=+1>index</font></tt> <i>name</i>Names the index for the system.<br>
+    <tt><font size=+1>arenas</font></tt> <i>file&nbsp;&nbsp;&nbsp;File</i> is an arena partition, formatted using <i>fmtarenas</i>.<br>
+    <tt><font size=+1>isect</font></tt> <i>file&nbsp;&nbsp;&nbsp;&nbsp;File</i> is an index section, formatted using <i>fmtisect</i>.<br>
+    <tt><font size=+1>bloom</font></tt> <i>file&nbsp;&nbsp;&nbsp;&nbsp;File</i> is a bloom filter, formatted using <i>fmtbloom</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    After formatting a venti system using <i>fmtindex</i>, the order of arenas
+    and index sections should not be changed. Additional arenas can
+    be appended to the configuration; run <i>fmtindex</i> with the <tt><font size=+1>&#8722;a</font></tt> flag
+    to update the index. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The configuration file also holds configuration parameters for
+    the venti server itself. These are:<br>
+    <tt><font size=+1>mem</font></tt> <i>size</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lump cache size<br>
+    <tt><font size=+1>bcmem</font></tt> <i>size</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;block cache size<br>
+    <tt><font size=+1>icmem</font></tt> <i>size</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;index cache size<br>
+    <tt><font size=+1>addr</font></tt> <i>netaddr</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network address to announce venti service (default
+    <tt><font size=+1>tcp!*!venti</font></tt>)<br>
+    <tt><font size=+1>httpaddr</font></tt> <i>netaddr</i>network address to announce HTTP service (default
+    <tt><font size=+1>tcp!*!http</font></tt>)<br>
+    <tt><font size=+1>queuewrites</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue writes in memory (default is not to queue)<br>
+    <tt><font size=+1>webroot</font></tt> <i>dir</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directory tree containing files for <i>venti</i>&#8217;s internal
+    HTTP server to consult for unrecognized URLs 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The units for the various cache sizes above can be specified by
+    appending a <tt><font size=+1>k</font></tt>, <tt><font size=+1>m</font></tt>, or <tt><font size=+1>g</font></tt> (case-insensitive) to indicate kilobytes,
+    megabytes, or gigabytes respectively. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>file</i> name in the configuration lines above can be of the form
+    <i>file</i><tt><font size=+1>:</font></tt><i>lo</i><tt><font size=+1>&#8722;</font></tt><i>hi</i> to specify a range of the file. <i>Lo</i> and <i>hi</i> are specified
+    in bytes but can have the usual <tt><font size=+1>k</font></tt><i>,</i> <tt><font size=+1>m</font></tt><i>,</i> or <tt><font size=+1>g</font></tt> suffixes. Either <i>lo</i>
+    or <i>hi</i> may be omitted. This notation eliminates the need to partition
+    raw disks on non-Plan 9 systems.<br>
+    <p><font size=+1><b>Command Line    </b></font><br>
+    Many of the options to Venti duplicate parameters that can be
+    specified in the configuration file. The command line options
+    override those found in a configuration file. Additional options
+    are:<br>
+    <tt><font size=+1>&#8722;c</font></tt> <i>config</i>The server configuration file (default <tt><font size=+1>venti.conf</font></tt>)<br>
+    <tt><font size=+1>&#8722;d</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Produce various debugging information on standard error. Implies
+    <tt><font size=+1>&#8722;s</font></tt>.<br>
+    <tt><font size=+1>&#8722;L</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enable logging. By default all logging is disabled. Logging
+    slows server operation considerably.<br>
+    <tt><font size=+1>&#8722;r</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Allow only read access to the venti data.<br>
+    <tt><font size=+1>&#8722;s</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Do not run in the background. Normally, the foreground process
+    will exit once the Venti server is initialized and ready for connections.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A simple configuration:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% cat venti.conf<br>
+        index main<br>
+        isect /tmp/disks/isect0<br>
+        isect /tmp/disks/isect1<br>
+        arenas /tmp/disks/arenas<br>
+        bloom /tmp/disks/bloom<br>
+        mem 10M<br>
+        bcmem 20M<br>
+        icmem 30M<br>
+        % <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Format the index sections, the arena partition, the bloom filter,
+    and finally the main index:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% venti/fmtisect isect0. /tmp/disks/isect0<br>
+        % venti/fmtisect isect1. /tmp/disks/isect1<br>
+        % venti/fmtarenas arenas0. /tmp/disks/arenas &amp;<br>
+        % venti/fmtbloom /tmp/disks/bloom &amp;<br>
+        % wait<br>
+        % venti/fmtindex venti.conf<br>
+        % <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Start the server and check the storage statistics:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% venti/venti<br>
+        % hget http://$sysname/storage<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/venti/srv">/usr/local/plan9/src/cmd/venti/srv</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/venti.html"><i>venti</i>(1)</a>, <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a>, <a href="../man8/venti-backup.html"><i>venti-backup</i>(8)</a> <a href="../man8/venti-fmt.html"><i>venti-fmt</i>(8)</a><br>
+    Sean Quinlan and Sean Dorward, &#8220;Venti: a new approach to archival
+    storage&#8221;, <i>Usenix Conference on File and Storage Technologies ,</i>
+    2002.<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Setting up a venti server is too complicated. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Venti should not require the user to decide how to partition its
+    memory usage. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Users of shells other than <a href="../man1/rc.html"><i>rc</i>(1)</a> will not be able to use the program
+    names shown. One solution is to define <tt><font size=+1>V=$PLAN9/bin/venti</font></tt> and
+    then substitute <tt><font size=+1>$V/</font></tt> for <tt><font size=+1>venti/</font></tt> in the paths above.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

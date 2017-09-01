@@ -1,0 +1,334 @@
+<head>
+<title>auth(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>AUTH(3)</b><td align=right><b>AUTH(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    auth_proxy, fauth_proxy, auth_allocrpc, auth_freerpc, auth_rpc,
+    auth_getkey, amount_getkey, auth_freeAI, auth_chuid, auth_challenge,
+    auth_response, auth_freechal, auth_respond, auth_userpasswd, auth_getuserpasswd,
+    auth_getinfo, fsauth_proxy, fsfauth_proxy, fsamount, nsamount&ndash;
+    routines for authenticating users
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;auth.h&gt;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    AuthInfo* auth_proxy(int fd, AuthGetkey *getkey, char *fmt, ...);
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* fauth_proxy(int fd, AuthRpc *rpc, AuthGetkey *getkey,<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            char *params); 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>AuthRpc* auth_allocrpc(void); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_freerpc(AuthRpc *rpc); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_rpc(AuthRpc *rpc, char *verb, void *a, int n); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_getkey(char *proto, char *dom); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(*amount_getkey)(char*, char*); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_freeAI(AuthInfo *ai); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_chuid(AuthInfo *ai, char *ns); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Chalstate* &nbsp;&nbsp;&nbsp;auth_challenge(char *fmt, ...); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* auth_response(Chalstate*); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_freechal(Chalstate*); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_respond(void *chal, uint nchal, char *user, uint nuser,
+    void *resp, uint nresp, AuthGetkey *getkey, char *fmt, ...); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* auth_userpasswd(char*user, char*password); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>UserPasswd* auth_getuserpasswd(AuthGetkey *getkey, char*fmt, ...);
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* auth_getinfo(AuthRpc *rpc); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>#include &lt;9pclient.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* fsauth_proxy(CFid *fid, AuthGetkey *getkey, char *fmt,
+    ...); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>AuthInfo* fsfauth_proxy(CFid *fid, AuthRpc *rpc, AuthGetkey *getkey,<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            char *params); 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>CFsys* &nbsp;&nbsp;&nbsp;&nbsp;fsamount(int fd, char *aname); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>CFsys* &nbsp;&nbsp;&nbsp;&nbsp;nsamount(char *name, char *aname);<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    This library, in concert with <a href="../man4/factotum.html"><i>factotum</i>(4)</a>, is used to authenticate
+    users. It provides the primary interface to <i>factotum</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The following routines use the <tt><font size=+1>AuthInfo</font></tt> structure returned after
+    a successful authentication by <a href="../man4/factotum.html"><i>factotum</i>(4)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>typedef struct<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        char &nbsp;&nbsp;&nbsp;*cuid;  &nbsp;&nbsp;&nbsp;&nbsp;/* caller id */<br>
+        char &nbsp;&nbsp;&nbsp;*suid;  &nbsp;&nbsp;&nbsp;&nbsp;/* server id */<br>
+        char &nbsp;&nbsp;&nbsp;*cap;   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* capability */<br>
+        int nsecret;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* length of secret */<br>
+        uchar *secret;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* secret */<br>
+        
+    </table>
+    } AuthInfo;<br>
+    </font></tt>The fields <tt><font size=+1>cuid</font></tt> and <tt><font size=+1>suid</font></tt> point to the authenticated ids of the
+    client and server. <tt><font size=+1>Cap</font></tt> is a capability returned only to the server.
+    It is meaningful only on Plan 9. <tt><font size=+1>Secret</font></tt> is an <tt><font size=+1>nsecret</font></tt>-byte shared
+    secret that can be used by the client and server to create encryption
+    and hashing keys for the rest of the conversation. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Auth_proxy</i> proxies an authentication conversation between a remote
+    server reading and writing <i>fd</i> and a <i>factotum</i> file, as opened by
+    <i>auth_allocrpc.</i> An <tt><font size=+1>sprint</font></tt> (see <a href="../man3/print.html"><i>print</i>(3)</a>) of <i>fmt</i> and the variable
+    arg list yields a key template (see <a href="../man4/factotum.html"><i>factotum</i>(4)</a>) specifying the
+    key to use. The template must specify at least the protocol (
+    <tt><font size=+1>proto=</font></tt><i>xxx</i><tt><font size=+1>)</font></tt> and the role (either
+    <tt><font size=+1>role=client</font></tt> or <tt><font size=+1>role=server</font></tt>). <i>Auth_proxy</i> either returns an allocated
+    <tt><font size=+1>AuthInfo</font></tt> structure, or sets the error string and returns nil.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Fauth_proxy</i> can be used instead of <i>auth_proxy</i> if a single connection
+    to <i>factotum</i> will be used for multiple authentications. This is
+    necessary, for example, for <i>newns</i> which must open the <i>factotum</i>
+    file before wiping out the namespace. <i>Fauth_proxy</i> takes as an
+    argument a pointer to an <tt><font size=+1>AuthRpc</font></tt> structure which contains an fd
+    for an open connection to
+    <i>factotum</i> in addition to storage and state information for the
+    protocol. An <tt><font size=+1>AuthRpc</font></tt> structure is obtained by calling <i>auth_allocrpc</i>.
+    <i>Auth_allocrpc</i> arranges a connection to <i>factotum</i>, either by opening
+    <tt><font size=+1>/mnt/factotum/rpc</font></tt> or by using <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a> to connect to a <tt><font size=+1>factotum</font></tt>
+    service posted in the current name space. The returned connection
+    is freed using
+    <i>auth_freerpc</i>. Individual commands can be sent to <a href="../man4/factotum.html"><i>factotum</i>(4)</a> by
+    invoking <i>auth_rpc</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Both <i>auth_proxy</i> and <i>fauth_proxy</i> take a pointer to a routine, <i>getkey</i>,
+    to invoke should <i>factotum</i> not posess a key for the authentication.
+    If <i>getkey</i> is nil, the authentication fails. <i>Getkey</i> is called with
+    a key template for the desired key. We have provided a generic
+    routine, <i>auth_getkey</i>, which queries the user for the key information
+    and passes it to
+    <i>factotum</i>. This is the default for the global variable, <i>amount_getkey</i>,
+    which holds a pointer to the key prompting routine used by <i>amount</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Auth_chuid</i> uses the <tt><font size=+1>cuid</font></tt> and <tt><font size=+1>cap</font></tt> fields of an <tt><font size=+1>AuthInfo</font></tt> structure
+    to change the user id of the current process and uses <i>ns</i>, default
+    <tt><font size=+1>/lib/namespace</font></tt>, to build it a new name space. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Auth_challenge</i> and <i>auth_response</i> perform challenge/response protocols
+    with <i>factotum</i>. State between the challenge and response phase
+    are kept in the <tt><font size=+1>Chalstate</font></tt> structure:<br>
+    <tt><font size=+1>struct Chalstate<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        char &nbsp;&nbsp;&nbsp;*user;<br>
+        char &nbsp;&nbsp;&nbsp;chal[MAXCHLEN];<br>
+        int nchal;<br>
+        void &nbsp;&nbsp;&nbsp;*resp;<br>
+        int nresp;<br>
+        
+    </table>
+    /* for implementation only */<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        int afd;<br>
+        AuthRpc &nbsp;&nbsp;&nbsp;*rpc;<br>
+        char &nbsp;&nbsp;&nbsp;userbuf[MAXNAMELEN];<br>
+        int userinchal;<br>
+        
+    </table>
+    };<br>
+    </font></tt><i>Auth_challenge</i> requires a key template generated by an <tt><font size=+1>sprint</font></tt>
+    of <i>fmt</i> and the variable arguments. It must contain the protocol
+    (proto=<i>xxx</i>) and depending on the protocol, the user name ( <tt><font size=+1>user=</font></tt><i>xxx</i>).
+    <tt><font size=+1>P9cr</font></tt> and <tt><font size=+1>vnc</font></tt> expect the user specified as an attribute in the
+    key template and <tt><font size=+1>apop</font></tt>, <tt><font size=+1>cram</font></tt>, and <tt><font size=+1>chap</font></tt> expect it in the <tt><font size=+1>user</font></tt> field
+    of the arg to
+    <i>auth_response</i>. For all protocols, the response is returned to
+    <i>auth_response</i> in the <i>resp</i> field of the <tt><font size=+1>Chalstate</font></tt>. <i>Chalstate.nresp</i>
+    must be the length of the response. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Supply to <i>auth_respond</i> a challenge string and the fmt and args
+    specifying a key, and it will use <i>factotum</i> to return the proper
+    user and response. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Auth_userpasswd</i> verifies a simple user/password pair. <i>Auth_getuserpasswd</i>
+    retrieves a user/password pair from <i>factotum</i> if permitted. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Auth_getinfo</i> reads an <tt><font size=+1>AuthInfo</font></tt> message from factotum and converts
+    it into a structure. It is only used by the other routines in
+    this library when communicating with <i>factotum</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>typedef struct UserPasswd {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        char &nbsp;&nbsp;&nbsp;*user;<br>
+        char &nbsp;&nbsp;&nbsp;*passwd;<br>
+        
+    </table>
+    } UserPasswd;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <i>Auth_freeAI</i> is used to free an <tt><font size=+1>AuthInfo</font></tt> structure returned by
+    one of these routines. Similary <i>auth_freechal</i> frees a challenge/response
+    state. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Fsauth_proxy</i> and <i>fsfauth_proxy</i> are like <i>auth_proxy</i> and <i>fauth_proxy</i>
+    but execute the protocol on a <tt><font size=+1>CFid*</font></tt> (see <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a>) instead
+    of a file descriptor. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Fsamount</i> and <i>nsamount</i> are like <i>fsmount</i> and <i>nsmount</i> (see <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a>)
+    but use <i>factotum</i> to authenticate to the file servers.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libauth">/usr/local/plan9/src/libauth</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man4/factotum.html"><i>factotum</i>(4)</a>, <a href="../man3/authsrv.html"><i>authsrv</i>(3)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines set <i>errstr</i>.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

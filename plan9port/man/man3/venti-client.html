@@ -1,0 +1,244 @@
+<head>
+<title>venti-client(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-CLIENT(3)</b><td align=right><b>VENTI-CLIENT(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    vtconnect, vthello, vtread, vtwrite, vtreadpacket, vtwritepacket,
+    vtsync, vtping, vtrpc, ventidoublechecksha1 &ndash; Venti client<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Packet* vtrpc(VtConn *z, Packet *p) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vthello(VtConn *z) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtconnect(VtConn *z) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtread(VtConn *z, uchar score[VtScoreSize],<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            uint type, uchar *buf, int n) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtwrite(VtConn *z, uchar score[VtScoreSize],<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            uint type, uchar *buf, int n) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>Packet* vtreadpacket(VtConn *z, uchar score[VtScoreSize],<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            uint type, int n) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtwritepacket(VtConn *z, uchar score[VtScoreSize],<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            uint type, Packet *p) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtsync(VtConn *z) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtping(VtConn *z) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>extern int ventidoublechecksha1; &nbsp;&nbsp;&nbsp;/* default 1 */<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines execute the client side of the <a href="../man7/venti.html"><i>venti</i>(7)</a> protocol.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtrpc</i> executes a single Venti RPC transaction, sending the request
+    packet <i>p</i> and then waiting for and returning the response packet.
+    <i>Vtrpc</i> will set the tag in the packet. <i>Vtrpc</i> frees <i>p</i>, even on error.
+    <i>Vtrpc</i> is typically called only indirectly, via the functions below.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vthello</i> executes a <tt><font size=+1>hello</font></tt> transaction, setting <i>z</i><tt><font size=+1>&#8722;&gt;sid</font></tt> to the name
+    used by the server. <i>Vthello</i> is typically called only indirectly,
+    via <i>vtconnect</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtconnect</i> calls <i>vtversion</i> (see <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>) and <i>vthello</i>, in
+    that order, returning success only if both succeed. This sequence
+    (calling <i>vtversion</i> and then <i>vthello</i>) must be done before the functions
+    below can be called. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtread</i> reads the block with the given <i>score</i> and <i>type</i> from the
+    server, stores the returned data in memory at <i>buf</i>, and returns
+    the number of bytes read. If the server&#8217;s block has size larger
+    than <i>n</i>, <i>vtread</i> does not modify <i>buf</i> and returns an error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtwrite</i> writes the <i>n</i> bytes in <i>buf</i> as a block of the given <i>type</i>,
+    setting <i>score</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtreadpacket</i> and <i>vtwritepacket</i> are like <i>vtread</i> and <i>vtwrite</i> but
+    return or accept the block contents in the form of a <tt><font size=+1>Packet</font></tt>. They
+    avoid making a copy of the data. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtsync</i> causes the server to flush all pending write requests to
+    disk before returning. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtping</i> executes a ping transaction with the server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>vtread</i> and <i>vtreadpacket</i> check that the SHA1 hash of
+    the returned data matches the requested <i>score</i>, and <i>vtwrite</i> and
+    <i>vtwritepacket</i> check that the returned <i>score</i> matches the SHA1 hash
+    of the written data. Setting <i>ventidoublechecksha1</i> to zero disables
+    these extra checks, mainly for benchmarking purposes. Doing so
+    in production code is
+    not recommended. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    These functions can be called from multiple threads or procs simultaneously
+    to issue requests in parallel. Programs that issue requests from
+    multiple threads in the same proc should start separate procs
+    running <i>vtsendproc</i> and <i>vtrecvproc</i> as described in <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>, <a href="../man3/venti-packet.html"><i>venti-packet</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Vtrpc</i> and <i>vtpacket</i> return nil on error. The other routines return
+    &ndash;1 on error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtwrite</i> returns 0 on success: there are no partial writes.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

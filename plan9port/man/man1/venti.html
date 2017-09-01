@@ -1,0 +1,122 @@
+<head>
+<title>venti(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI(1)</b><td align=right><b>VENTI(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    read, write, copy &ndash; simple Venti clients<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>venti/read</font></tt> [ <tt><font size=+1>&#8722;h</font></tt> <i>host</i> ] [ <tt><font size=+1>&#8722;t</font></tt> <i>type</i> ] <i>score<br>
+    </i><tt><font size=+1>venti/write</font></tt> [ <tt><font size=+1>&#8722;z</font></tt> ] [ <tt><font size=+1>&#8722;h</font></tt> <i>host</i> ] [ <tt><font size=+1>&#8722;t</font></tt> <i>type</i> ]<br>
+    <tt><font size=+1>venti/copy</font></tt> [ <tt><font size=+1>&#8722;fimrVv</font></tt> ] [ <tt><font size=+1>&#8722;t</font></tt> <i>type</i> ] <i>srchost dsthost score<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Venti is a SHA1-addressed block storage server. See <a href="../man7/venti.html"><i>venti</i>(7)</a> for
+    a full introduction. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Read</i> reads a block with the given <i>score</i> and numeric <i>type</i> from
+    the server <i>host</i> and prints the block to standard output. If the
+    <tt><font size=+1>&#8722;h</font></tt> option is omitted, <i>read</i> consults the environment variable <tt><font size=+1>$venti</font></tt>
+    for the name of the Venti server. If the <tt><font size=+1>&#8722;t</font></tt> option is omitted,
+    <i>read</i> will try each type, one at a time, until it finds one that
+    works. It prints the corresponding <tt><font size=+1>read
+    &#8722;t</font></tt> command to standard error to indicate the type of the block.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Write</i> writes at most 56 kilobytes of data from standard input
+    to the server <i>host</i> and prints the resulting score to standard
+    output. If the <tt><font size=+1>&#8722;t</font></tt> option is omitted, <i>write</i> uses type 0, denoting
+    a data block. If the <tt><font size=+1>&#8722;z</font></tt> option is given, <i>write</i> zero truncates
+    the block before writing it to the server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Copy</i> expects <i>score</i> to be the score of a <tt><font size=+1>VtRoot</font></tt> block. It copies
+    the entire tree of blocks reachable from the root block from the
+    server <i>srchost</i> to the server <i>dsthost</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Venti&#8217;s blocks are arranged in a directed acyclic graph (see venti(6));
+    there may be multiple paths from a root score to an interior block
+    (for example, if the same file contents are stored under multiple
+    names in an archive). <i>Copy</i> runs more efficiently if it does not
+    copy blocks (and all their children) multiple times. The <tt><font size=+1>&#8722;f</font></tt> option
+    causes <i>copy</i> to assume
+    that if a block already exists on the destination Venti server,
+    all its children also exist and need not be considered. The <tt><font size=+1>&#8722;m</font></tt>
+    option causes <i>copy</i> to maintain an in-memory list of blocks it
+    has copied and avoid considering the same block multiple times.
+    The <tt><font size=+1>&#8722;f</font></tt> option is only useful if the destination Venti server is
+    known not to have lost any blocks due to
+    disk corruption or other failures. The <tt><font size=+1>&#8722;m</font></tt> option is only useful
+    if enough memory is available to hold the block list, which typically
+    requires about 1% of the total number of bytes being copied. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;i</font></tt> and <tt><font size=+1>&#8722;r</font></tt> options control <i>copy</i>&#8217;s reaction to errors reading
+    from <i>srchost</i>. <i>Copy</i> always prints information to standard error
+    about each read error. By default, <i>copy</i> exits after printing the
+    first error. If the <tt><font size=+1>&#8722;i</font></tt> option is given, read errors are ignored.
+    This is dangerous behavior because it breaks the assumption made
+    by &#8216;fast&#8217; mode. If the <tt><font size=+1>&#8722;r</font></tt> option is
+    given, <i>copy</i> replaces pointers to unreadable blocks with pointers
+    to the zero block. It writes the new root score to standard output.
+    The <tt><font size=+1>&#8722;v</font></tt> option prints scores as it copies them, total writes, and
+    other debugging information. The <tt><font size=+1>&#8722;V</font></tt> option prints debugging information
+    about the Venti protocol messages send/received.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/venti">/usr/local/plan9/src/cmd/venti</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/vac.html"><i>vac</i>(1)</a>, <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man4/vacfs.html"><i>vacfs</i>(4)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a>, <a href="../man8/vbackup.html"><i>vbackup</i>(8)</a>, <a href="../man8/venti.html"><i>venti</i>(8)</a>, <a href="../man8/venti-fmt.html"><i>venti-fmt</i>(8)</a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    There should be programs to read and write venti files and directories.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

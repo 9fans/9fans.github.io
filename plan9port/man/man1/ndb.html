@@ -1,0 +1,143 @@
+<head>
+<title>ndb(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>NDB(1)</b><td align=right><b>NDB(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    ndbquery, ndbmkhash, ndbmkdb, ndbipquery, ndbmkhosts &ndash; network
+    database<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>ndbquery</font></tt> [ <tt><font size=+1>&#8722;f</font></tt> <i>dbfile</i> ] <i>attr value</i> [ <i>rattr</i> ]<br>
+    <tt><font size=+1>ndbipquery</font></tt> <i>attr value rattr...<br>
+    </i><tt><font size=+1>ndbmkhash</font></tt> <i>file attr<br>
+    </i><tt><font size=+1>ndbmkdb<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The network database holds administrative information used by
+    <i>authdial</i> (see <a href="../man3/authsrv.html"><i>authsrv</i>(3)</a>) and <a href="../man1/secstored.html"><i>secstored</i>(1)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbquery</i> searches the database for an attribute of type <i>attr</i> and
+    value <i>value</i>. If <i>rattr</i> is not specified, all entries matched by
+    the search are returned. If <i>rattr</i> is specified, the value of the
+    first pair with attribute <i>rattr</i> of all the matched entries is
+    returned. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbipquery</i> uses <i>ndbipinfo</i> (see <a href="../man3/ndb.html"><i>ndb</i>(3)</a>) to search for the values
+    of the attributes <i>rattr</i> corresponding to the system with entries
+    of attribute type <i>attr</i> and value <i>value</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbmkhash</i> creates a hash file for all entries with attribute <i>attr</i>
+    in database file <i>file</i>. The hash files are used by <i>ndbquery</i> and
+    by the ndb library routines. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbmkdb</i> is used in concert with <i>awk</i>(1) scripts to convert uucp
+    systems files and IP host files into database files. It is very
+    specific to the situation at Murray Hill. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When the database files change underfoot, running programs track
+    them properly. Nonetheless, to keep the database searches efficient
+    it is necessary to run <i>ndbmkhash</i> whenever the files are modified.
+    It may be profitable to control this by a frequent <i>cron</i>(8) job.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbmkhosts</i> generates a BSD style <tt><font size=+1>hosts</font></tt>, <tt><font size=+1>hosts.txt</font></tt>, and <tt><font size=+1>hosts.equiv</font></tt>
+    files from ndb data base files specified on the command line (default
+    <tt><font size=+1><a href="/usr/local/plan9/ndb/local">/usr/local/plan9/ndb/local</a></font></tt> and <tt><font size=+1><a href="/usr/local/plan9/ndb/">/usr/local/plan9/ndb/</a>friends</font></tt>).
+    It only processes hosts whose domain names end in <i>domname</i>. The
+    output files are named <tt><font size=+1>db.</font></tt><i>domname</i>,
+    <tt><font size=+1>equiv.</font></tt><i>domname</i>, and <tt><font size=+1>txt.</font></tt><i>domname</i>. For historical reasons, the default
+    <i>domname</i> is <tt><font size=+1>research.att.com.<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% ndbquery sys helix<br>
+        sys=helix dom=helix.research.bell&#8722;labs.com bootf=/mips/9powerboot<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            ip=135.104.117.31 ether=080069020427<br>
+            proto=il <br>
+            
+        </table>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/ndb/local">/usr/local/plan9/ndb/local</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        first database file searched<br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/ndb/local">/usr/local/plan9/ndb/local</a>.*<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        hash files for <tt><font size=+1><a href="/usr/local/plan9/ndb/local">/usr/local/plan9/ndb/local</a><br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/ndb">/usr/local/plan9/src/cmd/ndb</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/ndb.html"><i>ndb</i>(3)</a>, <a href="../man7/ndb.html"><i>ndb</i>(7)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

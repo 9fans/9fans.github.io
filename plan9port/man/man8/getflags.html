@@ -1,0 +1,111 @@
+<head>
+<title>getflags(8) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>GETFLAGS(8)</b><td align=right><b>GETFLAGS(8)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    getflags, usage &ndash; command-line parsing for shell scripts<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>getflags $* 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>usage [ progname ]<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Getflags</i> parses the options in its command-line arguments according
+    to the environment variable <tt><font size=+1>$flagfmt</font></tt>. This variable should be
+    a list of comma-separated options. Each option can be a single
+    letter, indicating that it does not take arguments, or a letter
+    followed by the space-separated names of its arguments. <i>Getflags</i>
+    prints an <a href="../man1/rc.html"><i>rc</i>(1)</a> script on
+    standard output which initializes the environment variable <tt><font size=+1>$flag</font></tt><i>x</i>
+    for every option mentioned in <tt><font size=+1>$flagfmt</font></tt>. If the option is not present
+    on the command-line, the script sets that option&#8217;s flag variable
+    to an empty list. Otherwise, the script sets that option&#8217;s flag
+    variable with a list containing the option&#8217;s arguments or, if
+    the option takes no arguments, with
+    the string <tt><font size=+1>1</font></tt>. The script also sets the variable <tt><font size=+1>$*</font></tt> to the list
+    of arguments following the options. The final line in the script
+    sets the <tt><font size=+1>$status</font></tt> variable, to the empty string on success and
+    to the string <tt><font size=+1>usage</font></tt> when there is an error parsing the command
+    line. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Usage</i> prints a usage message to standard error. It creates the
+    message using <tt><font size=+1>$flagfmt</font></tt>, as described above, <tt><font size=+1>$args</font></tt>, which should
+    contain the string to be printed explaining non-option arguments,
+    and <tt><font size=+1>$0</font></tt>, the program name (see <a href="../man1/rc.html"><i>rc</i>(1)</a>). If run under <i>sh</i>(1), which
+    does not set <tt><font size=+1>$0</font></tt>, the program name must be given explicitly on
+    the command line.
+    
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Parse the arguments for Plan 9&#8217;s <a href="../man1/leak.html"><i>leak</i>(1)</a>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>flagfmt='b,s,f binary,r res,x width'<br>
+        args='name | pid list'<br>
+        if(! ifs=() eval `{getflags $*} || ~ $#* 0){<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            usage<br>
+            exit usage<br>
+            
+        </table>
+        }<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/getflags.c">/usr/local/plan9/src/cmd/getflags.c</a><br>
+    <a href="/usr/local/plan9/src/cmd/usage.c">/usr/local/plan9/src/cmd/usage.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/arg.html"><i>arg</i>(3)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

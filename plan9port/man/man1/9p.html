@@ -1,0 +1,145 @@
+<head>
+<title>9p(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>9P(1)</b><td align=right><b>9P(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    9p &ndash; read and write files on a 9P server<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>read</font></tt> <i>path<br>
+    </i><tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>readfd</font></tt> <i>path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>write</font></tt> [ <tt><font size=+1>&#8722;l</font></tt> ] <i>path<br>
+    </i><tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>writefd</font></tt> <i>path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>stat</font></tt> <i>path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>rdwr</font></tt> <i>path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>9p</font></tt> [ <i>options</i> ] <tt><font size=+1>ls</font></tt> [ <tt><font size=+1>&#8722;dl</font></tt> ] <i>path...<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>9p</i> is a trivial 9P client that can access a single file on a 9P
+    server. It can be useful for manual interaction with a 9P server
+    or for accessing simple 9P services from within shell scripts.
+    The common options are:<br>
+    <tt><font size=+1>&#8722;a</font></tt> <i>addr<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        dial the server at <i>addr<br>
+        </i>
+    </table>
+    <tt><font size=+1>&#8722;A</font></tt> <i>aname<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        attach to the file system named <i>aname<br>
+        </i>
+    </table>
+    <tt><font size=+1>&#8722;n</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;mount without authentication 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The first argument is a command, one of:<br>
+    <tt><font size=+1>read</font></tt>&nbsp;&nbsp;&nbsp;print the contents of <i>path</i> to standard output<br>
+    <tt><font size=+1>write</font></tt>write data on standard input to <i>path</i>; the <tt><font size=+1>&#8722;l</font></tt> option causes
+    <i>write</i> to write one line at a time<br>
+    <tt><font size=+1>readfd</font></tt>, <tt><font size=+1>writefd<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        like <tt><font size=+1>read</font></tt> and <tt><font size=+1>write</font></tt> but use <a href="../man9/openfd.html"><i>openfd</i>(9p)</a> instead of <i>open</i>; this masks
+        errors and is mainly useful for debugging the implementation of
+        <i>openfd<br>
+        </i>
+    </table>
+    <tt><font size=+1>stat</font></tt>&nbsp;&nbsp;&nbsp;execute <i>stat (9p)</i> on <i>path</i> and print the result<br>
+    <tt><font size=+1>rdwr</font></tt>&nbsp;&nbsp;&nbsp;Open <i>path</i> for reading and writing. Then repeat until end-of-file
+    on standard input: copy a line from the file to standard output,
+    copy a line from standard input to the file. Print errors, but
+    don&#8217;t give up. <tt><font size=+1>Rdwr</font></tt> is useful for interacting with servers like
+    <a href="../man4/factotum.html"><i>factotum</i>(4)</a>.<br>
+    <tt><font size=+1>ls</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Print a directory listing in the format of <a href="../man1/ls.html"><i>ls</i>(1)</a>. The <tt><font size=+1>&#8722;d</font></tt> and
+    <tt><font size=+1>&#8722;l</font></tt> flags have the same meaning as in <i>ls</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>9p</i> dials <i>address</i> to connect to the 9P server. If the <tt><font size=+1>&#8722;a</font></tt> option
+    is not given, <i>9p</i> requires the <i>path</i> to be of the form <i>service</i><tt><font size=+1>/</font></tt><i>subpath</i>;
+    it connects to the Unix domain socket <i>service</i> in the name space
+    directory (see <a href="../man4/intro.html"><i>intro</i>(4)</a>) and then accesses <i>subpath</i>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    To update <a href="../man4/plumber.html"><i>plumber</i>(4)</a>&#8217;s copy of your plumbing rules after editing
+    <tt><font size=+1>$HOME/lib/plumbing</font></tt>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>cat $HOME/lib/plumbing | 9p write plumb/rules<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    To display the contents of the current <a href="../man4/acme.html"><i>acme</i>(4)</a> window:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>9p read acme/$winid/body<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/9p.c">/usr/local/plan9/src/cmd/9p.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man4/intro.html"><i>intro</i>(4)</a>, <a href="../man9/intro.html"><i>intro</i>(9p)</a>, <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

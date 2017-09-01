@@ -1,0 +1,129 @@
+.TH MAN 1
+.SH NAME
+man, lookman, sig \- print or find pages of this manual
+.SH SYNOPSIS
+.B man
+[
+.B -hnpPtw
+]
+[
+.I section ...
+]
+[
+.B --
+]
+.I title ...
+.PP
+.B lookman
+.I key ...
+.PP
+.B sig
+.I function ...
+.SH DESCRIPTION
+.I Man
+locates and prints pages of this manual named
+.I title
+in the specified
+.IR sections .
+.I Title
+is given in lower case.
+Each
+.I section
+is a number;
+pages marked (2S), for example,
+belong to chapter 2.
+If no
+.I section
+is specified, pages 
+in all sections are printed.
+Any name from the
+.SM NAME
+section at the top of the page will serve as a
+.IR title .
+.PP
+The options are:
+.TP
+.B -h
+Print the pages to HTML and send to a web browser with
+.IR web (1).
+.TP
+.B -n
+(Default)
+Print the pages on the standard output using
+.IR nroff .
+.TP
+.B -p
+Run
+.IR proof (1)
+on the specified man pages.
+.TP
+.B -P
+Run
+.IR page (1)
+on the specified man pages.
+.TP
+.B -t
+Run
+.IR troff (1)
+and send its output
+to standard output.
+.TP
+.B -w
+Print the file names for the pages.
+.PD
+.PP
+.B Lookman
+prints the names of all manual sections that contain
+all of the
+.I key
+words given on the command line.
+.PP
+.B Sig
+prints the signature (i.e. C definition) of the
+.IR function 's
+given on the command line.
+.SH FILES
+.TP
+.B \*9/man?/*.[0-9]*
+.I troff
+source for manual; this page is
+.B \*9/man/man1/man.1
+.TP
+.B \*9/man?/*.html
+HTML version of the manual
+.TP
+.B \*9/man/man?/INDEX
+indices searched to find pages corresponding to titles
+.TP
+.B \*9/man/secindex
+command to make an index for a given section
+.TP
+.B \*9/man/lookman.index
+index for
+.I lookman
+.SH SOURCE
+.B \*9/bin/man
+.br
+.B \*9/bin/lookman
+.SH "SEE ALSO"
+.IR page (1),
+.IR proof (1)
+.SH BUGS
+The manual was intended to be typeset; some detail is sacrificed on text terminals.
+.PP
+There is no automatic mechanism to keep the indices up to date.
+.PP
+Except for special cases,
+.I man
+doesn't recognize things that should be run through
+.I tbl
+and/or
+.IR eqn .
+.PP
+The HTML manual is not maintained automatically.
+To update it:
+.IP
+.EX
+cd \*9/dist
+mk man
+.EE

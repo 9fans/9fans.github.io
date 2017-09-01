@@ -1,0 +1,231 @@
+<head>
+<title>venti-fcall(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-FCALL(3)</b><td align=right><b>VENTI-FCALL(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    VtEntry, VtFcall, VtRoot, vtentrypack, vtentryunpack, vtfcallclear,
+    vtfcallfmt, vtfcallpack, vtfcallunpack, vtfromdisktype, vttodisktype,
+    vtgetstring, vtputstring, vtrootpack, vtrootunpack, vtparsescore,
+    vtscorefmt &ndash; venti data formats<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    enum<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        VtEntrySize = 40,<br>
+        VtRootSize = 300,<br>
+        VtScoreSize = 20,<br>
+        
+    </table>
+    };<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    typedef struct VtEntry<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        ulong gen; &nbsp;&nbsp;&nbsp;&nbsp;/* generation number */<br>
+        ushort psize; &nbsp;&nbsp;&nbsp;/* pointer block size */<br>
+        ushort dsize; &nbsp;&nbsp;&nbsp;/* data block size */<br>
+        uchar type;<br>
+        uchar flags;<br>
+        uvlong size;<br>
+        uchar score[VtScoreSize];<br>
+        
+    </table>
+    } VtEntry;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    typedef struct VtRoot<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        char name[128];<br>
+        char type[128];<br>
+        uchar score[VtScoreSize]; &nbsp;&nbsp;&nbsp;/* to a Dir block */<br>
+        ushort blocksize; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* maximum block size */<br>
+        uchar prev[VtScoreSize]; &nbsp;&nbsp;&nbsp;/* previous root block */<br>
+        
+    </table>
+    } VtRoot;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    void &nbsp;&nbsp;&nbsp;&nbsp;vtentrypack(VtEntry *e, uchar *buf, int index)<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtentryunpack(VtEntry *e, uchar *buf, int index)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Packet* vtfcallpack(VtFcall *f)<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfcallunpack(VtFcall *f, Packet *p)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void vtfcallclear(VtFcall *f)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint &nbsp;&nbsp;&nbsp;&nbsp;vttodisktype(uint type)<br>
+    uint &nbsp;&nbsp;&nbsp;&nbsp;vtfromdisktype(uint type)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtputstring(Packet *p, char *s)<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtgetstring(Packet *p, char **s)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;vtrootpack(VtRoot *r, uchar *buf)<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtrootunpack(VtRoot *r, uchar *buf)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtparsescore(char *s, char **prefix, uchar score[VtScoreSize])<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfcallfmt(Fmt *fmt)<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtscorefmt(Fmt *fmt)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines convert between C representations of Venti structures
+    and serialized representations used on disk and on the network.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtentrypack</i> converts a <tt><font size=+1>VtEntry</font></tt> structure describing a Venti file
+    (see <a href="../man7/venti.html"><i>venti</i>(7)</a>) into a 40-byte (<tt><font size=+1>VtEntrySize</font></tt>) structure at <i>buf</i><tt><font size=+1>+</font></tt><i>index</i><tt><font size=+1>*40</font></tt>.
+    Vtentryunpack does the reverse conversion. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfcallpack</i> converts a <tt><font size=+1>VtFcall</font></tt> structure describing a Venti protocol
+    message (see <a href="../man7/venti.html"><i>venti</i>(7)</a>) into a packet. <i>Vtfcallunpack</i> does the reverse
+    conversion. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The fields in a <tt><font size=+1>VtFcall</font></tt> are named after the protocol fields described
+    in <a href="../man7/venti.html"><i>venti</i>(7)</a>, except that the <tt><font size=+1>type</font></tt> field is renamed <tt><font size=+1>blocktype</font></tt>.
+    The <tt><font size=+1>msgtype</font></tt> field holds the one-byte message type: <tt><font size=+1>VtThello</font></tt>, <tt><font size=+1>VtRhello</font></tt>,
+    and so on. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfcallclear</i> frees the strings <i>f</i><tt><font size=+1>&#8722;&gt;error</font></tt>, <i>f</i><tt><font size=+1>&#8722;&gt;version</font></tt>, <i>f</i><tt><font size=+1>&#8722;&gt;uid</font></tt>, <i>f</i><tt><font size=+1>&#8722;&gt;sid</font></tt>,
+    the buffers <i>f</i><tt><font size=+1>&#8722;&gt;crypto</font></tt> and <i>f</i><tt><font size=+1>&#8722;&gt;codec</font></tt>, and the packet <i>f</i><tt><font size=+1>&#8722;&gt;data</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The block type enumeration defined in <tt><font size=+1>&lt;venti.h&gt;</font></tt> (presented in <a href="../man7/venti.html"><i>venti</i>(7)</a>)
+    differs from the one used on disk and in the network protocol.
+    The disk and network representation uses different constants and
+    does not distinguish between <tt><font size=+1>VtDataType+</font></tt><i>n</i> and <tt><font size=+1>VtDirType+</font></tt><i>n</i> blocks.
+    <i>Vttodisktype</i> converts a <tt><font size=+1>&lt;venti.h&gt;</font></tt> enumeration value to the disk
+    value;
+    <i>vtfromdisktype</i> converts a disk value to the enumeration value,
+    always using the <tt><font size=+1>VtDirType</font></tt> pointers. The <tt><font size=+1>VtFcall</font></tt> field <tt><font size=+1>blocktype</font></tt>
+    is an enumeration value (<i>vtfcallpack</i> and <i>vtfcallunpack</i> convert
+    to and from the disk values used in packets automatically), so
+    most programs will not need to call these functions. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtputstring</i> appends the Venti protocol representation of the string
+    <i>s</i> to the packet <i>p</i>. <i>Vtgetstring</i> reads a string from the packet,
+    returning a pointer to a copy of the string in <tt><font size=+1>*</font></tt><i>s</i>. The copy must
+    be freed by the caller. These functions are used by <i>vtfcallpack</i>
+    and <i>vtfcallunpack</i>; most programs will not need to call them directly.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtrootpack</i> converts a <tt><font size=+1>VtRoot</font></tt> structure describing a Venti file
+    tree into the 300-byte (<tt><font size=+1>VtRootSize</font></tt>) buffer pointed to by <i>buf</i>.
+    <i>Vtrootunpack does the reverse conversion. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <i>Vtparsescore</i> parses the 40-digit hexadecimal string <i>s</i>, writing
+    its value into <i>score</i>. If the hexadecimal string is prefixed with
+    a text label followed by a colon, a copy of that label is returned
+    in <tt><font size=+1>*</font></tt><i>prefix</i>. If <i>prefix</i> is nil, the label is ignored. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfcallfmt</i> and <i>vtscorefmt</i> are <a href="../man3/print.html"><i>print</i>(3)</a> formatters to print <tt><font size=+1>VtFcall</font></tt>
+    structures and scores. <i>Vtfcallfmt</i> assumes that <i>vtscorefmt</i> is installed
+    as <tt><font size=+1>%V</font></tt>.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/venti.html"><i>venti</i>(1)</a>, <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Vtentrypack</i>, <i>vtfcallpack</i>, <i>vtrootpack</i>, and <i>vtfcallclear</i> cannot
+    fail. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtentryunpack</i>, <i>vtrootunpack</i>, <i>vtputstring</i>, <i>vtgetstring</i>, and <i>vtparsescore</i>
+    return 0 on success, &ndash;1 on error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfcallpack</i> returns a packet on success, nil on error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vttodisktype</i> and <i>vtfromdisktype</i> return <tt><font size=+1>VtCorruptType</font></tt> (255) when
+    presented with invalid input.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

@@ -1,0 +1,110 @@
+<head>
+<title>encrypt(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>ENCRYPT(3)</b><td align=right><b>ENCRYPT(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    encrypt, decrypt, netcrypt &ndash; DES encryption<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;encrypt(void *key, void *data, int len) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;decrypt(void *key, void *data, int len) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;netcrypt(void *key, void *data)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Encrypt</i> and <i>decrypt</i> perform DES encryption and decryption. <i>Key</i>
+    is an array of <tt><font size=+1>DESKEYLEN</font></tt> (defined as 7 in <tt><font size=+1>&lt;auth.h&gt;</font></tt>) bytes containing
+    the encryption key. <i>Data</i> is an array of <i>len</i> bytes; it must be
+    at least 8 bytes long. The bytes are encrypted or decrypted in
+    place. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The DES algorithm encrypts an individual 8-byte block of data.
+    <i>Encrypt</i> uses the following method to encrypt data longer than
+    8 bytes. The first 8 bytes are encrypted as usual. The last byte
+    of the encrypted result is prefixed to the next 7 unencrypted
+    bytes to make the next 8 bytes to encrypt. This is repeated until
+    fewer than 7 bytes remain
+    unencrypted. Any remaining unencrypted bytes are encrypted with
+    enough of the preceding encrypted bytes to make a full 8-byte
+    block. <i>Decrypt</i> uses the inverse algorithm. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netcrypt</i> performs the same encryption as a SecureNet Key. <i>Data</i>
+    points to an ASCII string of decimal digits with numeric value
+    between 0 and 10000. These digits are copied into an 8-byte buffer
+    with trailing binary zero fill and encrypted as one DES block.
+    The first four bytes are each formatted as two digit ASCII hexadecimal
+    numbers, and the string is
+    copied into <i>data</i>.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/lib9">/usr/local/plan9/src/lib9</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines return 1 if the data was encrypted, and 0 if the
+    encryption fails. <i>Encrypt</i> and <i>decrypt</i> fail if the data passed
+    is less than 8 bytes long. <i>Netcrypt</i> can fail if it is passed invalid
+    data.<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The implementation is broken in a way that makes it unsuitable
+    for anything but authentication. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    To avoid name conflicts with the underlying system, <i>encrypt</i> and
+    <i>decrypt</i> are preprocessor macros defined as <i>p9encrypt</i> and <i>p9decrypt</i>;
+    see <a href="../man3/intro.html"><i>intro</i>(3)</a>.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

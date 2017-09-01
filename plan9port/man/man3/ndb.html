@@ -1,0 +1,435 @@
+<head>
+<title>ndb(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>NDB(3)</b><td align=right><b>NDB(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    ndbopen, ndbcat, ndbchanged, ndbclose, ndbreopen, ndbsearch, ndbsnext,
+    ndbgetvalue, ndbfree, ipattr, ndbgetipaddr, ndbipinfo, ndbhash,
+    ndbparse, ndbfindattr, ndbdiscard, ndbconcatenate, ndbreorder,
+    ndbsubstitute, ndbgetval, ndblookval &ndash; network database<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;bio.h&gt;<br>
+    #include &lt;ndb.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndb* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbopen(char *file) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndb* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbcat(Ndb *db1, Ndb *db2) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndb* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbchanged(Ndb *db) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbreopen(Ndb *db) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbclose(Ndb *db) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbsearch(Ndb *db, Ndbs *s, char *attr, char *val) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbsnext(Ndbs *s, char *attr, char *val) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbgetvalue(Ndb *db, Ndbs *s, char *attr, char *val,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            char *rattr, Ndbtuple **tp) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>char* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipattr(char *name) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbgetipaddr(Ndb *db, char *sys); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbipinfo(Ndb *db, char *attr, char *val, char **attrs,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            int nattr) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>ulong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbhash(char *val, int hlen) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbparse(Ndb *db) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbfindattr(Ndbtuple *entry, Ndbtuple *line, char *attr)
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ndbfree(Ndbtuple *db) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbdiscard(Ndbtuple &nbsp;&nbsp;&nbsp;*t, Ndbtuple *a) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbconcatenate(Ndbtuple *a, Ndbtuple *b); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbreorder(Ndbtuple *t, Ndbtuple *a); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Ndbtuple* &nbsp;&nbsp;&nbsp;ndbsubstitute(Ndbtuple *t, Ndbtuple *from, Ndbtuple
+    *to);<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines are used by network administrative programs to
+    search the network database. They operate on the database files
+    described in <a href="../man7/ndb.html"><i>ndb</i>(7)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbopen</i> opens the database <i>file</i> and calls <i>malloc</i>(3) to allocate
+    a buffer for it. If <i>file</i> is zero, all network database files are
+    opened. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbcat</i> concatenates two open databases. Either argument may be
+    nil. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbreopen</i> checks if the database files associated with <i>db</i> have
+    changed and if so throws out any cached information and reopens
+    the files. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbclose</i> closes any database files associated with <i>db</i> and frees
+    all storage associated with them. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbsearch</i> and <i>ndbsnext</i> search a database for an entry containing
+    the attribute/value pair, <i>attr</i>=<i>val</i>. <i>Ndbsearch</i> is used to find
+    the first match and <i>ndbsnext</i> is used to find each successive match.
+    On a successful search both return a linked list of <i>Ndbtuple</i> structures
+    acquired by <i>malloc</i>(3) that represent the attribute/value pairs
+    in the entry. On failure
+    they return zero.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>typedef struct Ndbtuple Ndbtuple;<br>
+        struct Ndbtuple {<br>
+         
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            char &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;attr[Ndbalen];<br>
+             char &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*val;<br>
+             Ndbtuple &nbsp;&nbsp;&nbsp;*entry;<br>
+             Ndbtuple &nbsp;&nbsp;&nbsp;*line;<br>
+             ulong &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ptr; &nbsp;&nbsp;&nbsp;&nbsp;/* for the application; starts 0 */<br>
+             char &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;valbuf[Ndbvlen]; &nbsp;&nbsp;&nbsp;/* initial allocation for val */<br>
+            
+        </table>
+        };<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The <i>entry</i> pointers chain together all pairs in the entry in a
+    null-terminated list. The <i>line</i> pointers chain together all pairs
+    on the same line in a circular list. Thus, a program can implement
+    2 levels of binding for pairs in an entry. In general, pairs on
+    the same line are bound tighter than pairs on different lines.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The argument <i>s</i> of <i>ndbsearch</i> has type <i>Ndbs</i> and should be pointed
+    to valid storage before calling <i>ndbsearch</i>, which will fill it
+    with information used by <i>ndbsnext</i> to link successive searches.
+    The structure <i>Ndbs</i> looks like:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>typedef struct Ndbs Ndbs;<br>
+        struct Ndbs {<br>
+         
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Ndb &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*db; &nbsp;&nbsp;&nbsp;/* data base file being searched */<br>
+             ...<br>
+             Ndbtuple *t; &nbsp;&nbsp;&nbsp;&nbsp;/* last attribute value pair found */<br>
+            
+        </table>
+        };<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The <i>t</i> field points to the pair within the entry matched by the
+    <i>ndbsearch</i> or <i>ndbsnext</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbgetvalue</i> searches the database for an entry containing not
+    only an attribute/value pair, <i>attr</i>=<i>val</i>, but also a pair with the
+    attribute <i>rattr</i>. If successful, it returns a malloced copy of
+    the null terminated value associated with <i>rattr</i>. If <i>tp</i> is non
+    nil, <i>*tp</i> will point to the entry. Otherwise the entry will be
+    freeed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbfree</i> frees a list of tuples returned by one of the other routines.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ipattr</i> takes the name of an IP system and returns the attribute
+    it corresponds to:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>dom</font></tt>&nbsp;&nbsp;&nbsp;domain name<br>
+        <tt><font size=+1>ip</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Internet number<br>
+        <tt><font size=+1>sys</font></tt>&nbsp;&nbsp;&nbsp;system name<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    <i>Ndbgetipaddr</i> looks in <i>db</i> for an entry matching <i>sys</i> as the value
+    of a <tt><font size=+1>sys=</font></tt> or <tt><font size=+1>dom=</font></tt> attribute/value pair and returns all IP addresses
+    in the entry. If <i>sys</i> is already an IP address, a tuple containing
+    just that address is returned. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbipinfo</i> looks up Internet protocol information about a system.
+    This is an IP aware search. It looks first for information in
+    the system&#8217;s database entry and then in the database entries for
+    any IP subnets or networks containing the system. The system is
+    identified by the attribute/value pair, <i>attr</i>=<i>val</i>. <i>Ndbipinfo</i> returns
+    a list of tuples whose attributes
+    match the attributes in the <i>n</i> element array <i>attrs</i>. For example,
+    consider the following database entries describing a network,
+    a subnetwork, and a system. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>ipnet=big ip=10.0.0.0<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            dns=dns.big.com<br>
+            smtp=smtp.big.com<br>
+            
+        </table>
+        
+    </table>
+    ipnet=dept ip=10.1.1.0 ipmask=255.255.255.0<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            smtp=smtp1.big.com<br>
+            
+        </table>
+        
+    </table>
+    ip=10.1.1.4 dom=x.big.com<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            bootf=/386/9pc<br>
+            
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    Calling 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ndbipinfo(db, &quot;dom&quot;, &quot;x.big.com&quot;, [&quot;bootf&quot; &quot;smtp&quot; &quot;dns&quot;], 3)<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    will return the tuples <tt><font size=+1>bootf=/386/9pc</font></tt>, <tt><font size=+1>smtp=smtp1.big.com</font></tt>, and
+    <tt><font size=+1>dns=dns.big.com</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The next three routines are used by programs that create the hash
+    tables and database files. <i>Ndbhash</i> computes a hash offset into
+    a table of length <i>hlen</i> for the string <i>val</i>. <i>Ndbparse</i> reads and
+    parses the next entry from the database file. Multiple calls to
+    <i>ndbparse</i> parse sequential entries in the database file. A zero
+    is returned at end of file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbfindattr</i> searches <i>entry</i> for the tuple with attribute <i>attr</i> and
+    returns a pointer to the tuple. If <i>line</i> points to a particular
+    line in the entry, the search starts there and then wraps around
+    to the beginning of the entry. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    All of the routines provided to search the database provide an
+    always consistent view of the relevant files. However, it may
+    be advantageous for an application to read in the whole database
+    using <i>ndbopen</i> and <i>ndbparse</i> and provide its own search routines.
+    The <i>ndbchanged</i> routine can be used by the application to periodicly
+    check for changes. It
+    returns zero if none of the files comprising the database have
+    changes and non-zero if they have. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Finally, a number of routines are provided for manipulating tuples.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbdiscard</i> removes attr/val pair <i>a</i> from tuple <i>t</i> and frees it.
+    If <i>a</i> isn&#8217;t in <i>t</i> it is just freed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbconcatenate</i> concatenates two tuples and returns the result.
+    Either or both tuples may be nil. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbreorder</i> reorders a tuple <i>t</i> to make the line containing attr/val
+    pair <i>a</i> first in the entry and making <i>a</i> first in its line. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Ndbsubstitute</i> replaces a single att/val pair <i>from</i> in <i>t</i> with the
+    tuple <i>to</i>. All attr/val pairs in <i>to</i> end up on the same line. <i>from</i>
+    is freed.<br>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/ndb">/usr/local/plan9/ndb</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        directory of network database files<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libndb">/usr/local/plan9/src/libndb</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/ndb.html"><i>ndb</i>(1)</a> <a href="../man7/ndb.html"><i>ndb</i>(7)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Ndbgetvalue</i> and <i>ndblookvalue</i> set <i>errstr</i> to <tt><font size=+1>buffer too short</font></tt> if
+    the buffer provided isn&#8217;t long enough for the returned value.<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Ndbgetval</i> and <i>ndblookval</i> are deprecated versions of <i>ndbgetvalue</i>
+    and <i>ndblookvalue</i>. They expect a fixed 64 byte long result buffer
+    and existed when the values of a <i>Ndbtuple</i> structure where fixed
+    length.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

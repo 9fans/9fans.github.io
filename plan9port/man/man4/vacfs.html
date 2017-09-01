@@ -1,0 +1,100 @@
+<head>
+<title>vacfs(4) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VACFS(4)</b><td align=right><b>VACFS(4)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    vacfs &ndash; a Venti-based file system<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>vacfs</font></tt> [ <tt><font size=+1>&#8722;dip</font></tt> ] [ <tt><font size=+1>&#8722;h</font></tt> <i>host</i> ] [ <tt><font size=+1>&#8722;m</font></tt> <i>mtpt</i> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>srvname</i> ] [ <tt><font size=+1>&#8722;M</font></tt> <i>mem</i>
+    ] <i>vacfile<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Vacfs</i> interprets the file system created by <a href="../man1/vac.html"><i>vac</i>(1)</a> so that it
+    can be mounted into a Plan 9 file hierarchy. The data for the
+    file system is stored on a Venti server with a root fingerprint
+    specified in <i>vacfile</i>. <i>Vacfs</i> is currently rather limited: access
+    is read-only, clients are not authenticated, and groups are assumed
+    to contain a single member with the same
+    name. These restrictions should eventually be removed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Options to <i>vacfs</i> are:<br>
+    <tt><font size=+1>&#8722;d</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Print debugging information to standard error.<br>
+    <tt><font size=+1>&#8722;h</font></tt> <i>host<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        The network address of the Venti server. The default is taken
+        from the environment variable <tt><font size=+1>venti</font></tt>. If this variable does not
+        exist, then the default is the metaname <tt><font size=+1>$venti</font></tt>.<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;i</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Use file descriptors 0 and 1 as the 9P communication channel
+    rather than create a pipe.<br>
+    <tt><font size=+1>&#8722;m</font></tt> <i>mtpt<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        The location to mount the file system. The default is not to mount.<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;p</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Disables permission checking.<br>
+    <tt><font size=+1>&#8722;s</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;The name of the 9P service to post. The default is <tt><font size=+1>vacfs.</font></tt>name,
+    where <i>name</i> is <i>vacfile</i> without any directory name or <tt><font size=+1>.vac</font></tt> extension.<br>
+    <tt><font size=+1>&#8722;M</font></tt> <i>mem<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        The amount of memory, in bytes, allocated to the block cache.
+        The default is 16M.<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/vac">/usr/local/plan9/src/cmd/vac</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/vac.html"><i>vac</i>(1)</a>, Plan 9&#8217;s <i>venti</i>(8)<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

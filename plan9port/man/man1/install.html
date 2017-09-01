@@ -1,0 +1,178 @@
+<head>
+<title>install(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>INSTALL(1)</b><td align=right><b>INSTALL(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    install &ndash; notes about Plan 9 from User Space installation<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>cd /usr/local/plan9; ./INSTALL</font></tt> [ <tt><font size=+1>&#8722;b</font></tt> | <tt><font size=+1>&#8722;c</font></tt> ] [ <tt><font size=+1>&#8722;r</font></tt> <i>path</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    To obtain the Plan 9 tree, use Git (see <a href="../man1/git.html"><i>git</i>(1)</a>) or download a
+    tar file from <a href="http://swtch.com/plan9port"><tt><font size=+1>http://swtch.com/plan9port</font></tt></a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The tree can be unpacked anywhere, but the usual place is <tt><font size=+1>/usr/local/plan9</font></tt>.
+    In the root of the tree, run <tt><font size=+1>./INSTALL</font></tt>. This script builds the
+    Plan 9 build program <a href="../man1/mk.html"><i>mk</i>(1)</a> if necessary, cleans all previously
+    built object files and libraries out of the tree, rebuilds and
+    installs everything, and then cleans up. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    There are a few files in tree which have the root hard-coded in
+    them. After the build, <i>INSTALL</i> edits these files to replace the
+    string <tt><font size=+1>/usr/local/plan9</font></tt> with the name of the root of the current
+    tree. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Finally, <i>INSTALL</i> builds an HTML version of the manual and installs
+    it in <tt><font size=+1><a href="/usr/local/plan9/man">/usr/local/plan9/man</a></font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The installation can be thought of as two steps: build all the
+    binaries, and then edit files as necessary to fix the references
+    to the installation root. If necessary, these can be run separately.
+    Given the <tt><font size=+1>&#8722;b</font></tt> flag, <i>INSTALL</i> performs only the first step. Given
+    the <tt><font size=+1>&#8722;c</font></tt> flag, <i>INSTALL</i> performs only the second step. The first
+    step can be done with the tree in a
+    temporary work directory, but the second step must be done once
+    the tree is in its final location. If you want to build the project
+    in one location and then install into another location, use <tt><font size=+1>&#8722;r</font></tt>
+    <i>path</i> to specify the <i>final</i> location of Plan9 tree. These flags
+    are only necessary when trying to conform to the expectations
+    of certain package management systems. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    At the end of the installation, <i>INSTALL</i> prints suggested settings
+    for the environment variables <tt><font size=+1>$PLAN9</font></tt> and <tt><font size=+1>$PATH</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Plan 9 from User Space uses different threading implementations
+    on Linux 2.6 and later kernels than on 2.4 and earlier; and on
+    FreeBSD 5 and later kernels than on FreeBSD 4 and earlier. Running
+    binaries from one class on another will not work. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Some Linux 2.6 systems (e.g., Gentoo) do not use the new NPTL
+    pthread library even though the kernel supports them. On these
+    systems, plan9port must fall back on the threading code intended
+    for Linux 2.4. To accomplish this, <i>INSTALL</i> checks whether the
+    running system uses NPTL and sets <tt><font size=+1>SYSVERSION</font></tt> in <tt><font size=+1><a href="/usr/local/plan9/config">/usr/local/plan9/config</a>
+    </font></tt>accordingly. The file <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>LOCAL.config</font></tt> is appended
+    to <tt><font size=+1>config</font></tt> after this auto-detection and can be used to override
+    the choices. If <tt><font size=+1>LOCAL.config</font></tt> contains a line <tt><font size=+1>WSYSTYPE=nowsys</font></tt> then
+    the system is built without using X11. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    On most Linux systems, the X11 header packages need to be installed
+    to build using X11. On Debian. the required packages are libx11-dev,
+    libxext-dev, and libxt-dev. On Ubuntu, it suffices to install
+    xorg-dev. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>INSTALL</i> can safely be repeated to rebuild the system from scratch.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Once the system is built for the first time, it can be maintained
+    and rebuilt using <a href="../man1/mk.html"><i>mk</i>(1)</a>. To rebuild individual commands or libraries,
+    run <tt><font size=+1>mk install</font></tt> and <tt><font size=+1>mk clean</font></tt> in the appropriate source directory
+    (see <a href="../man1/src.html"><i>src</i>(1)</a>).<br>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/lib/moveplan9.files">/usr/local/plan9/lib/moveplan9.files</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        the list of files that need to have <tt><font size=+1>/usr/local/plan9</font></tt> edited out
+        of them<br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/lib/moveplan9.sh">/usr/local/plan9/lib/moveplan9.sh</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        the script that edits the files<br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/src/mkmk.sh">/usr/local/plan9/src/mkmk.sh</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        the shell script used to build <a href="../man1/mk.html"><i>mk</i>(1)</a><br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/dist/manweb">/usr/local/plan9/dist/manweb</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        the shell script that builds the HTML manual<br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/man/index.html">/usr/local/plan9/man/index.html</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        the top-level page in the HTML version of the manual<br>
+        
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/install.log">/usr/local/plan9/install.log</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        logged output from the last run of <i>INSTALL<br>
+        </i>
+    </table>
+    <tt><font size=+1><a href="/usr/local/plan9/install.sum">/usr/local/plan9/install.sum</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        a summary of <tt><font size=+1>install.log<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/intro.html"><i>intro</i>(1)</a>, <a href="../man1/git.html"><i>git</i>(1)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

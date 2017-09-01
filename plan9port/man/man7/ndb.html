@@ -1,0 +1,274 @@
+<head>
+<title>ndb(7) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>NDB(7)</b><td align=right><b>NDB(7)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    ndb &ndash; Network database<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The network database consists of files describing machines known
+    to the local installation and machines known publicly. The files
+    comprise multi-line tuples made up of attribute/value pairs of
+    the form <i>attr</i><tt><font size=+1>=</font></tt><i>value</i> or sometimes just <i>attr</i>. Each line starting
+    without white space starts a new tuple. Lines starting with <tt><font size=+1>#</font></tt>
+    are comments. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The file <tt><font size=+1>/lib/ndb/local</font></tt> is the root of the database. Other files
+    are included in the database if a tuple with an attribute-value
+    pair of attribute <tt><font size=+1>database</font></tt> and no value exists in <tt><font size=+1>/lib/ndb/local</font></tt>.
+    Within the <tt><font size=+1>database</font></tt> tuple, each pair with attribute <tt><font size=+1>file</font></tt> identifies
+    a file to be included in the database. The files are searched
+    in the order they appear.
+    For example:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>database=<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            file=/lib/ndb/common<br>
+            file=/lib/ndb/local<br>
+            file=/lib/ndb/global<br>
+            
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        </font></tt>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    declares the database to be composed of the three files <tt><font size=+1>/lib/ndb/common</font></tt>,
+    <tt><font size=+1>/lib/ndb/local</font></tt>, and <tt><font size=+1>/lib/ndb/global</font></tt>. By default, <tt><font size=+1>/lib/ndb/local</font></tt>
+    is searched before the others. However, <tt><font size=+1>/lib/ndb/local</font></tt> may be
+    included in the <tt><font size=+1>database</font></tt> to redefine its ordering. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Within tuples, pairs on the same line bind tighter than pairs
+    on different lines. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Programs search the database directly using the routines in <a href="../man3/ndb.html"><i>ndb</i>(3)</a>.
+    The routine <i>ndbipinfo</i> imposes structure on the otherwise flat
+    database by using knowledge specific to the network. The internet
+    is made up of networks which can be subnetted multiple times.
+    A network must have an <tt><font size=+1>ipnet</font></tt> attribute and is uniquely identified
+    by the values of its <tt><font size=+1>ip</font></tt> and
+    <tt><font size=+1>ipmask</font></tt> attributes. If the <tt><font size=+1>ipmask</font></tt> is missing, the relevant Class
+    A, B or C one is used. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A search for an attribute associated with a network or host starts
+    at the lowest level, the entry for the host or network itself,
+    and works its way up, bit by bit, looking at entries for nets/subnets
+    that include the network or host. The search ends when the attribute
+    is found. For example, consider at the following entries:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ipnet=murray&#8722;hill ip=135.104.0.0 ipmask=255.255.0.0<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            dns=135.104.10.1<br>
+            ntp=ntp.cs.bell&#8722;labs.com<br>
+            
+        </table>
+        ipnet=plan9 ip=135.104.9.0 ipmask=255.255.255.0<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            ntp=oncore.cs.bell&#8722;labs.com<br>
+            smtp=smtp1.cs.bell&#8722;labs.com<br>
+            
+        </table>
+        ip=135.104.9.6 sys=anna dom=anna.cs.bell&#8722;labs.com<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            smtp=smtp2.cs.bell&#8722;labs.com<br>
+            
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        </font></tt>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    Here <tt><font size=+1>anna</font></tt> is on the subnet <tt><font size=+1>plan9</font></tt> which is in turn on the class
+    B net <tt><font size=+1>murray&#8722;hill</font></tt>. Assume that we&#8217;re searching for <tt><font size=+1>anna</font></tt>&#8217;s <tt><font size=+1>NTP</font></tt>
+    and <tt><font size=+1>SMTP</font></tt> servers. The search starts by looking for an entry with
+    <tt><font size=+1>sys=anna</font></tt>. We find the anna entry. Since it has an <tt><font size=+1>smtp=smtp2.cs.bell&#8722;labs.com</font></tt>
+    pair, we&#8217;re done looking for that attribute. To fulfill the NTP
+    request, we continue by looking for networks that include anna&#8217;s
+    IP address. We lop off the right most one bit from anna&#8217;s address
+    and look for an <tt><font size=+1>ipnet=</font></tt> entry with <tt><font size=+1>ip=135.104.9.4</font></tt>. Not finding
+    one, we drop another bit and look for an <tt><font size=+1>ipnet=</font></tt> entry with <tt><font size=+1>ip=135.104.9.0</font></tt>.
+    There is such an entry and it has the pair,
+    <tt><font size=+1>ntp=oncore.cs.bell&#8722;labs.com</font></tt>, ending our search. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A number of attributes are meaningful to programs and thus reserved.
+    They are:<br>
+    <tt><font size=+1>sys</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system name<br>
+    <tt><font size=+1>dom</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet domain name<br>
+    <tt><font size=+1>ip</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet address<br>
+    <tt><font size=+1>ether</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ethernet address<br>
+    <tt><font size=+1>bootf</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file to download for initial bootstrap<br>
+    <tt><font size=+1>ipnet</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet network name<br>
+    <tt><font size=+1>ipmask</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet network mask<br>
+    <tt><font size=+1>ipgw</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Internet gateway<br>
+    <tt><font size=+1>auth</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authentication server to be used<br>
+    <tt><font size=+1>authdom</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authentication domain. Plan 9 supports multiple authentication
+    domains. To specify an authentication server for a particular
+    domain, add a tuple containing both <tt><font size=+1>auth</font></tt> and <tt><font size=+1>authdom</font></tt> attributes
+    and values.<br>
+    <tt><font size=+1>fs</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file server to be used<br>
+    <tt><font size=+1>tcp</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a TCP service name<br>
+    <tt><font size=+1>udp</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a UDP service name<br>
+    <tt><font size=+1>il</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an IL service name<br>
+    <tt><font size=+1>port</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a TCP, UDP, or IL port number<br>
+    <tt><font size=+1>restricted</font></tt>&nbsp;&nbsp;&nbsp;a TCP service that can be called only by ports numbered
+    less that 1024<br>
+    <tt><font size=+1>proto</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a protocol supported by a host.<br>
+    <tt><font size=+1>dnsdomain</font></tt>&nbsp;&nbsp;&nbsp;a domain name that <i>ndb/dns</i> adds onto any unrooted names
+    when doing a search There may be multiple <tt><font size=+1>dnsdomain</font></tt> pairs.<br>
+    <tt><font size=+1>dns</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a DNS server to use (for DNS and DHCP)<br>
+    <tt><font size=+1>ntp</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an NTP server to use (for DHCP)<br>
+    <tt><font size=+1>smtp</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;an SMTP server to use (for DHCP)<br>
+    <tt><font size=+1>time</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a time server to use (for DHCP)<br>
+    <tt><font size=+1>wins</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a Windows name server (for DHCP)<br>
+    <tt><font size=+1>mx</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mail exchanger (for DNS and DHCP)<br>
+    <tt><font size=+1>soa</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;start of area (for DNS)<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A tuple for the CPU server, spindle. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>sys = spindle<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        dom=spindle.research.bell&#8722;labs.com<br>
+        bootf=/mips/9powerboot<br>
+        ip=135.104.117.32 ether=080069020677<br>
+        proto=il<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        
+    </table>
+    Entries for the network <tt><font size=+1>mh&#8722;astro&#8722;net</font></tt> and its subnets. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>ipnet=mh&#8722;astro&#8722;net ip=135.104.0.0 ipmask=255.255.255.0<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        fs=bootes.research.bell&#8722;labs.com<br>
+        ipgw=r70.research.bell&#8722;labs.com<br>
+        auth=p9auth.research.bell&#8722;labs.com<br>
+        
+    </table>
+    ipnet=unix&#8722;room ip=135.104.117.0<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        ipgw=135.104.117.1<br>
+        
+    </table>
+    ipnet=third&#8722;floor ip=135.104.51.0<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        ipgw=135.104.51.1<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        
+    </table>
+    Mappings between TCP service names and port numbers. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>tcp=sysmon &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port=401<br>
+    tcp=rexec &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port=512 &nbsp;&nbsp;&nbsp;restricted<br>
+    tcp=9fs &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;port=564<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/ndb/local">/usr/local/plan9/ndb/local</a><br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        first database file searched<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/ndb.html"><i>ndb</i>(1)</a>, <a href="../man3/ndb.html"><i>ndb</i>(3)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

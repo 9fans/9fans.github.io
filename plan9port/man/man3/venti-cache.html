@@ -1,0 +1,234 @@
+<head>
+<title>venti-cache(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-CACHE(3)</b><td align=right><b>VENTI-CACHE(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    VtBlock, VtCache, vtblockcopy, vtblockduplock, vtblockput, vtblockwrite,
+    vtcachealloc, vtcacheallocblock, vtcachefree, vtcacheglobal, vtcachelocal,
+    vtcachesetwrite, vtglobaltolocal, vtlocaltoglobal &ndash; Venti block
+    cache<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    typedef struct VtBlock<br>
+    {<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        uchar *data;<br>
+        uchar type;<br>
+        uchar score[VtScoreSize];<br>
+        u32int addr;<br>
+        ...<br>
+        
+    </table>
+    } VtBlock;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    VtCache* vtcachealloc(VtConn *z, ulong maxmem);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtcachefree(VtCache *c);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>u32int &nbsp;&nbsp;&nbsp;vtglobaltolocal(uchar score[VtScoreSize])<br>
+    void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtlocaltoglobal(u32int local, uchar score[VtScoreSize])<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtBlock* vtcacheallocblock(VtCache *c, int type, ulong size);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtBlock* vtcachelocal(VtCache *c, u32int addr, int type);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtBlock* vtcacheglobal(VtCache *c, uchar[VtScoreSize], int type,
+    ulong size);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtblockput(VtBlock *b);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtblockduplock(VtBlock *b);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtblockwrite(VtBlock *b);<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtcachesetwrite(VtCache *c,<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            int (*write)(VtConn*, uchar[VtScoreSize], uint, uchar*, int));<br>
+            
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>VtBlock* vtblockcopy(VtBlock *b);<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These functions provide access to a simple in-memory cache of
+    blocks already stored on a Venti server and blocks that will eventually
+    be stored on a Venti server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A <tt><font size=+1>VtBlock</font></tt> represents a venti data block. Blocks stored on a venti
+    server, called <i>global blocks</i>, are named by the SHA1 hash of their
+    contents. This hash is recorded as the block&#8217;s <i>score</i>. Such blocks
+    are immutable. The cache also stores mutable blocks that have
+    not yet been written to a venti server. These blocks are called
+    <i>local blocks</i>, and have
+    special scores that are 16 zero bytes followed by a 4-byte big-endian
+    <i>address</i>. The address is an index into the internal set of cache
+    blocks. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The user-visible contents of a <tt><font size=+1>VtBlock</font></tt> are <tt><font size=+1>data</font></tt>, a pointer to
+    the data; <tt><font size=+1>type</font></tt>, the venti block type; <tt><font size=+1>score</font></tt>, the block&#8217;s score;
+    and <tt><font size=+1>addr</font></tt>, the block&#8217;s cache address. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtcachealloc</i> allocates a new cache using the client connection
+    <i>z</i> (see <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a> and <a href="../man3/venti-client.html"><i>venti-client</i>(3)</a>), with <i>maxmem</i> bytes of
+    memory. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtcachefree</i> frees a cache and all the associated blocks. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtglobaltolocal</i> returns the local address corresponding to the
+    given local <i>score</i>. If passed a global score, <i>vtglobaltolocal</i> returns
+    the special constant <tt><font size=+1>NilBlock</font></tt> (<tt><font size=+1>~0</font></tt>). <i>Vtlocaltoglobal</i> is the opposite,
+    setting <i>score</i> to the local score for the cache address <i>local</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtcacheallocblock</i> allocates a new local block with the given <i>type</i>
+    and <i>size</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtcachelocal</i> retrieves the local block at address <i>addr</i> from the
+    cache. The given <i>type</i> must match the type of the block found at
+    <i>addr</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtcacheglobal</i> retrieves the block with the given <i>score</i>, <i>dtype</i>
+    and <i>size</i> from the cache, consulting the Venti server if necessary.
+    If passed a local score, <i>vtcacheglobal</i> invokes <i>vtcachelocal</i> appropriately.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The block references returned by <i>vtcacheallocblock</i>, <i>vtcachelocal</i>,
+    and <i>vtcacheglobal</i> must be released when no longer needed. <i>Vtblockput</i>
+    releases such a reference. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    It is occasionally convenient to have multiple variables refer
+    to the same block. <i>Vtblockduplock</i> increments the block&#8217;s reference
+    count so that an extra <i>vtblockput</i> will be required in order to
+    release the block. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtblockwrite</i> writes a local block to the Venti server, changing
+    the block to a global block. It calls the cache&#8217;s <i>write</i> function
+    to write the block to the server. The default <i>write</i> function is
+    <i>vtwrite</i> (see <a href="../man3/venti-client.html"><i>venti-client</i>(3)</a>); <i>vtsetcachewrite</i> sets it. <i>Vtsetcachewrite</i>
+    is used by clients to install replacement functions that run writes
+    in the background or perform other
+    additional processing. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtblockcopy</i> copies a block in preparation for modifying its contents.
+    The old block may be a local or global block, but the new block
+    will be a local block. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The cache only evicts global blocks. Local blocks can only leave
+    the cache via <i>vtblockwrite</i>, which turns them into global blocks,
+    making them candidates for eviction. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If a new cache block must be allocated (for <i>vtcacheallocblock</i>,
+    <i>vtcachelocal</i>, <i>vtcacheglobal</i>, or <i>vtblockcopy</i>), but the cache is
+    filled (with local blocks and blocks that have not yet been released
+    with <i>vtblockput</i>), the library prints the score and reference count
+    of every block in the cache and then aborts. A full cache indicates
+    either that the cache is too
+    small, or, more commonly, that cache blocks are being leaked.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man3/venti-client.html"><i>venti-client</i>(3)</a>, <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>, <a href="../man3/venti-file.html"><i>venti-file</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

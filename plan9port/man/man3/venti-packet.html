@@ -1,0 +1,274 @@
+<head>
+<title>venti-packet(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-PACKET(3)</b><td align=right><b>VENTI-PACKET(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Packet, packetalloc, packetappend, packetasize, packetcmp, packetconcat,
+    packetconsume, packetcopy, packetdup, packetforeign, packetfragments,
+    packetfree, packetheader, packetpeek, packetprefix, packetsha1,
+    packetsize, packetsplit, packetstats, packettrailer, packettrim
+    &ndash; zero-copy network buffers<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;venti.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Packet* packetalloc(void); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetappend(Packet *p, uchar *buf, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint &nbsp;&nbsp;&nbsp;&nbsp;packetasize(Packet *p) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packetcmp(Packet *p, Packet *q) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetconcat(Packet *p, Packet *q) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packetconsume(Packet *p, uchar *buf, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packetcopy(Packet *p, uchar *buf, int offset, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Packet* packetdup(Packet *p, int offset, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Packet* packetforeign(uchar *buf, int n,<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            void (*free)(void *a), void *a) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packetfragments(Packet *p, IOchunk *io, int nio,<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            int offset) 
+            <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+            
+        </table>
+        
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetfree(Packet *p) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uchar* &nbsp;&nbsp;&nbsp;packetheader(Packet *p, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uchar* &nbsp;&nbsp;&nbsp;packetpeek(Packet *p, uchar *buf, int offset, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetprefix(Packet *p, uchar *buf, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetsha1(Packet *p, uchar sha1[20]) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint &nbsp;&nbsp;&nbsp;&nbsp;packetsize(Packet *p) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Packet* packetsplit(Packet *p, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;packetstats(void) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uchar* &nbsp;&nbsp;&nbsp;packettrailer(Packet *p, int n) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;packettrim(Packet *p, int offset, int n)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    A <tt><font size=+1>Packet</font></tt> is a chain of blocks of data. Each block, called a fragment,
+    is contiguous in memory, but the entire packet may not be. This
+    representation helps avoid unnecessary memory copies. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetalloc</i> allocates an empty packet. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetappend</i> appends the <i>n</i> bytes at <i>buf</i> to the end of <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetasize</i> returns the number of data bytes allocated to <i>p</i>. This
+    may be larger than the number of bytes stored in <i>p</i> because fragments
+    may not be filled completely. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetcmp</i> compares the data sections of two packets as <i>memcmp</i>
+    (see <a href="../man3/memory.html"><i>memory</i>(3)</a>) would. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetconcat</i> removes all data from <i>q</i>, appending it to <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetconsume</i> removes <i>n</i> bytes from the beginning of <i>p</i>, storing
+    them into <i>buf</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetcopy</i> copies <i>n</i> bytes at <i>offset</i> in <i>p</i> to <i>buf</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetdup</i> creates a new packet initialized with <i>n</i> bytes from <i>offset</i>
+    in <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetforeign</i> allocates a packet containing &#8216;foreign&#8217; data: the
+    <i>n</i> bytes pointed to by <i>buf</i>. Once the bytes are no longer needed,
+    they are freed by calling <i>free</i><tt><font size=+1>(</font></tt><i>a</i><tt><font size=+1>)</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetfragments</i> initializes up to <i>nio</i> of the <i>io</i> structures with
+    pointers to the data in <i>p</i>, starting at <i>offset</i>. It returns the
+    total number of bytes represented by the returned structures.
+    <i>Packetfragments</i> initializes any unused <i>io</i> structures with nil
+    pointer and zero length. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetfree</i> frees the packet <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetheader</i> returns a pointer to the first <i>n</i> bytes of <i>p</i>, making
+    them contiguous in memory if necessary. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetpeek</i> returns a pointer to the <i>n</i> bytes at <i>offset</i> in <i>p</i>. If
+    the requested bytes are already stored contiguously in memory,
+    the returned pointer points at the internal data storage for <i>p</i>.
+    Otherwise, the bytes are copied into <i>buf</i>, and <i>packetpeek</i> returns
+    <i>buf</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetprefix</i> inserts a copy of the <i>n</i> bytes at <i>buf</i> at the beginning
+    of <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetsha1</i> computes the SHA1 hash of the data contained in <i>p</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetsize</i> returns the length, in bytes, of the data contained
+    in <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetsplit</i> returns a new packet initialized with <i>n</i> bytes removed
+    from the beginning of <i>p</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packetstats</i> prints run-time statistics to standard output. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packettrailer</i> returns a pointer to the last <i>n</i> bytes of <i>p</i>, making
+    them contiguous in memory if necessary. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Packettrim</i> deletes all bytes from the packet <i>p</i> except the <i>n</i> bytes
+    at offset <i>offset</i>.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi">/usr/local/plan9/src/libventi</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti.html"><i>venti</i>(3)</a><br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These functions return errors only when passed invalid inputs,
+    <i>e.g.</i>, requests for data at negative offsets or beyond the end
+    of a packet. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Functions returning pointers return nil on error; functions returning
+    integers return &ndash;1 on error. Most functions returning integers
+    return 0 on success. The exceptions are <i>packetfragments</i> and <i>packetcmp</i>,
+    whose return values are described above. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When these functions run out of memory, they print error messages
+    and call <i>sysfatal</i>.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

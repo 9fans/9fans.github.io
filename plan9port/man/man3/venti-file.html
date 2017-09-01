@@ -1,0 +1,245 @@
+<head>
+<title>venti-file(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI-FILE(3)</b><td align=right><b>VENTI-FILE(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    VtFile, vtfileblock, vtfileblockscore, vtfileclose, vtfilecreate,
+    vtfilecreateroot, vtfileflush, vtfileflushbefore, vtfilegetdirsize,
+    vtfilegetentry, vtfilegetsize, vtfileincref, vtfilelock, vtfilelock2,
+    vtfileopen, vtfileopenroot, vtfileread, vtfileremove, vtfilesetdirsize,
+    vtfilesetentry, vtfilesetsize, vtfiletruncate, vtfileunlock, vtfilewrite
+    &ndash; Venti files<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>VtFile* &nbsp;&nbsp;&nbsp;vtfilecreateroot(VtCache *c, int psize, int dsize, int
+    type); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtFile* &nbsp;&nbsp;&nbsp;vtfileopenroot(VtCache *c, VtEntry *e); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtFile* &nbsp;&nbsp;&nbsp;vtfileopen(VtFile *f, u32int n, int mode); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtFile* &nbsp;&nbsp;&nbsp;vtfilecreate(VtFile *f, int psize, int dsize, int type);
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileincref(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileclose(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileremove(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>VtBlock* vtfileblock(VtFile *f, u32int n, int mode); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>long &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileread(VtFile *f, void *buf, long n, vlong offset); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>long &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilewrite(VtFile *f, void *buf, long n, vlong offset);
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileflush(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileflushbefore(VtFile *f, vlong offset); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfiletruncate(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uvlong &nbsp;&nbsp;&nbsp;vtfilegetsize(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilesetsize(VtFile *f, vlong size); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>u32int &nbsp;&nbsp;&nbsp;vtfilegetdirsize(VtFile *f); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilesetdirsize(VtFile *f, u32int size); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilegetentry(VtFile *f, VtEntry *e); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilesetentry(VtFile *f, VtEntry *e); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileblockscore(VtFile *f, u32int n,  </font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uchar score[VtScoreSize]);
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilelock(VtFile *f, int mode); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfilelock2(VtFile *f, VtFile *f, int mode); 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vtfileunlock(VtFile *f);<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines provide a simple interface to create and manipulate
+    Venti file trees (see <a href="../man7/venti.html"><i>venti</i>(7)</a>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilecreateroot</i> creates a new Venti file. <i>Type</i> must be either
+    <tt><font size=+1>VtDataType</font></tt> or <tt><font size=+1>VtDirType</font></tt>, specifying a data or directory file.
+    <i>Dsize</i> is the block size to use for leaf (data or directory) blocks
+    in the hash tree; <i>psize</i> is the block size to use for internal
+    (pointer) blocks. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileopenroot</i> opens an existing Venti file described by <i>e</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileopen</i> opens the Venti file described by the <i>n</i>th entry in
+    the directory <i>f</i>. <i>Mode</i> should be one of <tt><font size=+1>VtOREAD</font></tt>, <tt><font size=+1>VtOWRITE</font></tt>, or <tt><font size=+1>VtORDWR</font></tt>,
+    indicating how the returned file is to be used. The <tt><font size=+1>VtOWRITE</font></tt> and
+    <tt><font size=+1>VtORDWR</font></tt> modes can only be used if <i>f</i> is open with mode <tt><font size=+1>VtORDWR</font></tt>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilecreate</i> creates a new file in the directory <i>f</i> with block
+    type <i>type</i> and block sizes <i>dsize</i> and <i>psize</i> (see <i>vtfilecreateroot</i>
+    above). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Each file has an associated reference count and holds a reference
+    to its parent in the file tree. <i>Vtfileincref</i> increments this reference
+    count. <i>Vtfileclose</i> decrements the reference count. If there are
+    no other references, <i>vtfileclose</i> releases the reference to <i>f</i>&#8217;s
+    parent and then frees the in-memory structure <i>f</i>. The data stored
+    in <i>f</i> is still accessible by
+    reopening it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileremove</i> removes the file <i>f</i> from its parent directory. It
+    also acts as <i>vtfileclose</i>, releasing the reference to <i>f</i> and potentially
+    freeing the structure. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileblock</i> returns the <i>n</i>th block in the file <i>f</i>. If there are
+    not <i>n</i> blocks in the file and <i>mode</i> is <tt><font size=+1>VtOREAD</font></tt>, <i>vtfileblock</i> returns
+    nil. If the mode is <tt><font size=+1>VtOWRITE</font></tt> or <tt><font size=+1>VtORDWR</font></tt>, <i>vtfileblock</i> grows the
+    file as needed and then returns the block. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileread</i> reads at most <i>n</i> bytes at offset <i>offset</i> from <i>f</i> into
+    memory at <i>buf</i>. It returns the number of bytes read. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilewrite</i> writes the <i>n</i> bytes in memory at <i>buf</i> into the file
+    <i>f</i> at offset <i>n</i>. It returns the number of bytes written, or &ndash;1 on
+    error. Writing fewer bytes than requested will only happen if
+    an error is encountered. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilewrite</i> writes to an in-memory copy of the data blocks (see
+    <a href="../man3/venti-cache.html"><i>venti-cache</i>(3)</a>) instead of writing directly to Venti. <i>Vtfileflush</i>
+    writes all copied blocks associated with <i>f</i> to the Venti server.
+    <i>Vtfileflushbefore</i> flushes only those blocks corresponding to data
+    in the file before byte <i>offset</i>. Loops that <i>vtfilewrite</i> should
+    call <i>vtfileflushbefore</i> regularly to avoid filling
+    the block cache with unwritten blocks. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfiletruncate</i> changes the file <i>f</i> to have zero length. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilegetsize</i> returns the length (in bytes) of file <i>f</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilesetsize</i> sets the length (in bytes) of file <i>f</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilegetdirsize</i> returns the length (in directory entries) of
+    the directory <i>f</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilesetdirsize</i> sets the length (in directory entries) of the
+    directory <i>f</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilegetentry</i> fills <i>e</i> with an entry that can be passed to <i>vtfileopenroot</i>
+    to reopen <i>f</i> at a later time. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfilesetentry</i> sets the entry associated with <i>f</i> to be <i>e</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vtfileblockscore</i> returns in <i>score</i> the score of the <i>n</i>th block in
+    the file <i>f</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Venti files are locked and unlocked via <i>vtfilelock</i> and <i>vtfileunlock</i>
+    to moderate concurrent access. Only one thread at a time--the one
+    that has the file locked--can read or modify the file. The functions
+    that return files (<i>vtfilecreateroot</i>, <i>vtfileopenroot</i>, <i>vtfilecreate</i>,
+    and <i>vtfileopen</i>) return them unlocked. When files are passed to
+    any of the functions
+    documented in this manual page, it is the caller&#8217;s responsibility
+    to ensure that they are already locked. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Internally, a file is locked by locking the block that contains
+    its directory entry. When two files in the same directory both
+    need to be locked, <i>vtfilelock2</i> must be used. It locks both its
+    arguments, taking special care not to deadlock if their entries
+    are stored in the same directory block.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libventi/file.c">/usr/local/plan9/src/libventi/file.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man3/venti-cache.html"><i>venti-cache</i>(3)</a>, <a href="../man3/venti-conn.html"><i>venti-conn</i>(3)</a>, <a href="../man3/venti-client.html"><i>venti-client</i>(3)</a>, <a href="../man7/venti.html"><i>venti</i>(7)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

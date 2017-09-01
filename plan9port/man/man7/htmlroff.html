@@ -1,0 +1,286 @@
+<head>
+<title>htmlroff(7) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>HTMLROFF(7)</b><td align=right><b>HTMLROFF(7)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    htmlroff &ndash; HTML formatting and typesetting<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/htmlroff.html"><i>Htmlroff</i>(1)</a> accepts <i>troff</i> input with a few extensions and changes.
+    This manual describes the changes to the input language, assuming
+    a working knowledge of <i>troff</i> itself.<br>
+    <p><font size=+1><b>Name lengths    </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Request, macro, string, and number names can be longer than two
+    letters, as in:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.html c &lt;center&gt;<br>
+        .de footnote<br>
+        Footnote here.<br>
+        ..<br>
+        .footnote<br>
+        .ds string &quot;hello<br>
+        \*[string]<br>
+        .nr number 1<br>
+        \n[number]<br>
+        </font></tt>
+    </table>
+    <p><font size=+1><b>HTML output    </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Two new requests:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.html</font></tt> <i>id</i> [ <i>&lt;html&gt;</i> ]<br>
+        <tt><font size=+1>.ihtml</font></tt> <i>id</i> [ <i>&lt;ihtml&gt;</i> ]<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    <tt><font size=+1>.html</font></tt> and <tt><font size=+1>.ihtml</font></tt> insert HTML into the output. The requests are
+    only for opening new HTML tags. To close previously-opened tags,
+    repeat the request with the same <i>id</i>. For example, the input:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.html t &lt;table&gt;&lt;tr&gt;<br>
+        .html td &lt;td&gt;Cell 1<br>
+        .html td &lt;td&gt;Cell 2<br>
+        .html td<br>
+        .html t<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    produces this output:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>&lt;table&gt;&lt;tr&gt;&lt;td&gt;Cell 1&lt;/td&gt;&lt;td&gt;Cell 2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The <tt><font size=+1>.html</font></tt> request is intended for block-level HTML constructs
+    (those that can contain <tt><font size=+1>&lt;p&gt;</font></tt>) and maintains the HTML tag stack automatically.
+    Intermediate tags need not be explicitly closed: removing the
+    final <tt><font size=+1>.html t</font></tt> line in the example above would produce the same
+    output. The special <i>id</i> <tt><font size=+1>&#8722;</font></tt> closes the HTML tags immediately after
+    printing them. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>.ihtml</font></tt> request is similar to <tt><font size=+1>.html</font></tt> but is intended for inline
+    HTML constructs such as <tt><font size=+1>&lt;b&gt;</font></tt> or <tt><font size=+1>&lt;i&gt;</font></tt> (those that can be contained within
+    <tt><font size=+1>&lt;p&gt;</font></tt>). Unlike <tt><font size=+1>.html</font></tt>, <tt><font size=+1>.ihtml</font></tt> treats the open HTML tags as a set rather
+    than a stack: each must be explicitly closed. Although it treats
+    the tags as a set, <tt><font size=+1>.ihtml</font></tt> treats nesting properly in the output,
+    closing and
+    reopening tags as necessary. For example, the input:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.ihtml style &lt;b&gt;<br>
+        .ihtml link &lt;a href=&quot;link.html&quot;&gt;<br>
+        Bold<br>
+        .ihtml style &lt;i&gt;<br>
+        and italic, still linked.<br>
+        .ihtml link &lt;a&gt;<br>
+        Unlinked.<br>
+        .ihtml style<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    produces this output:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>&lt;b&gt;&lt;a href=&quot;link.html&quot;&gt;Bold&lt;/a&gt;&lt;/b&gt;<br>
+        &lt;i&gt;&lt;a href=&quot;link.html&quot;&gt;and italic, still linked.&lt;/i&gt;&lt;/a&gt;<br>
+        &lt;i&gt;Unlinked.&lt;/i&gt;<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Outside of <tt><font size=+1>.html</font></tt> and <tt><font size=+1>.ihtml</font></tt> requests, the characters <tt><font size=+1>&lt; , &gt; ,</font></tt> and
+    <tt><font size=+1>&amp;</font></tt> are treated as normal characters, not HTML markers, and are translated
+    to <tt><font size=+1>&amp;lt; , &amp;gt; ,</font></tt> and <tt><font size=+1>&amp;amp;</font></tt> on output. To embed the raw HTML markers,
+    use <tt><font size=+1>\&lt; , \&gt; ,</font></tt> and <tt><font size=+1>\@</font></tt> [<i>sic</i>].<br>
+    <p><font size=+1><b>Font changes    </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Htmlroff</i> interprets the usual <tt><font size=+1>\f</font></tt>, <tt><font size=+1>.ft</font></tt>, <tt><font size=+1>\s</font></tt>, and <tt><font size=+1>.ps</font></tt> requests to
+    change the font and point size. After applying each such change
+    to its internal registers, <i>htmlroff</i> invokes the <tt><font size=+1>.font</font></tt> macro to
+    emit corresponding HTML. The default definition of <tt><font size=+1>.font</font></tt> is:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.de font<br>
+        .ihtml f1<br>
+        .ihtml f<br>
+        .ihtml f &lt;span style=<br>
+        .if \n(.f==2 .ihtml f1 &lt;i&gt;<br>
+        .if \n(.f==3 .ihtml f1 &lt;b&gt;<br>
+        .if \n(.f==4 .ihtml f1 &lt;b&gt;&lt;i&gt;<br>
+        .if \n(.f==5 .ihtml f1 &lt;tt&gt;<br>
+        .if \n(.f==6 .ihtml f1 &lt;tt&gt;&lt;i&gt;<br>
+        ..<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Input files can redefine <tt><font size=+1>.font</font></tt> like any other request or macro.<br>
+    <p><font size=+1><b>Paragraphs     </b></font><br>
+    <i>Htmlroff</i> implements line height, text adjustment, and margins
+    by wrapping all output text in <tt><font size=+1>&lt;p style=&quot;...&quot;&gt;</font></tt> tags. This behavior
+    can be disabled by setting the <tt><font size=+1>.paragraph</font></tt> number register to zero.
+    Setting the <tt><font size=+1>.margin</font></tt> register to zero eliminates only the margin
+    annotations.<br>
+    <p><font size=+1><b>Subscripts and superscripts   </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Htmlroff</i> interprets the <tt><font size=+1>\u</font></tt>, <tt><font size=+1>\d</font></tt>, and <tt><font size=+1>\v</font></tt> requests to move vertically
+    during output. It emits output vertically offset up the page inside
+    <tt><font size=+1>&lt;sup&gt;</font></tt> tags and output vertically offset down the page inside <tt><font size=+1>&lt;sub&gt;</font></tt>
+    tags. This heuristic handles simple equations formatted by <a href="../man1/eqn.html"><i>eqn</i>(1)</a>.<br>
+    <p><font size=+1><b>Conditional input    </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    To make it easier to write input files that can be formatted by
+    both <i>troff</i> and <i>htmlroff</i>, <i>htmlroff</i> adds a new condition <tt><font size=+1>h</font></tt> which
+    evaluates true in <tt><font size=+1>.if</font></tt> and <tt><font size=+1>.ie</font></tt> requests. The <tt><font size=+1>t</font></tt> condition continues
+    to evaluate true, to accomodate input files trying to distinguish
+    between <i>troff</i> and <i>nroff</i>. To write a conditional matching <i>troff</i>
+    alone, use &#8216;<tt><font size=+1>.if !h .if t</font></tt>&#8217;. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Htmlroff &#8217;s</i> handling of conditional input does not match <i>troff</i>&#8217;s
+    exactly. For example,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.if 0 \{\<br>
+        .de xx<br>
+        ..<br>
+        .\}<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    redefines the <tt><font size=+1>xx</font></tt> macro in <i>troff</i> but not in <i>htmlroff</i>. Do not write
+    files depending on this behavior, as this bug may be fixed in
+    the future. <i>Htmlroff</i> also mishandles <tt><font size=+1>\}</font></tt> in some cases. To work
+    around them, use <tt><font size=+1>.\}</font></tt> on a line by itself, as in the last example.<br>
+    <p><font size=+1><b>Diversions     </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Diversions in <i>htmlroff</i> use the alignment in effect at the time
+    of the diversion when output. In particular,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.di xx<br>
+        Line here.<br>
+        .di<br>
+        .nf<br>
+        .ce <br>
+        .xx<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    produces a centered line in <i>troff</i> but not in <i>htmlroff</i>. The solution
+    is to center inside the diversion, as in<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.di xx<br>
+        .if h .ce 999<br>
+        Line here<br>
+        .di<br>
+        </font></tt>
+    </table>
+    <p><font size=+1><b>Input pipes    </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Htmlroff</i> adds a new request <tt><font size=+1>.inputpipe</font></tt> <i>stop cmd</i> that redirects
+    <i>htmlroff &#8217;s</i> input into a pipe to the given <i>cmd .</i> The redirection
+    stops on encountering the line <i>stop</i>, optionally followed by white
+    space and extra text. This is a dangerous and clusmy request,
+    as <i>htmlroff</i> stops interpreting its input during the redirection,
+    so <i>stop</i> must be found in the input
+    itself, not in a macro that the input might appear to call. Although
+    clusmy, <tt><font size=+1>.inputpipe</font></tt> allows input files to invoke <i>troff</i> to handle
+    complicated input. For example, <tt><font size=+1>tmac.html</font></tt> redefines the <tt><font size=+1>PS</font></tt> macro
+    that marks the beginning of a <a href="../man1/pic.html"><i>pic</i>(1)</a> picture:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>.nr png &#8722;1 1<br>
+        .de PS<br>
+        .ds pngbase &quot;\\*[basename]<br>
+        .if '\\*[pngbase]'' .ds pngbase \\n(.B<br>
+        .ds pngfile \\*[pngbase]\\n+[png].png<br>
+        .html &#8722; &lt;center&gt;&lt;img src=&quot;\\*[pngfile]&quot;&gt;&lt;/center&gt;<br>
+        .inputpipe .PE troff2png &gt;\\*[pngfile]<br>
+        ..<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    This macro invokes the shell script <i>troff2png</i> to run troff and
+    convert the Postscript output to a PNG image file. Before starting
+    the program, the macro creates a new file name for the image and
+    prints HTML referring to it. The new <tt><font size=+1>.B</font></tt> register holds the final
+    path element (the base name) of the current input file.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

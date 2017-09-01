@@ -1,0 +1,128 @@
+<head>
+<title>netfiles(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>NETFILES(1)</b><td align=right><b>NETFILES(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Netfiles, netfileget, netfileput, netfilestat &ndash; network file access
+    inside acme<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>Netfiles 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>netfileget</font></tt> [ <tt><font size=+1>&#8722;d</font></tt> ] <i>system path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>netfileput</font></tt> <i>system path 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>netfilestat</font></tt> <i>system path<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>Netfiles</font></tt> presents remote file systems in <a href="../man4/acme.html"><i>acme</i>(4)</a> windows. Each
+    window is named <tt><font size=+1>/n/</font></tt><i>system</i><tt><font size=+1>/</font></tt><i>path</i> and displays the contents of <i>path</i>
+    on <i>system</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netfiles</i> reads names of windows to create from the plumbing channel
+    <tt><font size=+1>netfileedit</font></tt> (see <a href="../man4/plumber.html"><i>plumber</i>(4)</a> and the example section below). In
+    a <i>netfiles</i>-controlled window, <tt><font size=+1>Get</font></tt>, <tt><font size=+1>Put</font></tt>, and button 3 loads work
+    as in normal acme windows. External commands executed with button
+    2 run in the directory in which <i>acme</i> was started. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netfiles</i> uses the helper programs <i>netfileget</i>, <i>netfileput</i>, and
+    <i>netfilestat</i> to access the remote file systems. The three first
+    check to see if <i>system</i> is a service in the current name space
+    (see <a href="../man4/intro.html"><i>intro</i>(4)</a>). If so, they use <a href="../man1/9p.html"><i>9p</i>(1)</a> to access it. Otherwise,
+    they assume that the system is a network name and use <i>ssh</i>(1)&#8217;s
+    <i>sftp</i> to access it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netfileget</i> prints the contents of the named <i>path</i> to standard output.
+    If the <tt><font size=+1>&#8722;d</font></tt> option is given, then <i>netfileget</i> prints a single-column
+    listing of <i>path</i>, which must be a directory. Directories in the
+    listing have <tt><font size=+1>/</font></tt> appended to their names. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netfileput</i> writes its standard input to the named <i>path</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Netfilestat</i> prints the file type of <i>path</i>, one of <tt><font size=+1>nonexistent</font></tt>,
+    <tt><font size=+1>directory</font></tt>, or <tt><font size=+1>file</font></tt>.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The following plumbing rule (see <a href="../man7/plumb.html"><i>plumb</i>(7)</a>) passes <tt><font size=+1>/n/</font></tt> paths to
+    <i>Netfiles</i>, starting it if necessary.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1># /n/ paths go to simulator in acme<br>
+        kind is text<br>
+        data matches '[a&#8722;zA&#8722;Z0&#8722;9_\&#8722;./]+('$addr')?'<br>
+        data matches '(/n/[a&#8722;zA&#8722;Z0&#8722;9_\&#8722;./]+)('$addr')?'<br>
+        plumb to netfileedit<br>
+        plumb client Netfiles<br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/netfiles">/usr/local/plan9/src/cmd/netfiles</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/9p.html"><i>9p</i>(1)</a>, <i>ssh</i>(1), <a href="../man1/ssh-agent.html"><i>ssh-agent</i>(1)</a>, <a href="../man4/intro.html"><i>intro</i>(4)</a>, <a href="../man4/acme.html"><i>acme</i>(4)</a>, <a href="../man4/factotum.html"><i>factotum</i>(4)</a>, <a href="http://v9fs.sf.net"><tt><font size=+1>http://v9fs.sf.net</font></tt></a><br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Netfiles</i> depends on <a href="../man1/sftpcache.html"><i>sftpcache</i>(1)</a>, which only works with OpenSSH
+    versions 4.3 and earlier; later versions do not print the <tt><font size=+1>sftp&gt;</font></tt>
+    prompt frequently enough.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

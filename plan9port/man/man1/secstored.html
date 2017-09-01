@@ -1,0 +1,94 @@
+<head>
+<title>secstored(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>SECSTORED(1)</b><td align=right><b>SECSTORED(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    secstored, secuser &ndash; secstore commands<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>secstored</font></tt> [-R] [-S servername] [-s tcp!*!5356] [-x mountpoint]<br>
+    <tt><font size=+1>secuser</font></tt> [-v] username<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Secstored</i> serves requests from <a href="../man1/secstore.html"><i>secstore</i>(1)</a>. The <tt><font size=+1>&#8722;R</font></tt> option supplements
+    the password check with a call to a RADIUS server, for checking
+    hardware tokens or other validation. The <tt><font size=+1>&#8722;x</font></tt>mountpoint option specifies
+    an alternative to the default network <tt><font size=+1>/net</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Secuser</i> is an administrative command that runs on the secstore
+    machine, normally the authserver, to create new accounts and to
+    change status on existing accounts. It prompts for account information
+    such as password and expiration date, writing to <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>secstore/who/$uid</font></tt>.
+    The <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>secstore</font></tt> directory should
+    be created mode 770 for the userid or groupid of the secstored
+    process. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>secstored</i> warns the client if no account exists. If
+    you prefer to obscure this information, use <i>secuser</i> to create
+    an account <tt><font size=+1>FICTITIOUS</font></tt>.<br>
+    
+</table>
+<p><font size=+1><b>FILES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>secstore/who/$uid</font></tt> secstore account name, expiration
+    date, verifier<br>
+    <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>secstore/store/$uid/</font></tt> users&#8217; files<br>
+    <tt><font size=+1><a href="/usr/local/plan9/ndb/">/usr/local/plan9/ndb/</a>auth</font></tt> for mapping local userid to RADIUS userid<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/auth/secstore">/usr/local/plan9/src/cmd/auth/secstore</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/secstore.html"><i>secstore</i>(1)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

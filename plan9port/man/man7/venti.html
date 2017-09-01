@@ -1,0 +1,293 @@
+<head>
+<title>venti(7) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VENTI(7)</b><td align=right><b>VENTI(7)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    venti &ndash; archival storage server<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Venti is a block storage server intended for archival data. In
+    a Venti server, the SHA1 hash of a block&#8217;s contents acts as the
+    block identifier for read and write operations. This approach
+    enforces a write-once policy, preventing accidental or malicious
+    destruction of data. In addition, duplicate copies of a block
+    are coalesced, reducing the consumption of
+    storage and simplifying the implementation of clients. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    This manual page documents the basic concepts of block storage
+    using Venti as well as the Venti network protocol. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man1/venti.html"><i>Venti</i>(1)</a> documents some simple clients. <a href="../man1/vac.html"><i>Vac</i>(1)</a>, <a href="../man4/vacfs.html"><i>vacfs</i>(4)</a>, and
+    <a href="../man8/vbackup.html"><i>vbackup</i>(8)</a> are more complex clients. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man3/venti.html"><i>Venti</i>(3)</a> describes a C library interface for accessing Venti servers
+    and manipulating Venti data structures. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <a href="../man8/venti.html"><i>Venti</i>(8)</a> describes the programs used to run a Venti server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <p><font size=+1><b>Scores     </b></font><br>
+    The SHA1 hash that identifies a block is called its <i>score</i>. The
+    score of the zero-length block is called the <i>zero score</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Scores may have an optional <i>label</i><tt><font size=+1>:</font></tt> prefix, typically used to describe
+    the format of the data. For example, <a href="../man1/vac.html"><i>vac</i>(1)</a> uses a <tt><font size=+1>vac:</font></tt> prefix,
+    while <a href="../man8/vbackup.html"><i>vbackup</i>(8)</a> uses prefixes corresponding to the file system
+    types: <tt><font size=+1>ext2:</font></tt>, <tt><font size=+1>ffs:</font></tt>, and so on.<br>
+    <p><font size=+1><b>Files and Directories     </b></font><br>
+    Venti accepts blocks up to 56 kilobytes in size. By convention,
+    Venti clients use hash trees of blocks to represent arbitrary-size
+    data <i>files</i>. The data to be stored is split into fixed-size blocks
+    and written to the server, producing a list of scores. The resulting
+    list of scores is split into fixed-size pointer blocks (using
+    only an integral number of scores per
+    block) and written to the server, producing a smaller list of
+    scores. The process continues, eventually ending with the score
+    for the hash tree&#8217;s top-most block. Each file stored this way
+    is summarized by a <tt><font size=+1>VtEntry</font></tt> structure recording the top-most score,
+    the depth of the tree, the data block size, and the pointer block
+    size. One or more <tt><font size=+1>VtEntry
+    </font></tt>structures can be concatenated and stored as a special file called
+    a <i>directory</i>. In this manner, arbitrary trees of files can be constructed
+    and stored. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Scores passed between programs conventionally refer to <tt><font size=+1>VtRoot</font></tt>
+    blocks, which contain descriptive information as well as the score
+    of a directory block containing a small number of directory entries.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Conventionally, programs do not mix data and directory entries
+    in the same file. Instead, they keep two separate files, one with
+    directory entries and one with metadata referencing those entries
+    by position. Keeping this parallel representation is a minor annoyance
+    but makes it possible for general programs like <i>venti/copy</i> (see
+    <a href="../man1/venti.html"><i>venti</i>(1)</a>) to traverse the
+    block tree without knowing the specific details of any particular
+    program&#8217;s data.<br>
+    <p><font size=+1><b>Block Types     </b></font><br>
+    To allow programs to traverse these structures without needing
+    to understand their higher-level meanings, Venti tags each block
+    with a type. The types are: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>VtDataType &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;000 </font></tt>&nbsp;&nbsp;&nbsp;data<br>
+         <tt><font size=+1>VtDataType+1 &nbsp;&nbsp;&nbsp;001 </font></tt>&nbsp;&nbsp;&nbsp;scores of <tt><font size=+1>VtDataType</font></tt> blocks<br>
+         <tt><font size=+1>VtDataType+2 &nbsp;&nbsp;&nbsp;002 </font></tt>&nbsp;&nbsp;&nbsp;scores of <tt><font size=+1>VtDataType+1</font></tt> blocks<br>
+         ...<br>
+         <tt><font size=+1>VtDirType &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;010 &nbsp;&nbsp;&nbsp;VtEntry</font></tt> structures<br>
+         <tt><font size=+1>VtDirType+1 &nbsp;&nbsp;&nbsp;&nbsp;011 </font></tt>&nbsp;&nbsp;&nbsp;scores of <tt><font size=+1>VtDirType</font></tt> blocks<br>
+         <tt><font size=+1>VtDirType+2 &nbsp;&nbsp;&nbsp;&nbsp;012 </font></tt>&nbsp;&nbsp;&nbsp;scores of <tt><font size=+1>VtDirType+1</font></tt> blocks<br>
+         ...<br>
+         <tt><font size=+1>VtRootType &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;020 &nbsp;&nbsp;&nbsp;VtRoot</font></tt> structure<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        <tt><font size=+1>
+        </font></tt>
+    </table>
+    The octal numbers listed are the type numbers used by the commands
+    below. (For historical reasons, the type numbers used on disk
+    and on the wire are different from the above. They do not distinguish
+    <tt><font size=+1>VtDataType+</font></tt><i>n</i> blocks from <tt><font size=+1>VtDirType+</font></tt><i>n</i> blocks.)<br>
+    <p><font size=+1><b>Zero Truncation     </b></font><br>
+    To avoid storing the same short data blocks padded with differing
+    numbers of zeros, Venti clients working with fixed-size blocks
+    conventionally &#8216;zero truncate&#8217; the blocks before writing them
+    to the server. For example, if a 1024-byte data block contains
+    the 11-byte string &#8216;<tt><font size=+1>hello world</font></tt>&#8217; followed by 1013 zero bytes,
+    a client would store only the 11-byte
+    block. When the client later read the block from the server, it
+    would append zero bytes to the end as necessary to reach the expected
+    size. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When truncating pointer blocks (<tt><font size=+1>VtDataType+</font></tt><i>n</i> and <tt><font size=+1>VtDirType+</font></tt><i>n</i> blocks),
+    trailing zero scores are removed instead of trailing zero bytes.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Because of the truncation convention, any file consisting entirely
+    of zero bytes, no matter what its length, will be represented
+    by the zero score: the data blocks contain all zeros and are thus
+    truncated to the empty block, and the pointer blocks contain all
+    zero scores and are thus also truncated to the empty block, and
+    so on up the hash tree.
+    <p><font size=+1><b>Network Protocol    </b></font><br>
+    A Venti session begins when a <i>client</i> connects to the network address
+    served by a Venti <i>server</i>; the conventional address is <tt><font size=+1>tcp!</font></tt><i>server</i><tt><font size=+1>!venti</font></tt>
+    (the <tt><font size=+1>venti</font></tt> port is 17034). Both client and server begin by sending
+    a version string of the form <tt><font size=+1>venti&#8722;</font></tt><i>versions</i><tt><font size=+1>&#8722;</font></tt><i>comment</i><tt><font size=+1>\n</font></tt>. The <i>versions</i>
+    field is a list of acceptable versions separated by colons. The
+    protocol described here is version <tt><font size=+1>02</font></tt>. The client is responsible
+    for choosing a common version and sending it in the <tt><font size=+1>VtThello</font></tt> message,
+    described below. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    After the initial version exchange, the client transmits <i>requests</i>
+    (<i>T-messages</i>) to the server, which subsequently returns <i>replies</i>
+    (<i>R-messages</i>) to the client. The combined act of transmitting (receiving)
+    a request of a particular type, and receiving (transmitting) its
+    reply is called a <i>transaction</i> of that type. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Each message consists of a sequence of bytes. Two-byte fields
+    hold unsigned integers represented in big-endian order (most significant
+    byte first). Data items of variable lengths are represented by
+    a one-byte field specifying a count, <i>n</i>, followed by <i>n</i> bytes of
+    data. Text strings are represented similarly, using a two-byte
+    count with the text itself stored
+    as a UTF-encoded sequence of Unicode characters (see <a href="../man7/utf.html"><i>utf</i>(7)</a>).
+    Text strings are not NUL-terminated: <i>n</i> counts the bytes of UTF
+    data, which include no final zero byte. The NUL character is illegal
+    in text strings in the Venti protocol. The maximum string length
+    in Venti is 1024 bytes. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Each Venti message begins with a two-byte size field specifying
+    the length in bytes of the message, not including the length field
+    itself. The next byte is the message type, one of the constants
+    in the enumeration in the include file <tt><font size=+1>&lt;venti.h&gt;</font></tt>. The next byte
+    is an identifying <i>tag</i>, used to match responses to requests. The
+    remaining bytes are parameters
+    of different sizes. In the message descriptions, the number of
+    bytes in a field is given in brackets after the field name. The
+    notation <i>parameter</i>[<i>n</i>] where <i>n</i> is not a constant represents a variable-length
+    parameter: <i>n</i>[1] followed by <i>n</i> bytes of data forming the <i>parameter</i>.
+    The notation <i>string</i>[<i>s</i>] (using a literal <i>s</i> character) is shorthand
+    for <i>s</i>[2] followed by <i>s
+    </i>bytes of UTF-8 text. The notation <i>parameter</i>[] where <i>parameter</i>
+    is the last field in the message represents a variable-length
+    field that comprises all remaining bytes in the message. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    All Venti RPC messages are prefixed with a field <i>size</i>[2] giving
+    the length of the message that follows (not including the <i>size</i>
+    field itself). The message bodies are:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>VtThello</font></tt> <i>tag</i>[1] <i>version</i>[<i>s</i>] <i>uid</i>[<i>s</i>] <i>strength</i>[1] <i>crypto</i>[<i>n</i>] <i>codec</i>[<i>n</i>]<br>
+        <tt><font size=+1>VtRhello</font></tt> <i>tag</i>[1] <i>sid</i>[<i>s</i>] <i>rcrypto</i>[1] <i>rcodec</i>[1]<br>
+        <tt><font size=+1>VtTping</font></tt> <i>tag</i>[1]<br>
+        <tt><font size=+1>VtRping</font></tt> <i>tag</i>[1]<br>
+        <tt><font size=+1>VtTread</font></tt> <i>tag</i>[1] <i>score</i>[20] <i>type</i>[1] <i>pad</i>[1] <i>count</i>[2]<br>
+        <tt><font size=+1>VtRread</font></tt> <i>tag</i>[1] <i>data</i>[]<br>
+        <tt><font size=+1>VtTwrite</font></tt> <i>tag</i>[1] <i>type</i>[1] <i>pad</i>[3] <i>data</i>[]<br>
+        <tt><font size=+1>VtRwrite</font></tt> <i>tag</i>[1] <i>score</i>[20]<br>
+        <tt><font size=+1>VtTsync</font></tt> <i>tag</i>[1]<br>
+        <tt><font size=+1>VtRsync</font></tt> <i>tag</i>[1]<br>
+        <tt><font size=+1>VtRerror</font></tt> <i>tag</i>[1] <i>error</i>[<i>s</i>]<br>
+        <tt><font size=+1>VtTgoodbye</font></tt> <i>tag</i>[1] 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    Each T-message has a one-byte <i>tag</i> field, chosen and used by the
+    client to identify the message. The server will echo the request&#8217;s
+    <i>tag</i> field in the reply. Clients should arrange that no two outstanding
+    messages have the same tag field so that responses can be distinguished.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The type of an R-message will either be one greater than the type
+    of the corresponding T-message or <tt><font size=+1>Rerror</font></tt>, indicating that the
+    request failed. In the latter case, the <i>error</i> field contains a
+    string describing the reason for failure. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Venti connections must begin with a <tt><font size=+1>hello</font></tt> transaction. The <tt><font size=+1>VtThello</font></tt>
+    message contains the protocol <i>version</i> that the client has chosen
+    to use. The fields <i>strength</i>, <i>crypto</i>, and <i>codec</i> could be used to
+    add authentication, encryption, and compression to the Venti session
+    but are currently ignored. The <i>rcrypto</i>, and <i>rcodec</i> fields in the
+    <tt><font size=+1>VtRhello
+    </font></tt>response are similarly ignored. The <i>uid</i> and <i>sid</i> fields are intended
+    to be the identity of the client and server but, given the lack
+    of authentication, should be treated only as advisory. The initial
+    <tt><font size=+1>hello</font></tt> should be the only <tt><font size=+1>hello</font></tt> transaction during the session.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>ping</font></tt> message has no effect and is used mainly for debugging.
+    Servers should respond immediately to pings. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>read</font></tt> message requests a block with the given <i>score</i> and <i>type</i>.
+    Use <i>vttodisktype</i> and <i>vtfromdisktype</i> (see <a href="../man3/venti.html"><i>venti</i>(3)</a>) to convert
+    a block type enumeration value (<tt><font size=+1>VtDataType</font></tt>, etc.) to the <i>type</i>
+    used on disk and in the protocol. The <i>count</i> field specifies the
+    maximum expected size of the block. The <i>data</i> in the reply is the
+    block&#8217;s contents. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>write</font></tt> message writes a new block of the given <i>type</i> with contents
+    <i>data</i> to the server. The response includes the <i>score</i> to use to
+    read the block, which should be the SHA1 hash of <i>data</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The Venti server may buffer written blocks in memory, waiting
+    until after responding to the <tt><font size=+1>write</font></tt> message before writing them
+    to permanent storage. The server will delay the response to a
+    <tt><font size=+1>sync</font></tt> message until after all blocks in earlier <tt><font size=+1>write</font></tt> messages
+    have been written to permanent storage. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>goodbye</font></tt> message ends a session. There is no <tt><font size=+1>VtRgoodbye</font></tt>: upon
+    receiving the <tt><font size=+1>VtTgoodbye</font></tt> message, the server terminates up the
+    connection. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Version <tt><font size=+1>04</font></tt> of the Venti protocol is similar to version <tt><font size=+1>02</font></tt> (described
+    above) but has two changes to accomodates larger payloads. First,
+    it replaces the leading 2-byte packet size with a 4-byte size.
+    Second, the <i>count</i> in the <tt><font size=+1>VtTread</font></tt> packet may be either 2 or 4 bytes;
+    the total packet length distinguishes the two cases.<br>
+    
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/venti.html"><i>venti</i>(1)</a>, <a href="../man3/venti.html"><i>venti</i>(3)</a>, <a href="../man8/venti.html"><i>venti</i>(8)</a><br>
+    Sean Quinlan and Sean Dorward, &#8220;Venti: a new approach to archival
+    storage&#8221;, <i>Usenix Conference on File and Storage Technologies ,</i>
+    2002.<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

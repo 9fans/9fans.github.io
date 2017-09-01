@@ -1,0 +1,123 @@
+<head>
+<title>pem(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>PEM(1)</b><td align=right><b>PEM(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    pemdecode, pemencode &ndash; encode files in Privacy Enhanced Mail (PEM)
+    format<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>auth/pemdecode</font></tt> <i>section</i> [ <i>file</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>auth/pemencode</font></tt> <i>section</i> [ <i>file</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    PEM is a textual encoding for binary data originally used by the
+    Privacy Enhanced Mail program but now commonly used for other
+    applications, notably TLS. PEM encodes data in base 64 (see <a href="../man3/encode.html"><i>encode</i>(3)</a>)
+    between lines of the form:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>&#8722;&#8722;&#8722;&#8722;&#8722;BEGIN SECTION&#8722;&#8722;&#8722;&#8722;&#8722;<br>
+        &#8722;&#8722;&#8722;&#8722;&#8722;END SECTION&#8722;&#8722;&#8722;&#8722;&#8722;<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    where <tt><font size=+1>SECTION</font></tt> may be any string describing the encoded data. The
+    most common use of PEM format on Plan 9 is for encoding X.509
+    certificates; see <a href="../man1/rsa.html"><i>rsa</i>(1)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Pemdecode</i> extracts the named <i>section</i> and writes the decoded data
+    to standard output. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Pemencode</i> encodes its standard input, labels it as a <i>section</i>,
+    and writes it to standard output.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Encode and decode a simple greeting:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% echo hello world |<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            auth/pemencode GREETING<br>
+            
+        </table>
+        &#8722;&#8722;&#8722;&#8722;&#8722;BEGIN GREETING&#8722;&#8722;&#8722;&#8722;&#8722;<br>
+        aGVsbG8gd29ybGQK<br>
+        &#8722;&#8722;&#8722;&#8722;&#8722;END GREETING&#8722;&#8722;&#8722;&#8722;&#8722;<br>
+        % echo hello world |<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            auth/pemencode GREETING |<br>
+            auth/pemdecode GREETING<br>
+            
+        </table>
+        hello world<br>
+        % <br>
+        </font></tt>
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/auth">/usr/local/plan9/src/cmd/auth</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/rsa.html"><i>rsa</i>(1)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

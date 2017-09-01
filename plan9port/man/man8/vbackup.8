@@ -1,0 +1,404 @@
+.TH VBACKUP 8
+.SH NAME
+vbackup, vcat, vftp, vmount, vnfs \- 
+back up Unix file systems to Venti
+.SH SYNOPSIS
+.B vbackup
+[
+.B -DVinv
+]
+[
+.B -M
+.I mtpt
+]
+[
+.B -m
+.I host
+]
+[
+.B -s
+.I secs
+]
+[
+.B -w
+.I n
+]
+.I disk
+[
+.I score
+]
+.PP
+.B vcat
+[
+.B -z
+]
+.I disk
+|
+.I score
+.B >
+.I disk
+.PP
+.B vftp
+.I score
+|
+.I disk
+.PP
+.B vmount
+[
+.B -v
+]
+.I addr
+.I mtpt
+.PP
+.B vnfs
+[
+.B -ELLRVir
+]
+[
+.B -a
+.I addr
+]
+[
+.B -b
+.I blocksize
+]
+[
+.B -c
+.I cachesize
+]
+.I config
+.SH DESCRIPTION
+These programs back up and restore standard
+Unix file system images stored in
+.IR venti (8).
+Images stored in
+.I venti
+are named by
+.IR scores ,
+which consist of a file system type followed
+by a colon and forty hexadecimal digits, as in:
+.IP
+.EX
+ffs:0123456789abcdef0123456789abcdef01234567
+.EE
+.PP
+(The hexadecimal data is the SHA1 hash of the Venti
+root block representing the file system image.)
+.PP
+These programs expect the environment variable
+.B $venti
+to be set to the network address of the Venti server to use
+(for example,
+.B yourhost
+or
+.BR tcp!yourhost!venti ).
+.PP
+.I Vbackup
+copies the file system stored on
+.I disk
+to the Venti server and prints the 
+score for the newly-stored image.
+The argument
+.I disk
+should be a disk or disk partition device
+that would be appropriate to pass to
+.IR mount (8).
+.PP
+The optional argument
+.I score
+is the score of a previous backup of the disk image.
+If
+.I score
+is given, 
+.I vbackup
+will not write to Venti any blocks that have not changed
+since the previous backup.
+This is only a speed optimization: since the blocks are already
+stored on Venti they need not be sent to the Venti server again.
+.PP
+The options to
+.I vbackup
+are:
+.TP
+.B -D
+Turn on debugging output.
+.TP
+.B -V
+Trace interactions with Venti server.
+.TP
+.B -m \fIhost
+.B -M \fImtpt
+Set names used to construct the path in the
+.B mount command.
+The default 
+.I host
+is the name returned by 
+.I sysname
+(see
+.IR getuser (3)).
+The default
+.I mtpt
+is the place where
+.I disk
+is currently mounted.
+.TP
+Set backup mount point:
+this name is also used in the printed
+.B mount
+command.
+The default is the name returned by
+.I sysname
+(see
+.IR getuser (3)).
+.TP
+.B -n
+No-op mode: do not write any blocks to the server
+.TP
+.B -i
+Read scores incrementally from the previous backup as needed,
+rather than prefetching them.
+.TP
+.B -v
+Print verbose output.
+.TP
+.B -w \fIn
+Write parallelism: keep
+.I n
+writes to the server in progress at a time.
+.TP
+.B -s \fIsecs
+Status interval: every
+.I secs
+seconds, print a line tracking progress of the backup.
+.PD
+.PP
+When
+.I vbackup
+finishes, it prints a single line of the form
+.IP
+.EX
+mount /\fIhost\fL/\fIyyyy\fL/\fImmdd\fL/\fImtpt\fL \fIscore\fL \fIyyyy\fL/\fImmdd\fL/\fIhhmm
+.EE
+.LP
+This line is a valid configuration line for
+.I vnfs
+.RI ( q.v. ).
+.I Mntpath
+is the path on which
+.I disk
+is currently mounted.
+.PP
+.I Vcat
+writes the named disk image to standard output.
+Unused file system blocks are printed zeroed regardless
+of their actual content.
+.PP
+By default,
+.I vcat
+will assume that its standard output is seekable
+.RI ( i.e., 
+it has been redirected to a file or disk)
+and seek over unused blocks instead of writing to them.
+The
+.B -z
+option causes
+.I vcat
+to zero unused blocks instead.
+.PP
+.I Vftp
+presents an
+.IR ftp (1)-like
+interface to a physical or backed-up disk image.
+It is used mainly for debugging.
+Type
+.B help
+at the 
+.B vftp>
+prompt for a list of commands.
+.PP
+.I Vmount
+mounts the NFS service at the network connection
+.I address
+onto
+.IR mountpoint .
+On most operating systems,
+.I vmount
+must be run by the user
+.BR root .
+Because
+.I address
+is passed to the host OS kernel rather than interpreted by
+.IR dial (3),
+it must be only an IP address, not a full dial address.
+.PP
+.I Vnfs
+serves, using the
+NFS version 3 protocol,
+one or more disk images in a synthetic tree defined
+by the configuration file
+.IR config .
+.I Vnfs
+serves both NFS mount protocol
+and NFS protocol
+RPCs at
+.IR addr 
+(default
+.BR udp!*!nfs ).
+The options are:
+.TP
+.B -E
+Disable `encrypted' handles.
+By default handles are encrypted with a random key to avoid
+leaking information about the backed-up file systems.
+If encryption is disabled, the NFS handles exposed to the client
+may leak information about the root scores of the disks as well
+as inode numbers.
+.TP
+.B -L
+Local service only: serve only requests from the loopback interface (127.0.0.1).
+.TP
+.B -LL
+Local service only, with paranoia: serve only requests from loopback,
+and only from the first source port that sends a request.
+This option is intended to be used to make sure that once the local
+host has mounted the service, no other local users can access it.
+.TP
+.B -R
+Print all NFS and NFS mount RPCs to standard error.
+.TP
+.B -V
+Print all Venti transactions to standard error.
+.TP
+.BI -a " addr
+Serve requests on
+.IR addr
+(see above).
+.TP
+.BI -b " blocksize
+Set block size used by the in-memory venti block cache.
+Must be as large as the maximum block size in any
+file system mentioned in the configuration.
+.TP
+.BI -c " cachesize
+Set the number of blocks stored by the in-memory venti cache.
+.TP
+.B -i
+Run in ``insecure'' mode, allowing remote root users to 
+use uid and gid 0 and read any file.
+(Normally, remote root is mapped to uid and gid \-1
+and has no special permissions.)
+.TP
+.B -r
+Respond to all requests with a Sun RPC rejection.
+This is useful during debugging.
+.PD
+.PP
+.I Config
+is a text file describing the
+backup hierarchy for 
+.I vnfs
+to serve.
+Lines beginning with a sharp
+.RB ( # )
+are ignored.
+The rest of the file is a sequence of commands, one per line.
+The commands are:
+.TP
+.BI mount " mtpt score time
+Add the file system with the given
+.I score
+to the tree at the mount point
+.IR mtpt .
+The path to the mount point will be created
+if necessary.
+If
+.B /dev/null
+is given as the score, an empty file system is mounted at
+.IR mtpt ,
+excluding
+.IR mtpt 's
+contents from view.
+.I Time
+is the modification time to return for the directory
+.IR mtpt ,
+either a decimal number of seconds since the epoch
+or a string of the form
+.IB yyyy / mmdd / hhmm
+giving the year, month, day, hour, and minute.
+.RI ( Vnfs
+does not use the modification time of the root in order
+to avoid accessing every mounted file system on common
+actions like
+.B ls
+.B -l
+.BR /dump/sys/2005 .)
+.TP
+.BI allow " ip\fR[\fL/\fImask\fR]
+.TP
+.BI deny " ip\fR[\fL/\fImask\fR]
+These two commands define access permissions based on IP address.
+The optional
+.I mask
+can be a decimal number (24) or an equivalent IP mask (255.255.255.0).
+Each request is filtered through the rules listed in the configuration file.
+The first rule that matches is used.
+If any
+.B allow
+or
+.B deny
+rules are given, the default action is to reject the request.
+In the absence of any rules, the default action is to accept all requests.
+.PD
+.PP
+Reading the special file
+.B /dump/+refreshconfig
+causes 
+.I vnfs
+to reload
+.IR config .
+The read returns either the string
+.B ok
+or an error message.
+.SH EXAMPLES
+.PP
+Running on the server
+.IR bob ,
+back up the file system stored on
+.BR /dev/da0s1a ,
+which is mounted on
+.BR /home :
+.IP
+.EX
+% vbackup /dev/da0s1a
+mount /bob/2005/0510/home ffs:0123456789abcdef\fI...\fP 2005/0510/0831
+% 
+.EE
+.PP
+Serve that backup and a few others in a tree reminiscent
+of Plan 9's dump file system, but hide each day's contents of
+.B /tmp :
+.IP
+.EX
+% cat config
+mount /bob/2005/0510 ffs:0123456789abcdef\fI...\fP 2005/0510/0829
+mount /bob/2005/0510/home ffs:0123456789abcdef\fI...\fP 2005/0510/0831
+mount /bob/2005/0510/tmp /dev/null 1
+mount /bob/2005/0511 ffs:0123456789abcdef\fI...\fP 2005/0511/0827
+mount /bob/2005/0511/home ffs:0123456789abcdef\fI...\fP 2005/0511/0828
+mount /bob/2005/0511/tmp /dev/null 1
+% vnfs -b 16k -c 1k config
+% 
+.EE
+.PP
+Mount the backups on a client machine using
+.IR vmount :
+.IP
+.EX
+# vmount udp!yourserver!nfs /dump
+# ls /dump/bob/2005
+0510
+0511
+# 
+.EE
+.PP
+(Users of fancy shells may need to quote the address argument.)

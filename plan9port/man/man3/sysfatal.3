@@ -1,0 +1,68 @@
+.TH SYSFATAL 3
+.SH NAME
+syslog, sysfatal \- system error messages
+.SH SYNOPSIS
+.B #include <u.h>
+.br
+.B #include <libc.h>
+.PP
+.B
+void syslog(int cons, char *logname, char *fmt, ...)
+.PP
+.B
+void sysfatal(char *fmt, ...)
+.SH DESCRIPTION
+.I Sysfatal
+prints to standard error the name of the running program,
+a colon and a space, 
+the message described by the
+.IR print (3)
+format string
+.I fmt
+and subsequent arguments, and a newline.
+It then calls
+.IR exits (3)
+with the formatted message as argument.
+The program's name is the value of
+.BR argv0 ,
+which will be set if the program uses the
+.IR arg (3)
+interface to process its arguments.
+If
+.B argv0
+is null, it is ignored and the following colon and space are suppressed.
+.PP
+.I Syslog
+logs messages in the file named by
+.I logname
+in the directory
+.B \*9/log ;
+the file must already exist and is opened append-only.
+.I Logname
+must contain no slashes.
+The message is a line with several fields:
+the name of the machine writing the message;
+the date and time;
+the message specified by the 
+.IR print (3)
+format
+.I fmt
+and any following arguments;
+and a final newline.
+If
+.I cons
+is set or the log file cannot be opened, the message is also printed
+on the system console.
+.I Syslog
+can be used safely in multi-threaded programs.
+.SH SOURCE
+.B \*9/src/lib9/sysfatal.c
+.br
+.B \*9/src/lib9/syslog.c
+.SH "SEE ALSO"
+.IR intro (3),
+.IR errstr (3),
+the
+.B %r
+format in
+.IR print (3)

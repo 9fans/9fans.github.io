@@ -1,0 +1,661 @@
+<head>
+<title>factotum(4) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>FACTOTUM(4)</b><td align=right><b>FACTOTUM(4)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    factotum &ndash; authentication agent<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>factotum</font></tt> [ <tt><font size=+1>&#8722;DdkSun</font></tt> ] [ <tt><font size=+1>&#8722;a authaddr</font></tt> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>srvname</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>factotum &#8722;g</font></tt> <i>attribute</i><tt><font size=+1>=</font></tt><i>value</i> <tt><font size=+1>...</font></tt> <i>attribute</i><tt><font size=+1>? ...<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Factotum</i> is a user-level file system that acts as the authentication
+    agent for a user. It does so by managing a set of <i>keys</i>. A key
+    is a collection of information used to authenticate a particular
+    action. Stored as a list of <i>attribute</i><tt><font size=+1>=</font></tt><i>value</i> pairs, a key typically
+    contains a user, an authentication domain, a protocol, and some
+    secret data. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Factotum</i> presents the following files:<br>
+    <tt><font size=+1>rpc</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;each open represents a new private channel to <i>factotum<br>
+    </i><tt><font size=+1>proto</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;when read lists the protocols available<br>
+    <tt><font size=+1>confirm</font></tt>&nbsp;&nbsp;&nbsp;for confiming the use of key<br>
+    <tt><font size=+1>needkey</font></tt>&nbsp;&nbsp;&nbsp;allows external programs to control the addition of new
+    keys<br>
+    <tt><font size=+1>log</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a log of actions<br>
+    <tt><font size=+1>ctl</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for maintaining keys; when read, it returns a list of keys.
+    For secret attributes, only the attribute name follow by a <tt><font size=+1>?</font></tt> is
+    returned. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    In any authentication, the caller typically acts as a client and
+    the callee as a server. The server determines the authentication
+    domain, sometimes after a negotiation with the client. Authentication
+    always requires the client to prove its identity to the server.
+    Under some protocols, the authentication is mutual. Proof is accomplished
+    using secret
+    information kept by factotum in conjunction with a cryptographic
+    protocol. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Factotum</i> can act in the role of client for any process possessing
+    the same user id as it. For select protocols such as <tt><font size=+1>p9sk1</font></tt> it
+    can also act as a client for other processes provided its user
+    id may speak for the other process&#8217; user id (see Plan 9&#8217;s <i>authsrv</i>(6)).
+    <i>Factotum</i> can act in the role of server for any process. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Factotum</i>&#8217;s structure is independent of any particular authentication
+    protocol. <i>Factotum</i> supports the following protocols:<br>
+    <tt><font size=+1>p9any</font></tt>&nbsp;&nbsp;&nbsp;a metaprotocol used to negotiate which actual protocol to
+    use.<br>
+    <tt><font size=+1>p9sk1</font></tt>&nbsp;&nbsp;&nbsp;a Plan 9 shared key protocol.<br>
+    <tt><font size=+1>p9sk2</font></tt>&nbsp;&nbsp;&nbsp;a variant of <tt><font size=+1>p9sk1.<br>
+    p9cr</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;a Plan 9 protocol that can use either <tt><font size=+1>p9sk1</font></tt> keys or SecureID
+    tokens.<br>
+    <tt><font size=+1>apop</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;the challenge/response protocol used by POP3 mail servers.<br>
+    <tt><font size=+1>cram</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;the challenge/response protocol also used by POP3 mail servers.<br>
+    <tt><font size=+1>chap</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;the challenge/response protocols used by PPP and PPTP.<br>
+    <tt><font size=+1>dsa</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DSA signatures, used by SSH<br>
+    <tt><font size=+1>mschap</font></tt>&nbsp;&nbsp;&nbsp;a proprietary Microsoft protocol also used by PPP and PPTP.<br>
+    <tt><font size=+1>rsa</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RSA encryption and signatures, used by SSH and TLS.<br>
+    <tt><font size=+1>pass</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;passwords in the clear.<br>
+    <tt><font size=+1>vnc</font></tt><i>vnc</i>(1)&#8217;s challenge/response.<br>
+    <tt><font size=+1>wep</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WEP passwords for wireless ethernet cards. The &#8220;Protocols&#8221;
+    section below describes these protocols in more detail. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The options to <i>factotum</i> are:<br>
+    <tt><font size=+1>&ndash;a</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;supplies the address of the authentication server to use. Without
+    this option, it will attempt to find an authentication server
+    by querying the connection server, the file <tt><font size=+1>&lt;mtpt&gt;/ndb</font></tt>, and finally
+    the network database in <tt><font size=+1>/lib/ndb</font></tt>.<br>
+    <tt><font size=+1>&ndash;m</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;specifies the mount point to use, by default <tt><font size=+1>/mnt</font></tt>.<br>
+    <tt><font size=+1>&ndash;s</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;specifies the service name to use. Without this option, <i>factotum</i>
+    does not create a service file in <tt><font size=+1>/srv</font></tt>.<br>
+    <tt><font size=+1>&ndash;D</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;turns on 9P tracing, written to standard error.<br>
+    <tt><font size=+1>&ndash;d</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;turns on debugging, written to standard error.<br>
+    <tt><font size=+1>&ndash;g</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;causes the agent to prompt for the key, write it to the <tt><font size=+1>ctl</font></tt> file,
+    and exit. The agent will prompt for values for any of the attributes
+    ending with a question mark (<tt><font size=+1>?</font></tt>) and will append all the supplied
+    <i>attribute = value</i> pairs. See the section on key templates below.<br>
+    <tt><font size=+1>&ndash;n</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;don&#8217;t look for a secstore.<br>
+    <tt><font size=+1>&ndash;S</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;indicates that the agent is running on a cpu server. On starting,
+    it will attempt to get a <tt><font size=+1>9psk1</font></tt> key from NVRAM using <tt><font size=+1>readnvram</font></tt>
+    (see <a href="../man3/authsrv.html"><i>authsrv</i>(3)</a>), prompting for anything it needs. It will never
+    subsequently prompt for a key that it doesn&#8217;t have. This option
+    is typically used by the kernel at boot time.<br>
+    <tt><font size=+1>&ndash;k</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;causes the NVRAM to be written. It is only valid with the <tt><font size=+1>&ndash;S</font></tt> option.
+    This option is typically used by the kernel at boot time.<br>
+    <tt><font size=+1>&ndash;u</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;causes the agent to prompt for user id and writes it to <tt><font size=+1>/dev/hostowner</font></tt>.
+    It is mutually exclusive with <tt><font size=+1>&ndash;k</font></tt> and <tt><font size=+1>&ndash;S</font></tt>. This option is typically
+    used by the kernel at boot time.<br>
+    <p><font size=+1><b>Key Tuples     </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A <i>key tuple</i> is a space delimited list of <i>attribute</i><tt><font size=+1>=</font></tt><i>value</i> pairs.
+    An attribute whose name begins with an exclamation point (<tt><font size=+1>!</font></tt>) does
+    not appear when reading the <tt><font size=+1>ctl</font></tt> file. Here are some examples:<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>proto=p9sk1 dom=avayalabs.com user=presotto !password=lucent<br>
+         proto=apop server=mit.edu user=rsc !password=nerdsRus<br>
+         proto=pass user=tb service=ssh !password=does.it.matter<br>
+        </font></tt>
+    </table>
+    The &#8220;Protocols&#8221; section below describes the attributes specific
+    to each supported protocol. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    All keys can have additional attibutes that act either as comments
+    or as selectors to distinguish them in the <a href="../man3/auth.html"><i>auth</i>(3)</a> library calls.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The factotum owner can use any key stored by factotum. Any key
+    may have one or more <tt><font size=+1>owner</font></tt> attributes listing the users who can
+    use the key as though they were the owner. For example, the TLS
+    and SSH host keys on a server often have an attribute <tt><font size=+1>owner=*</font></tt>
+    to allow any user (and in particular, <tt><font size=+1>none )</font></tt> to run the TLS or
+    SSH server-side protocol.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Any key may have a <tt><font size=+1>role</font></tt> attribute for restricting how it can be
+    used. If this attribute is missing, the key can be used in any
+    role. Common values are:<br>
+    <tt><font size=+1>client<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for authenticating outbound calls<br>
+        
+    </table>
+    <tt><font size=+1>server<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for authenticating inbound calls<br>
+        
+    </table>
+    <tt><font size=+1>speaksfor<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for authenticating processes whose user id does not match <i>factotum</i>&#8217;s.<br>
+        
+    </table>
+    <tt><font size=+1>encrypt<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for encrypting data<br>
+        
+    </table>
+    <tt><font size=+1>decrypt<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for decrypting data<br>
+        
+    </table>
+    <tt><font size=+1>sign</font></tt>&nbsp;&nbsp;&nbsp;for cryptographically signing data<br>
+    <tt><font size=+1>verify<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        for verifying cryptographic signatures 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    Whenever <i>factotum</i> runs as a server, it must have a <tt><font size=+1>p9sk1</font></tt> key in
+    order to communicate with the authentication server for validating
+    passwords and challenge/responses of other users.<br>
+    <p><font size=+1><b>Key Templates     </b></font><br>
+    Key templates are used by routines that interface to <i>factotum</i>
+    such as <tt><font size=+1>auth_proxy</font></tt> and <tt><font size=+1>auth_challenge</font></tt> (see <a href="../man3/auth.html"><i>auth</i>(3)</a>) to specify
+    which key and protocol to use for an authentication. Like a key
+    tuple, a key template is also a list of <i>attribute</i><tt><font size=+1>=</font></tt><i>value</i> pairs.
+    It must specify at least the protocol and enough other attributes
+    to uniquely identify a key, or set of
+    keys, to use. The keys chosen are those that match all the attributes
+    specified in the template. The possible attribute/value formats
+    are:<br>
+    <i>attr</i><tt><font size=+1>=</font></tt><i>val</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The attribute <i>attr</i> must exist in the key and its value
+    must exactly match <i>val<br>
+    attr</i><tt><font size=+1>?</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The attribute <i>attr</i> must exist in the key but its value doesn&#8217;t
+    matter.<br>
+    <i>attr</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The attribute <i>attr</i> must exist in the key with a null value
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Key templates are also used by factotum to request a key either
+    via an RPC error or via the <tt><font size=+1>needkey</font></tt> interface. The possible attribute/value
+    formats are:<br>
+    <i>attr</i><tt><font size=+1>=</font></tt><i>val</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This pair must remain unchanged<br>
+    <i>attr</i><tt><font size=+1>?</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This attribute needs a value<br>
+    <i>attr</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The pair must remain unchanged<br>
+    <p><font size=+1><b>Control and Key Management     </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A number of messages can be written to the control file. The mesages
+    are:<br>
+    <tt><font size=+1>key</font></tt> <i>attribute-value-list<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        add a new key. This will replace any old key whose public, i.e.
+        non ! attributes, match.<br>
+        
+    </table>
+    <tt><font size=+1>delkey</font></tt> <i>attribute-value-list<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        delete a key whose attributes match those given.<br>
+        
+    </table>
+    <tt><font size=+1>debug</font></tt>toggle debugging on and off, i.e., the debugging also turned
+    on by the <tt><font size=+1>&ndash;d</font></tt> option. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default when factotum starts it looks for a <a href="../man1/secstore.html"><i>secstore</i>(1)</a> account
+    on $auth for the user and, if one exists, prompts for a secstore
+    password in order to fetch the file <i>factotum</i>, which should contain
+    control file commands. An example would be<br>
+     
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>key dom=x.com proto=p9sk1 user=boyd !hex=26E522ADE2BBB2A229<br>
+         key proto=rsa service=ssh size=1024 ek=3B !dk=...<br>
+        </font></tt>
+    </table>
+    where the first line sets a password for challenge/response authentication,
+    strong against dictionary attack by being a long random string,
+    and the second line sets a public/private keypair for ssh authentication,
+    generated by <tt><font size=+1>ssh_genkey</font></tt> (see <i>ssh</i>(1)).<br>
+    <p><font size=+1><b>Confirming key use     </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>confirm</font></tt> file provides a connection from <i>factotum</i> to a confirmation
+    server, normally the program <i>auth/fgui</i>. Whenever a key with the
+    <tt><font size=+1>confirm</font></tt> attribute is used, <i>factotum</i> requires confirmation of its
+    use. If no process has <tt><font size=+1>confirm</font></tt> opened, use of the key will be
+    denied. However, if the file is opened a request can be read from
+    it with the following
+    format: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>confirm tag=</font></tt><i>tagno &lt;key template&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    The reply, written back to <tt><font size=+1>confirm</font></tt>, consists of string: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>tag=</font></tt><i>tagno</i> <tt><font size=+1>answer=</font></tt><i>xxx 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    If <i>xxx</i> is the string <tt><font size=+1>yes</font></tt> then the use is confirmed and the authentication
+    will proceed. Otherwise, it fails. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>Confirm</font></tt> is exclusive open and can only be opened by a process
+    with the same user id as <i>factotum</i>.<br>
+    <p><font size=+1><b>Prompting for keys     </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>needkey</font></tt> file provides a connection from <i>factotum</i> to a key
+    server, normally the program <i>auth/fgui</i>. Whenever <i>factotum</i> needs
+    a new key, it first checks to see if <tt><font size=+1>needkey</font></tt> is opened. If it
+    isn&#8217;t, it returns a error to its client. If the file is opened
+    a request can be read from it with the following format: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>needkey tag=</font></tt><i>tagno &lt;key template&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    It is up to the reader to then query the user for any missing
+    fields, write the key tuple into the <tt><font size=+1>ctl</font></tt> file, and then reply
+    by writing into the <tt><font size=+1>needkey</font></tt> file the string: 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>tag=</font></tt><i>tagno 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>Needkey</font></tt> is exclusive open and can only be opened by a process
+    with the same user id as <i>factotum</i>.<br>
+    <p><font size=+1><b>The RPC Protocol     </b></font><br>
+    Authentication is performed by<br>
+    1)&nbsp;&nbsp;&nbsp;&nbsp;opening <tt><font size=+1>rpc<br>
+    </font></tt>2)&nbsp;&nbsp;&nbsp;&nbsp;setting up the protocol and key to be used (see the <tt><font size=+1>start</font></tt> RPC
+    below),<br>
+    3)&nbsp;&nbsp;&nbsp;&nbsp;shuttling messages back and forth between <i>factotum</i> and the other
+    party (see the <tt><font size=+1>read</font></tt> and <tt><font size=+1>write</font></tt> RPC&#8217;s) until done<br>
+    4)&nbsp;&nbsp;&nbsp;&nbsp;if successful, reading back an <i>AuthInfo</i> structure (see <a href="../man3/authsrv.html"><i>authsrv</i>(3)</a>).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The RPC protocol is normally embodied by one of the routines in
+    <a href="../man3/auth.html"><i>auth</i>(3)</a>. We describe it here should anyone want to extend the
+    library. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    An RPC consists of writing a request message to <tt><font size=+1>rpc</font></tt> followed by
+    reading a reply message back. RPC&#8217;s are strictly ordered; requests
+    and replies of different RPC&#8217;s cannot be interleaved. Messages
+    consist of a verb, a single space, and data. The data format depends
+    on the verb. The request verbs are:<br>
+    <tt><font size=+1>start</font></tt> <i>attribute-value-list<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        start a new authentication. <i>Attribute-value-pair-list</i> must include
+        a <tt><font size=+1>proto</font></tt> attribute, a <tt><font size=+1>role</font></tt> attribute with value <tt><font size=+1>client</font></tt> or <tt><font size=+1>server</font></tt>,
+        and enough other attibutes to uniquely identify a key to use.
+        A <tt><font size=+1>start</font></tt> RPC is required before any others. The possible replies
+        are:<br>
+        <tt><font size=+1>ok</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;start succeeded.<br>
+        <tt><font size=+1>error</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            where <i>string</i> is the reason.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>read</font></tt>&nbsp;&nbsp;&nbsp;get data from <i>factotum</i> to send to the other party. The possible
+    replies are:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ok</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;read succeeded, this is zero length message.<br>
+        <tt><font size=+1>ok</font></tt> <i>data<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            read succeeded, the data follows the space and is unformatted.<br>
+            
+        </table>
+        <tt><font size=+1>done</font></tt>&nbsp;&nbsp;&nbsp;authentication has succeeded, no further RPC&#8217;s are necessary<br>
+        <tt><font size=+1>done haveai<br>
+        </font></tt>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            authentication has succeeded, an <tt><font size=+1>AuthInfo</font></tt> structure (see <a href="../man3/auth.html"><i>auth</i>(3)</a>)
+            can be retrieved with an <tt><font size=+1>authinfo</font></tt> RPC<br>
+            
+        </table>
+        <tt><font size=+1>phase</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            its not your turn to read, get some data from the other party
+            and return it with a write RPC.<br>
+            
+        </table>
+        <tt><font size=+1>error</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            authentication failed, <i>string</i> is the reason.<br>
+            
+        </table>
+        <tt><font size=+1>protocol not started<br>
+        </font></tt>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            a <tt><font size=+1>start</font></tt> RPC needs to precede reads and writes<br>
+            
+        </table>
+        <tt><font size=+1>needkey</font></tt> <i>attribute-value-list<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            a key matching the argument is needed. This argument may be passed
+            as an argument to <i>factotum</i> <tt><font size=+1>&#8722;g</font></tt> in order to prompt for a key. After
+            that, the authentication may proceed, i.e., the read restarted.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>write</font></tt> <i>data<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        send data from the other party to <i>factotum</i>. The possible replies
+        are:<br>
+        <tt><font size=+1>ok</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;the write succeeded<br>
+        <tt><font size=+1>needkey</font></tt> <i>attribute-value-list<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            see above<br>
+            
+        </table>
+        <tt><font size=+1>toosmall</font></tt> <i>n<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            the write is too short, get more data from the other party and
+            retry the write. <i>n</i> specifies the maximun total number of bytes.<br>
+            
+        </table>
+        <tt><font size=+1>phase</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            its not your turn to write, get some data from <i>factotum</i> first.<br>
+            
+        </table>
+        <tt><font size=+1>done</font></tt>&nbsp;&nbsp;&nbsp;see above<br>
+        <tt><font size=+1>done haveai<br>
+        </font></tt>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            see above<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>readhex</font></tt>, <tt><font size=+1>writehex<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        like <tt><font size=+1>read</font></tt> and <tt><font size=+1>write</font></tt>, except that an <tt><font size=+1>ok</font></tt> response to <tt><font size=+1>readhex</font></tt> returns
+        the data encoded as a long hexadecimal string, and the argument
+        to <tt><font size=+1>writehex</font></tt> is expected to be a long hexadecimal string. These
+        are useful for manually debugging of binary protocols.<br>
+        
+    </table>
+    <tt><font size=+1>authinfo<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        retrieve the AuthInfo structure. The possible replies are:<br>
+        <tt><font size=+1>ok</font></tt> <i>data<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            data
+        </table>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+             is a marshaled form of the AuthInfo structure.<br>
+            
+        </table>
+        <tt><font size=+1>error</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            where <i>string</i> is the reason for the error.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>attr</font></tt>&nbsp;&nbsp;&nbsp;retrieve the attributes used in the <tt><font size=+1>start</font></tt> RPC. The possible
+    replies are:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ok</font></tt> <i>attribute-value-list<br>
+        </i><tt><font size=+1>error</font></tt> <i>string<br>
+        </i>
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            where <i>string</i> is the reason for the error.<br>
+            
+        </table>
+        
+    </table>
+    <p><font size=+1><b>Protocols     </b></font><br>
+    Factotum supports many authentication types, each with its own
+    roles and required key attributes. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>P9any</i>, <i>p9sk1</i>, <i>p9sk2</i>, and <i>p9cr</i> are used to authenticate to Plan
+    9 systems; valid <tt><font size=+1>role</font></tt>s are <tt><font size=+1>client</font></tt> and <tt><font size=+1>server</font></tt>. All require <tt><font size=+1>proto=p9sk1</font></tt>
+    keys with <tt><font size=+1>user</font></tt>, <tt><font size=+1>dom</font></tt> (authentication domain), and <tt><font size=+1>!password</font></tt> attributes.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>P9sk1</i> and <i>p9sk2</i> are the Plan 9 shared-key authentication protocols.
+    <i>P9sk2</i> is a deprecated form of <i>p9sk1</i> that neglects to authenticate
+    the server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>P9any</i> is a meta-protocol that negotiates a protocol (<tt><font size=+1>p9sk1</font></tt> or
+    <tt><font size=+1>p9sk2</font></tt>) and an authentication domain and then invokes the given
+    protocol with a <tt><font size=+1>dom=</font></tt> attribute. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>P9any</i>, <i>p9sk1</i>, and <i>p9sk2</i> are intended to be proxied via <i>auth_proxy</i>
+    (see <a href="../man3/auth.html"><i>auth</i>(3)</a>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>P9cr</i> is a textual challenge-response protocol; roles are <tt><font size=+1>client</font></tt>
+    and <tt><font size=+1>server</font></tt>. It uses <i>p9sk1</i> keys as described above. The protocol
+    with <i>factotum</i> is textual: client writes a user name, server responds
+    with a challenge, client writes a response, server responds with
+    <tt><font size=+1>ok</font></tt> or <tt><font size=+1>bad</font></tt>. Typically this information is wrapped in other protocols
+    before being sent over
+    the network. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vnc</i> is the challenge-response protocol used by <i>vnc</i>(1); valid roles
+    are <tt><font size=+1>client</font></tt> and <tt><font size=+1>server</font></tt>. The client protocol requires a <tt><font size=+1>proto=vnc</font></tt>
+    key with attribute <tt><font size=+1>!password</font></tt>. Conventionally, client keys also
+    have <tt><font size=+1>user</font></tt> and <tt><font size=+1>server</font></tt> attributes. The server protocol requires
+    a <i>p9sk1</i> key as described above. The protocol with <i>factotum</i> is
+    the same as <i>p9cr</i>,
+    except that the challenge and response are not textual. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Apop</i> and <i>cram</i> are challenge-response protocols typically used
+    to authenticate to mail servers. The client protocols require
+    <tt><font size=+1>proto=apop</font></tt> or <tt><font size=+1>proto=cram</font></tt> keys with <tt><font size=+1>user</font></tt> and <tt><font size=+1>!password</font></tt> attributes.
+    Conventionally, client keys also have <tt><font size=+1>server</font></tt> attributes. The server
+    protocol requires a <i>p9sk1</i> key as described above. The protocol
+    with <i>factotum</i> is
+    textual: server writes a challenge of the form <i>random</i><tt><font size=+1>@</font></tt><i>domain</i>,
+    client responds with user name and then a hexadecimal response
+    (two separate writes), and then the server responds with <tt><font size=+1>ok</font></tt> or
+    <tt><font size=+1>bad</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Chap</i> and <i>mschap</i> are challenge-response protocols used in PPP sessions;
+    valid roles are <tt><font size=+1>client</font></tt> and <tt><font size=+1>server</font></tt>. The client protocols require
+    <tt><font size=+1>proto=chap</font></tt> or <tt><font size=+1>proto=mschap</font></tt> keys with <tt><font size=+1>user</font></tt> and <tt><font size=+1>!password</font></tt> attributes.
+    Conventionally, client keys also have <tt><font size=+1>server</font></tt> attributes. The server
+    protocol requires a <i>p9sk1</i> key as described above. The protocol
+    with factotum is: server writes an 8-byte binary challenge, client
+    responds with user name and then a <tt><font size=+1>Chapreply</font></tt> or <tt><font size=+1>MSchapreply</font></tt> structure
+    (defined in <tt><font size=+1>&lt;auth.h&gt; ). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <i>Pass</i> is a client-only protocol that hands out passwords from <tt><font size=+1>proto=pass</font></tt>
+    keys with <tt><font size=+1>user</font></tt> and <tt><font size=+1>!password</font></tt> attributes. The protocol is a single
+    read that returns a string: a space-separated quoted user name
+    and password that can be parsed with <i>tokenize</i> (see <a href="../man3/getfields.html"><i>getfields</i>(3)</a>).
+    Conventionally, client keys have distinguishing attributes like
+    <tt><font size=+1>service</font></tt> and
+    <tt><font size=+1>server</font></tt> that can be specified in the <tt><font size=+1>start</font></tt> message to select a
+    key. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Wep</i> is a client-only pseudo-protocol that initializes the encryption
+    key on a wireless ethernet device. It uses <tt><font size=+1>proto=wep</font></tt> keys with
+    <tt><font size=+1>!key1</font></tt>, <tt><font size=+1>!key2</font></tt>, or <tt><font size=+1>!key3</font></tt> attributes. The protocol with <i>factotum</i>
+    is: the client writes a device name that must begin with <tt><font size=+1>#l</font></tt>. In
+    response, <i>factotum</i> opens the device&#8217;s control file, sets the wireless
+    secret using the key, and
+    turns on encryption. If the key has an <tt><font size=+1>essid</font></tt> attribute, <i>factotum</i>
+    uses it to set the wireless station ID. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Rsa</i> is an implementation of the RSA protocol. Valid roles are
+    <tt><font size=+1>decrypt</font></tt>, <tt><font size=+1>encrypt</font></tt>, <tt><font size=+1>sign</font></tt>, and <tt><font size=+1>verify</font></tt>. <i>Rsa</i> uses <tt><font size=+1>proto=rsa</font></tt> keys with
+    <tt><font size=+1>ek</font></tt> and <tt><font size=+1>n</font></tt> attributes, large integers specifying the public half
+    of the key. If a key is to be used for decryption or signing,
+    then it must also have attributes <tt><font size=+1>!p</font></tt>, <tt><font size=+1>!q</font></tt>, <tt><font size=+1>!kp</font></tt>, <tt><font size=+1>!kq</font></tt>, <tt><font size=+1>!c2</font></tt>, and <tt><font size=+1>!dk</font></tt>
+    specifying the private half of the
+    key; see <a href="../man3/rsa.html"><i>rsa</i>(3)</a>. Conventionally, <i>rsa</i> keys also have <tt><font size=+1>service</font></tt> attributes
+    specifying the context in which the key is used: <tt><font size=+1>ssh</font></tt> (SSH version
+    1), <tt><font size=+1>ssh&#8722;rsa</font></tt> (SSH version 2), or <tt><font size=+1>tls</font></tt> (SSL and TLS). If an SSH key
+    has a <tt><font size=+1>comment</font></tt> attribute, that comment is presented to remote SSH
+    servers during key negotiation. The protocol for encryption (decryption)
+    is:
+    write the message, then read back the encrypted (decrypted) form.
+    The protocol for signing is: write a hash of the actual message,
+    then read back the signature. The protocol for verifying a signature
+    is: write the message hash, write the purported signature, then
+    read back <tt><font size=+1>ok</font></tt> or <tt><font size=+1>bad</font></tt> telling whether the signature could be verified.
+    The hash defaults to
+    SHA1 but can be specified by a <tt><font size=+1>hash</font></tt> attribute on the key. Valid
+    hash functions are <tt><font size=+1>md5</font></tt> and <tt><font size=+1>sha1</font></tt>. The hash function must be known
+    to <i>factotum</i> because the signature encodes the type of hash used.
+    The <tt><font size=+1>encrypt</font></tt> and <tt><font size=+1>verify</font></tt> operations are included as a convenience;
+    <i>factotum</i> is not using any private information to perform them.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Dsa</i> is an implementation of the NIST digital signature algorithm.
+    Valid roles are <tt><font size=+1>sign</font></tt> and <tt><font size=+1>verify</font></tt>. It uses <tt><font size=+1>proto=dsa</font></tt> keys with <tt><font size=+1>p</font></tt>,
+    <tt><font size=+1>q</font></tt>, <tt><font size=+1>alpha</font></tt>, and <tt><font size=+1>key</font></tt> attributes. If the key is to be used for signing,
+    it must also have a <tt><font size=+1>!secret</font></tt> attribute; see <a href="../man3/dsa.html"><i>dsa</i>(3)</a>. Conventionally,
+    <i>dsa</i> keys also have <tt><font size=+1>service</font></tt> attributes specifying the context in
+    which the key is
+    used: <tt><font size=+1>ssh&#8722;dss</font></tt> (SSH version 2) is the only one. If an SSH key has
+    a <tt><font size=+1>comment</font></tt> attribute, that comment is presented to SSH servers
+    during key negotiation. The protocol for signing and verifying
+    is the same as the RSA protocol. Unlike <i>rsa</i>, the <i>dsa</i> protocol
+    ignores the <tt><font size=+1>hash</font></tt> attribute; it always uses SHA1. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Httpdigest</i> is a client-only MD5-based challenge-response protocol
+    used in HTTP; see RFC 2617. It uses <tt><font size=+1>proto=httpdigest</font></tt> keys with
+    <tt><font size=+1>user</font></tt>, <tt><font size=+1>realm</font></tt>, and <tt><font size=+1>!password</font></tt> attributes. The protocol with factotum
+    is textual: write the challenge, read the response. The challenge
+    is a string with three space-separated fields <i>nonce</i>, <i>method</i>, and
+    <i>uri</i>, parseable
+    with <i>tokenize</i>. The response is a hexadecimal string of length
+    32.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/auth/factotum">/usr/local/plan9/src/cmd/auth/factotum</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/ssh-agent.html"><i>ssh-agent</i>(1)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

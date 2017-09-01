@@ -1,0 +1,98 @@
+<head>
+<title>drawfcall(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>DRAWFCALL(3)</b><td align=right><b>DRAWFCALL(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    convM2W, convW2M, drawfcallfmt, readwsysmsg, sizeW2M &ndash; window system
+    protocol<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt;<br>
+    #include &lt;draw.h&gt;<br>
+    #include &lt;mouse.h&gt;<br>
+    #include &lt;cursor.h&gt;<br>
+    #include &lt;drawfcall.h&gt;<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint convM2W(uchar *ap, uint nap, Wsysmsg *w)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint convW2M(Wsysmsg *w, uchar *ap, uint nap)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;drawfcallfmt(Fmt*)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int &nbsp;&nbsp;&nbsp;readwsysmsg(int fd, uchar *buf, uint nbuf)<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>uint sizeW2M(Wsysmsg *w)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines are analogues of the routines described in <a href="../man3/fcall.html"><i>fcall</i>(3)</a>.
+    They manipulate graphics device protocol messages rather than
+    9P protocol messages. The graphics device protocol is used for
+    internal communication between the <a href="../man1/devdraw.html"><i>devdraw</i>(1)</a> graphics server
+    and the <a href="../man3/draw.html"><i>draw</i>(3)</a> library. A <tt><font size=+1>Wsysmsg</font></tt> is the C structure corresponding
+    to a protocol message.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The protocol is intentionally undocumented and may change.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/libdraw/drawfcall.c">/usr/local/plan9/src/libdraw/drawfcall.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO    </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/devdraw.html"><i>devdraw</i>(1)</a>, <a href="../man3/draw.html"><i>draw</i>(3)</a>, <a href="../man3/graphics.html"><i>graphics</i>(3)</a><br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

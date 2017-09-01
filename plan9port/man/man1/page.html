@@ -1,0 +1,287 @@
+<head>
+<title>page(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>PAGE(1)</b><td align=right><b>PAGE(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    page &ndash; view FAX, image, graphic, PostScript, PDF, and typesetter
+    output files<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>page</font></tt> [ <tt><font size=+1>&#8722;abirPRvVw</font></tt> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>ppi</i> ] [ <i>file</i>... ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Page</i> is a general purpose document viewer. It can be used to display
+    the individual pages of a PostScript, PDF, or <a href="../man1/troff.html"><i>troff</i>(1)</a> or Unix&#8217;s
+    <i>tex</i>(1) device-independent output file. <i>Troff</i> or <i>tex</i> output is
+    simply converted to PostScript in order to be viewed. It can also
+    be used to view any number of graphics files (such as a FAX page,
+    a Plan 9 <a href="../man7/image.html"><i>image</i>(7)</a> file, an
+    Inferno bitmap file, or other common format). <i>Page</i> displays these
+    in sequence. In the absence of named files, <i>page</i> reads one from
+    standard input. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>page</i> runs in the window in which it is started and
+    leaves the window unchanged. The <tt><font size=+1>&#8722;R</font></tt> option causes <i>page</i> to grow
+    the window if necessary to display the page being viewed. The
+    <tt><font size=+1>&#8722;w</font></tt> option causes <i>page</i> to create a new window for itself. The newly
+    created window will grow as under the <tt><font size=+1>&#8722;R</font></tt> option. If being used
+    to display multipage
+    documents, only one file may be specified on the command line.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;p</font></tt> option sets the resolution for PostScript and PDF files,
+    in pixels per inch. The default is 100 ppi. The <tt><font size=+1>&#8722;r</font></tt> option reverses
+    the order in which pages are displayed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When viewing a document, <i>page</i> will try to guess the true bounding
+    box, usually rounding up from the file&#8217;s bounding box to 8&frac12;x11 or
+    A4 size. The <tt><font size=+1>&#8722;b</font></tt> option causes it to respect the bounding box given
+    in the file. As a more general problem, some PostScript files
+    claim to conform to Adobe&#8217;s Document Structuring Conventions but
+    do not. The <tt><font size=+1>&#8722;P</font></tt> option
+    enables a slightly slower and slightly more skeptical version
+    of the PostScript processing code. Unfortunately, there are PostScript
+    documents that can only be viewed with the <tt><font size=+1>&#8722;P</font></tt> option, and there
+    are PostScript documents that can only be viewed without it. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When viewing images with <i>page</i>, it listens to the <tt><font size=+1>image</font></tt> plumbing
+    channel (see <a href="../man4/plumber.html"><i>plumber</i>(4)</a>) for more images to display. The <tt><font size=+1>&#8722;i</font></tt> option
+    causes <i>page</i> to not load any graphics files nor to read from standard
+    input but rather to listen for ones to load from the plumbing
+    channel. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;v</font></tt> option turns on extra debugging output, and the <tt><font size=+1>&#8722;V</font></tt> option
+    turns on even more debugging output. The <tt><font size=+1>&#8722;a</font></tt> option causes <i>page</i>
+    to call Unix&#8217;s <i>abort</i>(3) rather than exit cleanly on errors, to
+    facilitate debugging. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Pressing and holding button 1 permits panning about the page.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Button 2 raises a menu of operations on the current image or the
+    entire set. The image transformations are non-destructive and
+    are valid only for the currently displayed image. They are lost
+    as soon as another image is displayed. The button 2 menu operations
+    are:<br>
+    <tt><font size=+1>Orig size<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Restores the image to the original. All modifications are lost.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>Zoom</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Prompts the user to sweep a rectangle on the image which is
+    expanded proportionally to the rectangle.<br>
+    <tt><font size=+1>Fit window<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Resizes the image so that it fits in the current window.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>Rotate 90<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Rotates the image 90 degrees clockwise<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>Upside down<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Toggles whether images are displayed upside-down.<br>
+            
+        </table>
+        
+    </table>
+    <tt><font size=+1>Next</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Displays the next page.<br>
+    <tt><font size=+1>Prev</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Displays the previous page.<br>
+    <tt><font size=+1>Zerox</font></tt>&nbsp;&nbsp;&nbsp;Displays the current image in a new page window. Useful for
+    selecting important pages from large documents.<br>
+    <tt><font size=+1>Reverse</font></tt>Reverses the order in which pages are displayed.<br>
+    <tt><font size=+1>Write</font></tt>&nbsp;&nbsp;&nbsp;Writes the image to file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Button 3 raises a menu of the pages to be selected for viewing
+    in any order. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Typing a <tt><font size=+1>q</font></tt> or control-D exits the program. Typing a <tt><font size=+1>u</font></tt> toggles
+    whether images are displayed upside-down. (This is useful in the
+    common case of mistransmitted upside-down faxes). Typing a <tt><font size=+1>r</font></tt> reverses
+    the order in which pages are displayed. Typing a <tt><font size=+1>w</font></tt> will write
+    the currently viewed page to a new file as a compressed <a href="../man7/image.html"><i>image</i>(7)</a>
+    file. When possible,
+    the filename is of the form <i>basename</i>.<i>pagenum</i>.<i>bit</i>. Typing a <tt><font size=+1>d</font></tt> removes
+    an image from the working set. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    To go to a specific page, one can type its number followed by
+    enter. Typing left arrow, backspace, or minus displays the previous
+    page. Typing right arrow, space, or enter displays the next page.
+    The up and down arrow pan up and down one half screen height,
+    changing pages when panning off the top or bottom of the page.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Page</i> calls Unix&#8217;s <i>gs</i>(1) to draw each page of PostScript and PDF
+    <i>files</i>. It also calls a variety of conversion programs, such as
+    those described in <a href="../man1/jpg.html"><i>jpg</i>(1)</a>, to convert the various raster graphics
+    formats into Inferno bitmap files. Pages are converted &#8220;on the
+    fly,&#8221; as needed.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>page /sys/src/cmd/gs/examples/tiger.eps<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Display a color PostScript file.<br>
+        
+    </table>
+    <tt><font size=+1>page /usr/inferno/icons/*.bit<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Browse the Inferno bitmap library.<br>
+        
+    </table>
+    <tt><font size=+1>man &#8722;t page | page &#8722;w<br>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Preview this manual in a new window.<br>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>gs</i>(1), <a href="../man1/jpg.html"><i>jpg</i>(1)</a>, <a href="../man1/proof.html"><i>proof</i>(1)</a>, <i>tex</i>(1), <a href="../man1/troff.html"><i>troff</i>(1)</a><br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/page">/usr/local/plan9/src/cmd/page</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    The mouse cursor changes to an arrow and ellipsis when <i>page</i> is
+    reading or writing a file.<br>
+    
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Page</i> supports reading of only one document file at a time, and
+    the user interface is clumsy when viewing very large documents.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    When viewing multipage PostScript files that do not contain &#8220;<tt><font size=+1>%%Page</font></tt>&#8221;
+    comments, the button 3 menu only contains &#8220;this page&#8221; and &#8220;next
+    page&#8221;: correctly determining page boundaries in Postscript code
+    is not computable in the general case. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If <i>page</i> has trouble viewing a Postscript file, it might not be
+    exactly conforming: try viewing it with the <tt><font size=+1>&#8722;P</font></tt> option. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The interface to the plumber is unsatisfactory. In particular,
+    document references cannot be sent via plumbing messages. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    There are too many keyboard commands and menu items. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Displaying a PostScript or PDF file depends both on having GhostScript
+    (see <i>gs</i>(1)) installed and on the underlying operating system providing
+    a file descriptor device tree at <tt><font size=+1>/dev/fd</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Some FreeBSD installations do not provide file descriptors greater
+    than 2 in <tt><font size=+1>/dev/fd</font></tt>. To fix this, add<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>/fdescfs &nbsp;&nbsp;&nbsp;&nbsp;/dev/fd &nbsp;&nbsp;&nbsp;&nbsp;fdescfs &nbsp;&nbsp;&nbsp;&nbsp;rw &nbsp;&nbsp;&nbsp;&nbsp;0 &nbsp;&nbsp;&nbsp;&nbsp;0<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    to <tt><font size=+1>/etc/fstab</font></tt>, and then <tt><font size=+1>mount /dev/fd</font></tt>. (Adding the line to <tt><font size=+1>fstab</font></tt>
+    ensures causes FreeBSD to mount the file system automatically
+    at boot time.)<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

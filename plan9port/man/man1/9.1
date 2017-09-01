@@ -1,0 +1,142 @@
+.TH 9 1
+.SH NAME
+9, 9.rc, u, u.rc \- run Plan 9 or Unix commands
+.SH SYNOPSIS
+.B 9
+.I cmd
+[
+.I args
+\&...
+]
+.PP
+.B .
+.B 9
+(from
+.IR sh (1))
+.PP
+.B 9.rc
+.I cmd
+[
+.I args
+\&...
+]
+.PP
+.B .
+.B 9.rc
+(from
+.IR rc (1))
+.PP
+.B u
+.I cmd
+[
+.I args
+\&...
+]
+.PP
+.B .
+.B u
+(from
+.IR sh (1))
+.PP
+.B u.rc
+.I cmd
+[
+.I args
+\&...
+]
+.PP
+.B .
+.B u.rc
+(from
+.IR rc (1))
+.SH DESCRIPTION
+Because Plan 9 supplies commands with the same name as but different
+behavior than many basic Unix system commands
+(e.g.,
+.BR grep ,
+.BR sed ,
+.BR mkdir ,
+.BR rm ),
+it is not recommended to run with the Plan 9 bin directory
+ahead of the system directories.
+.PP
+.I 9
+is a shell script that sets up a Plan 9 environment and runs
+.I cmd .
+It sets
+.B $PLAN9
+if necessary
+and adds
+.B $PLAN9/bin
+to the beginning of
+.B $PATH
+before running
+.IR cmd .
+.PP
+If run with no arguments,
+.B 9
+does not do anything, so it can be invoked from
+.IR sh -style
+shells using
+.B .
+.B 9
+in order to make the current shell start running in the Plan 9 environment.
+.PP
+.I 9.rc
+is the same as
+.I 9
+but written for use by the shell
+.IR rc (1).
+.PP
+.I U
+and
+.I u.rc
+are the inverse of
+.I 9
+and
+.IR 9.rc :
+they move
+.B $PLAN9/bin
+to the end of the path.
+.SH EXAMPLES
+Search for greek in the password file:
+.IP
+.EX
+$ 9 grep '[α-ζ]' /etc/passwd
+.EE
+.PP
+Start an
+.IR rc (1)
+with the Plan 9 commands in the path before the system commands,
+and then run the Unix
+.IR ls :
+.IP
+.EX
+$ 9 rc
+% u ls
+.EE
+.SH SOURCE
+.B \*9/bin/9
+.br
+.B \*9/bin/9.rc
+.br
+.B \*9/bin/u
+.br
+.B \*9/bin/u.rc
+.SH SEE ALSO
+.IR intro (1)
+.SH BUGS
+Some shell configurations
+(notably, oh-my-zsh)
+define
+.B 9
+as an alias for
+.B cd
+.BR \-9 ,
+which makes the
+.I 9
+command described here inaccessible.
+In such shells, it is necessary to
+.B unalias
+.B 9
+in your initialization scripts.

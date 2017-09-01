@@ -1,0 +1,317 @@
+<head>
+<title>vbackup(8) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>VBACKUP(8)</b><td align=right><b>VBACKUP(8)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    vbackup, vcat, vftp, vmount, vnfs &ndash; back up Unix file systems to
+    Venti<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>vbackup</font></tt> [ <tt><font size=+1>&#8722;DVinv</font></tt> ] [ <tt><font size=+1>&#8722;M</font></tt> <i>mtpt</i> ] [ <tt><font size=+1>&#8722;m</font></tt> <i>host</i> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>secs</i> ] [ <tt><font size=+1>&#8722;w</font></tt> <i>n</i>
+    ] <i>disk</i> [ <i>score</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>vcat</font></tt> [ <tt><font size=+1>&#8722;z</font></tt> ] <i>disk</i> | <i>score </i><tt><font size=+1>&gt;</font></tt> <i>disk 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>vftp</font></tt> <i>score</i> | <i>disk 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>vmount</font></tt> [ <tt><font size=+1>&#8722;v</font></tt> ] <i>addr mtpt 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>vnfs</font></tt> [ <tt><font size=+1>&#8722;ELLRVir</font></tt> ] [ <tt><font size=+1>&#8722;a</font></tt> <i>addr</i> ] [ <tt><font size=+1>&#8722;b</font></tt> <i>blocksize</i> ] [ <tt><font size=+1>&#8722;c</font></tt> <i>cachesize</i>
+    ] <i>config<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These programs back up and restore standard Unix file system images
+    stored in <a href="../man8/venti.html"><i>venti</i>(8)</a>. Images stored in <i>venti</i> are named by <i>scores</i>,
+    which consist of a file system type followed by a colon and forty
+    hexadecimal digits, as in:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>ffs:0123456789abcdef0123456789abcdef01234567<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    (The hexadecimal data is the SHA1 hash of the Venti root block
+    representing the file system image.) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    These programs expect the environment variable <tt><font size=+1>$venti</font></tt> to be set
+    to the network address of the Venti server to use (for example,
+    <tt><font size=+1>yourhost</font></tt> or <tt><font size=+1>tcp!yourhost!venti</font></tt>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vbackup</i> copies the file system stored on <i>disk</i> to the Venti server
+    and prints the score for the newly-stored image. The argument
+    <i>disk</i> should be a disk or disk partition device that would be appropriate
+    to pass to <i>mount</i>(8). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The optional argument <i>score</i> is the score of a previous backup
+    of the disk image. If <i>score</i> is given, <i>vbackup</i> will not write to
+    Venti any blocks that have not changed since the previous backup.
+    This is only a speed optimization: since the blocks are already
+    stored on Venti they need not be sent to the Venti server again.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The options to <i>vbackup</i> are:<br>
+    <tt><font size=+1>&#8722;D</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Turn on debugging output.<br>
+    <tt><font size=+1>&#8722;V</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Trace interactions with Venti server.<br>
+    <tt><font size=+1>&#8722;m</font></tt> <i>host<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>&#8722;M</font></tt> <i>mtpt</i> Set names used to construct the path in the <tt><font size=+1>mount command.</font></tt>
+        The default <i>host</i> is the name returned by <i>sysname</i> (see <a href="../man3/getuser.html"><i>getuser</i>(3)</a>).
+        The default <i>mtpt</i> is the place where <i>disk</i> is currently mounted.<br>
+        
+    </table>
+    Set backup mount point:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        this name is also used in the printed <tt><font size=+1>mount</font></tt> command. The default
+        is the name returned by <i>sysname</i> (see <a href="../man3/getuser.html"><i>getuser</i>(3)</a>).<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;n</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;No-op mode: do not write any blocks to the server<br>
+    <tt><font size=+1>&#8722;i</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Read scores incrementally from the previous backup as needed,
+    rather than prefetching them.<br>
+    <tt><font size=+1>&#8722;v</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Print verbose output.<br>
+    <tt><font size=+1>&#8722;w</font></tt> <i>n</i>&nbsp;&nbsp;&nbsp;Write parallelism: keep <i>n</i> writes to the server in progress
+    at a time.<br>
+    <tt><font size=+1>&#8722;s</font></tt> <i>secs<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Status interval: every <i>secs</i> seconds, print a line tracking progress
+        of the backup. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    When <i>vbackup</i> finishes, it prints a single line of the form<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>mount /</font></tt><i>host</i><tt><font size=+1>/</font></tt><i>yyyy</i><tt><font size=+1>/</font></tt><i>mmdd</i><tt><font size=+1>/</font></tt><i>mtpt score yyyy</i><tt><font size=+1>/</font></tt><i>mmdd</i><tt><font size=+1>/</font></tt><i>hhmm<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </i>
+        
+    </table>
+    This line is a valid configuration line for <i>vnfs</i> (<i>q.v.</i>). <i>Mntpath</i>
+    is the path on which <i>disk</i> is currently mounted. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vcat</i> writes the named disk image to standard output. Unused file
+    system blocks are printed zeroed regardless of their actual content.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>vcat</i> will assume that its standard output is seekable
+    (<i>i.e.,</i> it has been redirected to a file or disk) and seek over
+    unused blocks instead of writing to them. The <tt><font size=+1>&#8722;z</font></tt> option causes
+    <i>vcat</i> to zero unused blocks instead. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vftp</i> presents an <a href="../man1/ftp.html"><i>ftp</i>(1)</a>-like interface to a physical or backed-up
+    disk image. It is used mainly for debugging. Type <tt><font size=+1>help</font></tt> at the
+    <tt><font size=+1>vftp&gt;</font></tt> prompt for a list of commands. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vmount</i> mounts the NFS service at the network connection <i>address</i>
+    onto <i>mountpoint</i>. On most operating systems, <i>vmount</i> must be run
+    by the user <tt><font size=+1>root</font></tt>. Because <i>address</i> is passed to the host OS kernel
+    rather than interpreted by <a href="../man3/dial.html"><i>dial</i>(3)</a>, it must be only an IP address,
+    not a full dial address. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vnfs</i> serves, using the NFS version 3 protocol, one or more disk
+    images in a synthetic tree defined by the configuration file <i>config</i>.
+    <i>Vnfs</i> serves both NFS mount protocol and NFS protocol RPCs at <i>addr</i>
+    (default <tt><font size=+1>udp!*!nfs</font></tt>). The options are:<br>
+    <tt><font size=+1>&#8722;E</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Disable &#8216;encrypted&#8217; handles. By default handles are encrypted
+    with a random key to avoid leaking information about the backed-up
+    file systems. If encryption is disabled, the NFS handles exposed
+    to the client may leak information about the root scores of the
+    disks as well as inode numbers.<br>
+    <tt><font size=+1>&#8722;L</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Local service only: serve only requests from the loopback interface
+    (127.0.0.1).<br>
+    <tt><font size=+1>&#8722;LL</font></tt>&nbsp;&nbsp;&nbsp;Local service only, with paranoia: serve only requests from
+    loopback, and only from the first source port that sends a request.
+    This option is intended to be used to make sure that once the
+    local host has mounted the service, no other local users can access
+    it.<br>
+    <tt><font size=+1>&#8722;R</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Print all NFS and NFS mount RPCs to standard error.<br>
+    <tt><font size=+1>&#8722;V</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Print all Venti transactions to standard error.<br>
+    <tt><font size=+1>&#8722;a</font></tt> <i>addr<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Serve requests on <i>addr</i> (see above).<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;b</font></tt> <i>blocksize<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Set block size used by the in-memory venti block cache. Must be
+        as large as the maximum block size in any file system mentioned
+        in the configuration.<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;c</font></tt> <i>cachesize<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Set the number of blocks stored by the in-memory venti cache.<br>
+        
+    </table>
+    <tt><font size=+1>&#8722;i</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Run in &#8220;insecure&#8221; mode, allowing remote root users to use uid
+    and gid 0 and read any file. (Normally, remote root is mapped
+    to uid and gid &ndash;1 and has no special permissions.)<br>
+    <tt><font size=+1>&#8722;r</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Respond to all requests with a Sun RPC rejection. This is useful
+    during debugging. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Config</i> is a text file describing the backup hierarchy for <i>vnfs</i>
+    to serve. Lines beginning with a sharp (<tt><font size=+1>#</font></tt>) are ignored. The rest
+    of the file is a sequence of commands, one per line. The commands
+    are:<br>
+    <tt><font size=+1>mount</font></tt> <i>mtpt score time<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Add the file system with the given <i>score</i> to the tree at the mount
+        point <i>mtpt</i>. The path to the mount point will be created if necessary.
+        If <tt><font size=+1>/dev/null</font></tt> is given as the score, an empty file system is mounted
+        at <i>mtpt</i>, excluding <i>mtpt</i>&#8217;s contents from view. <i>Time</i> is the modification
+        time to return for the directory <i>mtpt</i>, either a decimal number
+        of seconds
+        since the epoch or a string of the form <i>yyyy</i><tt><font size=+1>/</font></tt><i>mmdd</i><tt><font size=+1>/</font></tt><i>hhmm</i> giving
+        the year, month, day, hour, and minute. (<i>Vnfs</i> does not use the
+        modification time of the root in order to avoid accessing every
+        mounted file system on common actions like <tt><font size=+1>ls &#8722;l /dump/sys/2005</font></tt>.)<br>
+        
+    </table>
+    <tt><font size=+1>allow</font></tt> <i>ip</i>[<tt><font size=+1>/</font></tt><i>mask</i>]<br>
+    <tt><font size=+1>deny</font></tt> <i>ip</i>[<tt><font size=+1>/</font></tt><i>mask</i>]<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        These two commands define access permissions based on IP address.
+        The optional <i>mask</i> can be a decimal number (24) or an equivalent
+        IP mask (255.255.255.0). Each request is filtered through the
+        rules listed in the configuration file. The first rule that matches
+        is used. If any <tt><font size=+1>allow</font></tt> or <tt><font size=+1>deny</font></tt> rules are given, the default action
+        is to reject the
+        request. In the absence of any rules, the default action is to
+        accept all requests. 
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    Reading the special file <tt><font size=+1>/dump/+refreshconfig</font></tt> causes <i>vnfs</i> to reload
+    <i>config</i>. The read returns either the string <tt><font size=+1>ok</font></tt> or an error message.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Running on the server <i>bob</i>, back up the file system stored on <tt><font size=+1>/dev/da0s1a</font></tt>,
+    which is mounted on <tt><font size=+1>/home</font></tt>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>% vbackup /dev/da0s1a<br>
+        mount /bob/2005/0510/home ffs:0123456789abcdef</font></tt><i>...</i> <tt><font size=+1>2005/0510/0831<br>
+        % <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Serve that backup and a few others in a tree reminiscent of Plan
+    9&#8217;s dump file system, but hide each day&#8217;s contents of <tt><font size=+1>/tmp :<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        % cat config<br>
+        mount /bob/2005/0510 ffs:0123456789abcdef
+    </table>
+    </font></tt>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <i>...</i> <tt><font size=+1>2005/0510/0829<br>
+        mount /bob/2005/0510/home ffs:0123456789abcdef</font></tt><i>...</i> <tt><font size=+1>2005/0510/0831<br>
+        mount /bob/2005/0510/tmp /dev/null 1<br>
+        mount /bob/2005/0511 ffs:0123456789abcdef</font></tt><i>...</i> <tt><font size=+1>2005/0511/0827<br>
+        mount /bob/2005/0511/home ffs:0123456789abcdef</font></tt><i>...</i> <tt><font size=+1>2005/0511/0828<br>
+        mount /bob/2005/0511/tmp /dev/null 1<br>
+        % vnfs &#8722;b 16k &#8722;c 1k config<br>
+        % <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Mount the backups on a client machine using <i>vmount</i>:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1># vmount udp!yourserver!nfs /dump<br>
+        # ls /dump/bob/2005<br>
+        0510<br>
+        0511<br>
+        # <br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    (Users of fancy shells may need to quote the address argument.)<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

@@ -1,0 +1,78 @@
+<head>
+<title>searchpath(3) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>SEARCHPATH(3)</b><td align=right><b>SEARCHPATH(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    search &ndash; search for named executable<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;u.h&gt;<br>
+    #include &lt;libc.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char* searchpath(char *name)<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Searchpath</i> searches for the executable <i>name</i> in the same way that
+    <i>sh</i>(1) and <a href="../man1/rc.html"><i>rc</i>(1)</a> do. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The environment variable <tt><font size=+1>$PATH</font></tt> is treated as a colon-separated
+    list of directories in which to look for <i>name</i>. An empty string
+    in the list is treated as the current directory. If an executable
+    named <i>name</i> is found in one of the directories, <i>searchpath</i> returns
+    a pointer to a malloced string containing a path (<tt><font size=+1>dir</font></tt><i>/</i><tt><font size=+1>name</font></tt>, or
+    simply <i>name</i>) suitable for use in
+    <a href="../man3/open.html"><i>open</i>(3)</a> or <a href="../man3/exec.html"><i>exec</i>(3)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If <i>name</i> begins with <tt><font size=+1>./ , ../ ,</font></tt> or <tt><font size=+1>/ ,</font></tt> then the search path is
+    ignored. If <i>name</i> exists and is an executable, then <i>searchpath</i>
+    returns a malloced string containing name. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The returned buffer should be freed when no longer needed. If
+    <i>name</i> is not found, <i>searchpath</i> returns nil. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/lib9/searchpath.c">/usr/local/plan9/src/lib9/searchpath.c</a><br>
+    </font></tt>
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

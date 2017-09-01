@@ -1,0 +1,634 @@
+<head>
+<title>fossilcons(8) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>FOSSILCONS(8)</b><td align=right><b>FOSSILCONS(8)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    fossilcons &ndash; fossil console commands<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>con /srv/fscons 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>.</font></tt> <i>file 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>9p</font></tt> <i>T-message 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>bind</font></tt> [ <tt><font size=+1>&#8722;b|&#8722;a|&#8722;c|&#8722;bc|&#8722;ac</font></tt> ] <i>new old 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>dflag 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>echo</font></tt> [ <tt><font size=+1>&#8722;n</font></tt> ] [ <i>arg</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>listen</font></tt> [ <tt><font size=+1>&#8722;INd</font></tt> ] [ <i>address</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>msg</font></tt> [ <tt><font size=+1>&#8722;m</font></tt> <i>nmsg</i> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>nproc</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>printconfig 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>srv</font></tt> [ <tt><font size=+1>&#8722;APWdp</font></tt> ] <i>name 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>uname</font></tt> <i>name</i> [ <i>id</i> | <tt><font size=+1>:</font></tt><i>id</i> | <tt><font size=+1>%</font></tt><i>newname</i> | <tt><font size=+1>=</font></tt><i>leader</i> | <tt><font size=+1>+</font></tt><i>member</i> | <tt><font size=+1>&#8722;</font></tt><i>member</i>
+    ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>users</font></tt> [ <tt><font size=+1>&#8722;d</font></tt> | <tt><font size=+1>&#8722;r</font></tt> <i>file</i> ] [ <tt><font size=+1>&#8722;w</font></tt> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>who<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>fsys</font></tt> <i>name 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    <tt><font size=+1>fsys</font></tt> <i>name</i> <tt><font size=+1>config</font></tt> [ <i>device</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>fsys</font></tt> <i>name</i> <tt><font size=+1>venti</font></tt> [ <i>host</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>fsys</font></tt> <i>name</i> <tt><font size=+1>open</font></tt> [ <tt><font size=+1>&#8722;APVWar</font></tt> ] [ <tt><font size=+1>&#8722;c</font></tt> <i>ncache</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>close 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>fsys</font></tt> <i>name</i> <tt><font size=+1>unconfig<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>bfree</font></tt> <i>addr 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>block</font></tt> <i>addr offset</i> [ <i>count</i> [ <i>data</i> ]] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>check</font></tt> [ <tt><font size=+1>pblock</font></tt> ] [ <tt><font size=+1>pdir</font></tt> ] [ <tt><font size=+1>pfile</font></tt> ] [ <tt><font size=+1>bclose</font></tt> ] [
+    <tt><font size=+1>clri</font></tt> ] [ <tt><font size=+1>clre</font></tt> ] [ <tt><font size=+1>clrp</font></tt> ] [ <tt><font size=+1>fix</font></tt> ] [ <tt><font size=+1>venti</font></tt> ] [ <tt><font size=+1>snapshot</font></tt> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>clre</font></tt> <i>addr offsets</i> ... 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>clri</font></tt> <i>files</i> ... 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>clrp</font></tt> <i>addr offset</i> ... 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>create</font></tt> <i>path uid gid perm 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>df 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>epoch</font></tt> [[ <tt><font size=+1>&#8722;ry</font></tt> ] <i>n</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>halt 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>label</font></tt> <i>addr</i> [ <i>type state epoch epochclose tag</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>remove</font></tt> <i>files</i> ... 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>snap</font></tt> [ <tt><font size=+1>&#8722;a</font></tt> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>src</i> ] [ <tt><font size=+1>&#8722;d</font></tt> <i>dst</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>snapclean</font></tt> [ <i>timeout</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>snaptime</font></tt> [ <tt><font size=+1>&#8722;a</font></tt> <i>hhmm</i> ] [ <tt><font size=+1>&#8722;s</font></tt> <i>interval</i> ] [ <tt><font size=+1>&#8722;t</font></tt> <i>timeout</i>
+    ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>stat</font></tt> <i>files</i>... 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>sync 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>unhalt 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>vac</font></tt> <i>dir 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    [ <tt><font size=+1>fsys</font></tt> <i>name</i> ] <tt><font size=+1>wstat</font></tt> <i>file elem uid gid perm length<br>
+    </i>
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These are configuration and maintenance commands executed at the
+    console of a <a href="../man4/fossil.html"><i>fossil</i>(4)</a> file server. The commands are split into
+    three groups above: file server configuration, file system configuration,
+    and file system maintenance. This manual page is split in the
+    same way.<br>
+    <p><font size=+1><b>File server configuration   </b></font><br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The dot (<i>.</i>) command reads <i>file</i>, treating each line as a command
+    to be executed. Blank lines and lines beginning with a <tt><font size=+1>#</font></tt> character
+    are ignored. Errors during execution are printed but do not stop
+    the script. Note that <i>file</i> is a file in the name space in which
+    <i>fossil</i> was started, <i>not</i> a file in any file system served by <i>fossil</i>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>9p</i> executes a 9P transaction; the arguments are in the same format
+    used by <a href="../man8/9pcon.html"><i>9pcon</i>(8)</a>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Bind</i> behaves similarly to <a href="../man1/bind.html"><i>bind</i>(1)</a>. It is useful when fossil is
+    started without devices it needs configured into its namespace.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Dflag</i> toggles the debug flag and prints the new setting. When
+    the debug flag is set, all protocol messages and information about
+    authentication is printed to standard error. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Echo</i> behaves identically to <a href="../man1/echo.html"><i>echo</i>(1)</a>, writing to the console. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Listen</i> manages the network addresses at which fossil is listening.
+    With no arguments, <i>listen</i> prints the current list of addresses
+    and their network directories. With one argument, listen <i>address</i>
+    starts a new listener at <i>address</i>; the <tt><font size=+1>&#8722;d</font></tt> flag causes <i>listen</i> to
+    remove the listener at the given address. By default, the user
+    <i>none</i> is only allowed to attach on a
+    connection after at least one other user has successfully attached.
+    The <tt><font size=+1>&#8722;N</font></tt> flag allows connections from <i>none</i> at any time. The <tt><font size=+1>&#8722;I</font></tt> flag
+    causes <i>fossil</i> to check the IP address of incoming connections
+    against <tt><font size=+1>/mnt/ipok</font></tt>, rejecting attaches from disallowed addresses.
+    This mechanism is not intended for general use. The server <i>sources.cs.bell-labs.com
+    </i>uses it to comply with U.S. crytography export regulations. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Msg</i> prints the maximum internal 9P message queue size and the
+    maximum number of 9P processes to allocate for serving the queue.
+    The <tt><font size=+1>&#8722;m</font></tt> and <tt><font size=+1>&#8722;p</font></tt> options set the two variables. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Printconfig</i> prints the <tt><font size=+1>config</font></tt> line for each configured file system
+    and prints the <tt><font size=+1>venti</font></tt> line, if any, used to configure this file
+    server. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Srv</i> behaves like listen but uses <tt><font size=+1>/srv/</font></tt><i>name</i> rather than a network
+    address. With the <tt><font size=+1>&#8722;p</font></tt> flag, <i>srv</i> edits a list of console services
+    rather than 9P services. With no arguments, <i>srv</i> prints the current
+    list of services. With one argument, srv <i>name</i> starts a new service
+    at <i>/srv/name</i>; the <tt><font size=+1>&#8722;d</font></tt> flag causes <i>srv</i> to remove the named service.
+    See the <i>[fsys] open
+    </i>command below for a description of the <tt><font size=+1>&#8722;APW</font></tt> options. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Uname</i> manipulates entries in the user table. There is no distinction
+    between users and groups: a user is a group with one member. For
+    each user, the user table records:<br>
+    <i>id</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the string used to represent this user in the on-disk structures<br>
+    <i>name</i>&nbsp;&nbsp;&nbsp;&nbsp;the string used to represent this user in the 9P protocol<br>
+    <i>leader</i>&nbsp;&nbsp;&nbsp;the group&#8217;s leader (see Plan 9&#8217;s <a href="../man5/stat.html"><i>stat</i>(5)</a> for a description
+    of the special privileges held by a group leader)<br>
+    <i>members</i>a comma-separated list of members in this group 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>id</i> and <i>name</i> are usually the same string, but need not be.
+    Once an <i>id</i> is used in file system structures archived to Venti,
+    it is impossible to change those disk structures, and thus impossible
+    to rename the <i>id</i>. The translation from <i>name</i> to <i>id</i> allows the appearance
+    of renaming the user even though the on-disk structures still
+    record the old name. (In a
+    conventional Unix file system, the <i>id</i> is stored as a small integer
+    rather than a string.) <i>Leader</i> and <i>members</i> are names, not ids.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The first argument to <i>uname</i> is the <i>name</i> of a user. The second
+    argument is a verb, one of:<br>
+    <i>id</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create a user with name &#8216;<i>name</i>&#8217; and id &#8216;<i>id</i>;&#8217; also create a home
+    directory <tt><font size=+1>/active/usr/</font></tt><i>uname<br>
+    </i><tt><font size=+1>:</font></tt><i>id</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create a user with name &#8216;<i>name</i>&#8217; and id &#8216;<i>id</i>,&#8217; but do not create
+    a home directory<br>
+    <tt><font size=+1>%</font></tt><i>newname</i>rename user &#8216;<i>name</i>&#8217; to &#8216;<i>newname</i>,&#8217; throughout the user table<br>
+    <tt><font size=+1>=</font></tt><i>leader</i>&nbsp;&nbsp;&nbsp;&nbsp;set <i>name</i>&#8217;s group leader to <i>leader</i>.<br>
+    <tt><font size=+1>=</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remove <i>name</i>&#8217;s group leader; then all members will be considered
+    leaders<br>
+    <tt><font size=+1>+</font></tt><i>member</i>&nbsp;&nbsp;&nbsp;add <i>member</i> to <i>name</i>&#8217;s list of members<br>
+    <tt><font size=+1>&#8722;</font></tt><i>member</i>&nbsp;&nbsp;&nbsp;remove <i>member</i> from <i>name</i>&#8217;s list of members 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the verb is omitted, the entire entry for <i>name</i> is printed,
+    in the form &#8216;<i>id</i><tt><font size=+1>:</font></tt><i>name</i><tt><font size=+1>:</font></tt><i>leader</i><tt><font size=+1>:</font></tt><i>members</i>.&#8217; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The end of this manual page gives examples. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Users</i> manipulates the user table. The user table is a list of
+    lines in the form printed by the <i>uname</i> command. The <tt><font size=+1>&#8722;d</font></tt> flag resets
+    the user table with the default:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>adm:adm:adm:sys<br>
+        none:none::<br>
+        noworld:noworld::<br>
+        sys:sys::<br>
+        glenda:glenda:glenda:<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    Except <tt><font size=+1>glenda</font></tt>, these users are mandatory: they must appear in
+    all user files and cannot be renamed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;r</font></tt> flag reads a user table from the named <i>file</i> in file system
+    <tt><font size=+1>main</font></tt>. The <tt><font size=+1>&#8722;w</font></tt> flag writes the table to <tt><font size=+1>/active/adm/users</font></tt> on the
+    file system <tt><font size=+1>main</font></tt>. <tt><font size=+1>/active/adm</font></tt> and <tt><font size=+1>/active/adm/users</font></tt> will be created
+    if they do not exist. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Users</i> <tt><font size=+1>&#8722;r /active/adm/users</font></tt> is automatically executed when the
+    file system <tt><font size=+1>main</font></tt> is opened. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Users</i> <tt><font size=+1>&#8722;w</font></tt> is automatically executed after each change to the user
+    table by the <i>uname</i> command. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Who</i> prints a list of users attached to each active connection.<br>
+    <p><font size=+1><b>File system configuration   </b></font><br>
+    <i>Fsys</i> sets the current file system to <i>name</i>, which must be configured
+    and open (q.v.). The current file system name is displayed as
+    the file server prompt. The special name <tt><font size=+1>all</font></tt> stands for all file
+    systems; commands applied to <tt><font size=+1>all</font></tt> are applied to each file system
+    in turn. The commands <tt><font size=+1>config</font></tt>, <tt><font size=+1>open</font></tt>, <tt><font size=+1>venti</font></tt>, and <tt><font size=+1>close</font></tt> cannot be
+    applied to <tt><font size=+1>all</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Fsys</i> takes as an optional argument (after <tt><font size=+1>name</font></tt>) a command to execute
+    on the named file system. Most commands require that the named
+    file system be configured and open; these commands can be invoked
+    without the <tt><font size=+1>fsys</font></tt> <i>name</i> prefix, in which case the current file system
+    is used. A few commands (<tt><font size=+1>config</font></tt>, <tt><font size=+1>open</font></tt>, and <tt><font size=+1>unconfig</font></tt>) operate on
+    unopened file systems; they require the prefix. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Config</i> creates a new file system named <i>name</i> using disk file <i>device</i>.
+    This just adds an entry to fossil&#8217;s internal table. If <i>device</i>
+    is missing, the <i>file</i> argument to <i>fossil</i>&#8217;s <tt><font size=+1>&#8722;f</font></tt> option will be used
+    instead; this allows the <i>fossil</i> configuration file to avoid naming
+    the partition that it is embedded in, making it more portable.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Venti</i> establishes a connection to the Venti server <i>host</i> (by default,
+    the environment variable <tt><font size=+1>$venti</font></tt> or the network variable <tt><font size=+1>$venti</font></tt>)
+    for use by the named file system. If no <i>venti</i> command is issued
+    before <i>open</i>, the default Venti server will be used. If the file
+    system is open, and was not opened with the <tt><font size=+1>&#8722;V</font></tt> flag, the command
+    redials the Venti server.
+    This can be used to reestablish broken connections. It is not
+    a good idea to use the command to switch between Venti servers,
+    since Fossil does not keep track of which blocks are stored on
+    which servers. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Open</i> opens the file system, reading the root and super blocks
+    and allocating an in-memory cache for disk and Venti blocks. The
+    options are:<br>
+    <tt><font size=+1>&#8722;A</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run with no authentication<br>
+    <tt><font size=+1>&#8722;P</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;run with no permission checking<br>
+    <tt><font size=+1>&#8722;V</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not attempt to connect to a Venti server<br>
+    <tt><font size=+1>&#8722;W</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allow wstat to make arbitrary changes to the user and group
+    fields<br>
+    <tt><font size=+1>&#8722;a</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do not update file access times; primarily to avoid wear on
+    flash memories<br>
+    <tt><font size=+1>&#8722;r</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open the file system read-only<br>
+    <tt><font size=+1>&#8722;c</font></tt> <i>ncache</i>allocate an in-memory cache of <i>ncache</i> (by default, 1000)
+    blocks 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <i>-APW</i> settings can be overridden on a per-connection basis
+    by the <i>srv</i> command above. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Close</i> flushes all dirty file system blocks to disk and then closes
+    the device file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Unconfig</i> removes the named file system (which must be closed)
+    from fossil&#8217;s internal table.<br>
+    <p><font size=+1><b>File system maintenance   </b></font><br>
+    <i>Bfree</i> marks the block at disk address <i>addr</i> as available for allocation.
+    Before doing so, it prints a <i>label</i> command (q.v.) that can be
+    used to restore the block to its previous state. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Block</i> displays (in hexadecimal) the contents of the block at disk
+    address <i>addr</i>, starting at <i>offset</i> and continuing for <i>count</i> bytes
+    or until the end of the block. If <i>data</i> (also hexadecimal) is given,
+    the contents in that range are replaced with data. When writing
+    to a block, <i>block</i> prints the old and new contents, so that the
+    change is easily undone. Editing
+    blocks is discouraged. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Clre</i> zeros an entry from a disk block. Before doing so, it prints
+    a <i>block</i> command that can be used to restore the entry. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Clri</i> removes the internal directory entry and abandons storage
+    associated with <i>files</i>. It ignores the usual rules for sanity,
+    such as checking against removing a non-empty directory. A subsequent
+    <i>flchk</i> (see <a href="../man4/fossil.html"><i>fossil</i>(4)</a>) will identify the abandoned storage so it
+    can be reclaimed with <i>bfree</i> commands. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Clrp</i> zeros a pointer in a disk block. Before doing so, it prints
+    a <i>block</i> command that can be used to restore the entry. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Check</i> checks the file system for various inconsistencies. If the
+    file system is not already halted, it is halted for the duration
+    of the check. If the archiver is currently sending a snapshot
+    to Venti, the check will refuse to run; the only recourse is to
+    wait for the archiver to finish. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A list of keyword options control the check. The <tt><font size=+1>pblock</font></tt>, <tt><font size=+1>pdir</font></tt>,
+    and <tt><font size=+1>pfile</font></tt> options cause <i>check</i> to print the name of each block,
+    directory, or file encountered. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>check</i> reports errors but does not fix them. The <tt><font size=+1>bclose</font></tt>,
+    <tt><font size=+1>clri</font></tt>, <tt><font size=+1>clre</font></tt>, and <tt><font size=+1>clrp</font></tt> options specify correcting actions that may
+    be taken: closing leaked blocks, clearing bad file directory entries,
+    clearing bad pointers, and clearing bad entries. The <tt><font size=+1>fix</font></tt> option
+    enables all of these; it is equivalent to <tt><font size=+1>bclose clri clre clrp</font></tt>.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    By default, <i>check</i> scans the portion of the active file system
+    held in the write buffer, avoiding blocks stored on Venti or used
+    only in snapshots. The <tt><font size=+1>venti</font></tt> option causes <i>check</i> to scan the portion
+    of the file system stored on Venti, and the <tt><font size=+1>snapshot</font></tt> option causes
+    <i>check</i> to scan old snapshots. Specifying <tt><font size=+1>snapshot</font></tt> causes <i>check</i>
+    to take a long time;
+    specifying <tt><font size=+1>venti</font></tt> or (worse) <tt><font size=+1>venti snapshot</font></tt> causes <i>check</i> to take
+    a very long time. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Create</i> creates a file on the current file system. <i>Uid</i> and <i>gid</i>
+    are uids (<i>not</i> unames; see the discussion above, in the description
+    of the <i>uname</i> command). <i>Perm</i> is the low 9 bits of the permission
+    mode of the file, in octal. The <tt><font size=+1>a</font></tt>, <tt><font size=+1>d</font></tt>, and <tt><font size=+1>l</font></tt> mode prefixes set
+    the append-only, directory, and lock bits. The <i>perm</i> is formatted
+    as described in the <i>stat</i> command;
+    creating files or directories with the <tt><font size=+1>snapshot</font></tt>(s) bit set is
+    not allowed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Df</i> prints the amount of used disk space in the write buffer. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Epoch</i> sets the low file system epoch. Snapshots in the file system
+    are given increasing epoch numbers. The file system maintains
+    a low and a high epoch number, and only allows access to snapshots
+    in that range. The low epoch number can be moved forward to discard
+    old snapshots and reclaim the disk space they occupy. (The high
+    epoch
+    number is always the epoch of the currently active file system.)
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    With no argument <i>epoch</i> reports the current low and high epoch
+    numbers. The command &#8220;<tt><font size=+1>epoch</font></tt> <i>n&#8221;</i> is used to propose changing the
+    low epoch to <i>n</i>. In response, <i>fossil</i> scans <tt><font size=+1>/archive</font></tt> and <tt><font size=+1>/snapshot</font></tt>
+    for snapshots that would be discarded, printing their epoch numbers
+    and the <i>clri</i> commands necessary to remove them. The epoch is changed
+    only if
+    no such paths are found. The usual sequence of commands is (1)
+    run epoch to print the snapshots and their epochs, (2) clri some
+    snapshots, (3) run epoch again. If the file system is completely
+    full (there are no free blocks), <i>clri</i> may fail because it needs
+    to allocate blocks. For this situation, the <tt><font size=+1>&#8722;y</font></tt> flag to epoch forces
+    the epoch change even when it
+    means discarding currently accessible snapshots. Note that when
+    there are still snapshots in <tt><font size=+1>/archive</font></tt>, the archiver should take
+    care of those snapshots (moving the blocks from disk to Venti)
+    if you give it more time. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;r</font></tt> flag to epoch causes it to remove any now-inaccessible
+    snapshot directories once it has changed the epoch. This flag
+    only makes sense in conjunction with the <tt><font size=+1>&#8722;y</font></tt> flag. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Epoch</i> is a very low-level way to retire snapshots. The preferred
+    way is by setting an automatic timer with <i>snaptime</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Halt</i> suspends all file system activity; <i>unhalt</i> resumes activity.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Label</i> displays and edits the label associated with a block. When
+    editing, a parameter of <tt><font size=+1>&#8722;</font></tt> means leave that field unchanged. Editing
+    labels is discouraged. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Remove</i> removes <i>files</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Snap</i> takes a temporary snapshot of the current file system, recording
+    it in <tt><font size=+1>/snapshot/</font></tt><i>yyyy</i><tt><font size=+1>/</font></tt><i>mmdd</i><tt><font size=+1>/</font></tt><i>hhmm</i> as described in <a href="../man4/fossil.html"><i>fossil</i>(4)</a>. The
+    <tt><font size=+1>&#8722;a</font></tt> flag causes <i>snap</i> to take an archival snapshot, recording it
+    in <tt><font size=+1>/archive/</font></tt><i>yyyy</i><tt><font size=+1>/</font></tt><i>mmdd</i>, also described in <a href="../man4/fossil.html"><i>fossil</i>(4)</a>. By default
+    the snapshot is taken of <tt><font size=+1>/active</font></tt>, the root of the active file
+    system. The <tt><font size=+1>&#8722;s</font></tt> flag
+    specifies a different source path. The <tt><font size=+1>&#8722;d</font></tt> flag specifies a different
+    destination path. These two flags are useful together for moving
+    snapshots into the archive tree. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Snapclean</i> immediately discards all snapshots that are more than
+    <i>timeout</i> minutes old. The default timeout is the one set by the
+    <i>snaptime</i> command. The discarding is a one-time event rather than
+    a recurring event as in <i>snaptime</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Snaptime</i> displays and edits the times at which snapshots are automatically
+    taken. An archival snapshot is taken once a day, at <i>hhmm</i>, while
+    temporary snapshots are taken at multiples of <i>interval</i> minutes.
+    Temporary snapshots are discarded after they are <i>timeout</i> minutes
+    old. The snapshot cleanup runs every <i>timeout</i> minutes or once a
+    day,
+    whichever is more frequent, so snapshots may grow to an age of
+    almost twice the timeout before actually being discarded. With
+    no arguments, <i>snaptime</i> prints the current snapshot times. The
+    <tt><font size=+1>&#8722;a</font></tt> and <tt><font size=+1>&#8722;s</font></tt> options set the archive and snapshot times. An <i>hhmm</i>
+    or <i>interval</i> of <tt><font size=+1>none</font></tt> can be used to disable that kind of automatic
+    snapshot. The <tt><font size=+1>&#8722;t</font></tt> option sets
+    the snapshot timeout. If <i>timeout</i> is <tt><font size=+1>none</font></tt>, temporary snapshots
+    are not automatically discarded. By default, all three times are
+    set to <tt><font size=+1>none</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Stat</i> displays metadata for each of the named <i>files</i>, in the form:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>stat</font></tt> <i>file elem uid gid perm length<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </i>
+        
+    </table>
+    (Replacing <tt><font size=+1>stat</font></tt> with <tt><font size=+1>wstat</font></tt> yields a valid command.) The <i>perm</i> is
+    an octal number less than or equal to 777, prefixed with any of
+    the following letters to indicate additional bits.<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>a </font></tt>&nbsp;&nbsp;&nbsp;append only<br>
+        d &nbsp;&nbsp;&nbsp;directory<br>
+        l &nbsp;&nbsp;&nbsp;exclusive use<br>
+        s &nbsp;&nbsp;&nbsp;is the root of a snapshot<br>
+        t &nbsp;&nbsp;&nbsp;temporary bit<br>
+        A &nbsp;&nbsp;&nbsp;MS-DOS archive bit<br>
+        G &nbsp;&nbsp;&nbsp;setgid<br>
+        H &nbsp;&nbsp;&nbsp;MS-DOS hidden bit<br>
+        L &nbsp;&nbsp;&nbsp;symbolic link<br>
+        S &nbsp;&nbsp;&nbsp;MS-DOS system bit<br>
+        U &nbsp;&nbsp;&nbsp;setuid<br>
+        Y &nbsp;&nbsp;&nbsp;sticky<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        
+        
+    </table>
+    The bits denoted by capital letters are included to support non-Plan
+    9 systems. They are not made visible by the 9P protocol. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Sync</i> writes dirty blocks in memory to the disk. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Vac</i> prints the Venti score for a <a href="../man1/vac.html"><i>vac</i>(1)</a> archive containing the
+    tree rooted at <i>dir</i>, which must already be archived to Venti (typically
+    <i>dir</i> is a directory in the <tt><font size=+1>/archive</font></tt> tree). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Wstat</i> changes the metadata of the named <i>file</i>. Specifying <tt><font size=+1>&#8722;</font></tt> for
+    any of the fields means &#8220;don&#8217;t change.&#8221; Attempts to change the
+    <tt><font size=+1>d</font></tt> or <tt><font size=+1>s</font></tt> bits in the <i>perm</i> are silently ignored.<br>
+    
+</table>
+<p><font size=+1><b>EXAMPLES     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Sources</i>, the Plan 9 distribution file server, uses the following
+    configuration file:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>srv &#8722;p fscons.sources<br>
+        srv &#8722;p fscons.sources.adduserd<br>
+        srv sources<br>
+        fsys main config /dev/sdC0/fossil.outside<br>
+        fsys main open &#8722;c 25600<br>
+        fsys main<br>
+        users /active/adm/users<br>
+        listen tcp!*!564<br>
+        msg &#8722;m 40 &#8722;p 10<br>
+        snaptime &#8722;a 0000 &#8722;s 15<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The second console is used by the daemon that creates new accounts.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    To add a new user with <i>name</i> and <i>id</i> <tt><font size=+1>rob</font></tt> and create his home directory:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>uname rob rob<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    To create a new group <tt><font size=+1>sys</font></tt> (with no home directory) and add <tt><font size=+1>rob</font></tt>
+    to it:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>uname sys :sys<br>
+        uname sys +rob<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    To save an old (but not yet discarded) snapshot into the archive
+    tree:<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>snap &#8722;a &#8722;s /snapshot/2003/1220/0700 &#8722;d /archive/2003/1220<br>
+        </font></tt>
+    </table>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="http://swtch.com/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>
