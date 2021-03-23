@@ -17,7 +17,7 @@ static int
 PUTSTRING(uchar *p, char *s)
 {
 	int n;
-	
+
 	if(s == nil)
 		s = "";
 	n = strlen(s);
@@ -30,14 +30,14 @@ static int
 GETSTRING(uchar *p, char **s)
 {
 	int n;
-	
+
 	GET(p, n);
 	memmove(p, p+4, n);
 	*s = (char*)p;
 	p[n] = 0;
 	return n+4;
 }
-	
+
 uint
 sizeW2M(Wsysmsg *m)
 {
@@ -48,8 +48,11 @@ sizeW2M(Wsysmsg *m)
 	case Rbouncemouse:
 	case Rmoveto:
 	case Rcursor:
+	case Rcursor2:
 	case Trdkbd:
+	case Trdkbd4:
 	case Rlabel:
+	case Rctxt:
 	case Rinit:
 	case Trdsnarf:
 	case Rwrsnarf:
@@ -65,12 +68,19 @@ sizeW2M(Wsysmsg *m)
 		return 4+1+1+4+4;
 	case Tcursor:
 		return 4+1+1+4+4+2*16+2*16+1;
+	case Tcursor2:
+		return 4+1+1+4+4+2*16+2*16+4+4+4*32+4*32+1;
 	case Rerror:
 		return 4+1+1+_stringsize(m->error);
 	case Rrdkbd:
 		return 4+1+1+2;
+	case Rrdkbd4:
+		return 4+1+1+4;
 	case Tlabel:
 		return 4+1+1+_stringsize(m->label);
+	case Tctxt:
+		return 4+1+1
+			+_stringsize(m->id);
 	case Tinit:
 		return 4+1+1
 			+_stringsize(m->winsize)
@@ -93,7 +103,7 @@ uint
 convW2M(Wsysmsg *m, uchar *p, uint n)
 {
 	int nn;
-	
+
 	nn = sizeW2M(m);
 	if(n < nn || nn == 0 || n < 6)
 		return 0;
@@ -108,8 +118,11 @@ convW2M(Wsysmsg *m, uchar *p, uint n)
 	case Rbouncemouse:
 	case Rmoveto:
 	case Rcursor:
+	case Rcursor2:
 	case Trdkbd:
+	case Trdkbd4:
 	case Rlabel:
+	case Rctxt:
 	case Rinit:
 	case Trdsnarf:
 	case Rwrsnarf:
@@ -143,11 +156,28 @@ convW2M(Wsysmsg *m, uchar *p, uint n)
 		memmove(p+46, m->cursor.set, sizeof m->cursor.set);
 		p[78] = m->arrowcursor;
 		break;
+	case Tcursor2:
+		PUT(p+6, m->cursor.offset.x);
+		PUT(p+10, m->cursor.offset.y);
+		memmove(p+14, m->cursor.clr, sizeof m->cursor.clr);
+		memmove(p+46, m->cursor.set, sizeof m->cursor.set);
+		PUT(p+78, m->cursor2.offset.x);
+		PUT(p+82, m->cursor2.offset.y);
+		memmove(p+86, m->cursor2.clr, sizeof m->cursor2.clr);
+		memmove(p+214, m->cursor2.set, sizeof m->cursor2.set);
+		p[342] = m->arrowcursor;
+		break;
 	case Rrdkbd:
 		PUT2(p+6, m->rune);
 		break;
+	case Rrdkbd4:
+		PUT(p+6, m->rune);
+		break;
 	case Tlabel:
 		PUTSTRING(p+6, m->label);
+		break;
+	case Tctxt:
+		PUTSTRING(p+6, m->id);
 		break;
 	case Tinit:
 		p += 6;
@@ -173,7 +203,7 @@ convW2M(Wsysmsg *m, uchar *p, uint n)
 		PUT(p+14, m->rect.max.x);
 		PUT(p+18, m->rect.max.y);
 		break;
-	}		
+	}
 	return nn;
 }
 
@@ -181,7 +211,7 @@ uint
 convM2W(uchar *p, uint n, Wsysmsg *m)
 {
 	int nn;
-	
+
 	if(n < 6)
 		return 0;
 	GET(p, nn);
@@ -196,8 +226,11 @@ convM2W(uchar *p, uint n, Wsysmsg *m)
 	case Rbouncemouse:
 	case Rmoveto:
 	case Rcursor:
+	case Rcursor2:
 	case Trdkbd:
+	case Trdkbd4:
 	case Rlabel:
+	case Rctxt:
 	case Rinit:
 	case Trdsnarf:
 	case Rwrsnarf:
@@ -231,11 +264,28 @@ convM2W(uchar *p, uint n, Wsysmsg *m)
 		memmove(m->cursor.set, p+46, sizeof m->cursor.set);
 		m->arrowcursor = p[78];
 		break;
+	case Tcursor2:
+		GET(p+6, m->cursor.offset.x);
+		GET(p+10, m->cursor.offset.y);
+		memmove(m->cursor.clr, p+14, sizeof m->cursor.clr);
+		memmove(m->cursor.set, p+46, sizeof m->cursor.set);
+		GET(p+78, m->cursor2.offset.x);
+		GET(p+82, m->cursor2.offset.y);
+		memmove(m->cursor2.clr, p+86, sizeof m->cursor2.clr);
+		memmove(m->cursor2.set, p+214, sizeof m->cursor2.set);
+		m->arrowcursor = p[342];
+		break;
 	case Rrdkbd:
 		GET2(p+6, m->rune);
 		break;
+	case Rrdkbd4:
+		GET(p+6, m->rune);
+		break;
 	case Tlabel:
 		GETSTRING(p+6, &m->label);
+		break;
+	case Tctxt:
+		GETSTRING(p+6, &m->id);
 		break;
 	case Tinit:
 		p += 6;
@@ -261,7 +311,7 @@ convM2W(uchar *p, uint n, Wsysmsg *m)
 		GET(p+14, m->rect.max.x);
 		GET(p+18, m->rect.max.y);
 		break;
-	}	
+	}
 	return nn;
 }
 
@@ -286,7 +336,7 @@ int
 drawfcallfmt(Fmt *fmt)
 {
 	Wsysmsg *m;
-	
+
 	m = va_arg(fmt->args, Wsysmsg*);
 	fmtprint(fmt, "tag=%d ", m->tag);
 	switch(m->type){
@@ -298,7 +348,7 @@ drawfcallfmt(Fmt *fmt)
 		return fmtprint(fmt, "Trdmouse");
 	case Rrdmouse:
 		return fmtprint(fmt, "Rrdmouse x=%d y=%d buttons=%d msec=%d resized=%d",
-			m->mouse.xy.x, m->mouse.xy.y, 
+			m->mouse.xy.x, m->mouse.xy.y,
 			m->mouse.buttons, m->mouse.msec, m->resized);
 	case Tbouncemouse:
 		return fmtprint(fmt, "Tbouncemouse x=%d y=%d buttons=%d",
@@ -311,16 +361,28 @@ drawfcallfmt(Fmt *fmt)
 		return fmtprint(fmt, "Rmoveto");
 	case Tcursor:
 		return fmtprint(fmt, "Tcursor arrow=%d", m->arrowcursor);
+	case Tcursor2:
+		return fmtprint(fmt, "Tcursor2 arrow=%d", m->arrowcursor);
 	case Rcursor:
 		return fmtprint(fmt, "Rcursor");
+	case Rcursor2:
+		return fmtprint(fmt, "Rcursor2");
 	case Trdkbd:
 		return fmtprint(fmt, "Trdkbd");
 	case Rrdkbd:
 		return fmtprint(fmt, "Rrdkbd rune=%C", m->rune);
+	case Trdkbd4:
+		return fmtprint(fmt, "Trdkbd4");
+	case Rrdkbd4:
+		return fmtprint(fmt, "Rrdkbd4 rune=%C", m->rune);
 	case Tlabel:
 		return fmtprint(fmt, "Tlabel label='%s'", m->label);
 	case Rlabel:
 		return fmtprint(fmt, "Rlabel");
+	case Tctxt:
+		return fmtprint(fmt, "Tctxt id='%s'", m->id);
+	case Rctxt:
+		return fmtprint(fmt, "Rctxt");
 	case Tinit:
 		return fmtprint(fmt, "Tinit label='%s' winsize='%s'", m->label, m->winsize);
 	case Rinit:

@@ -8,6 +8,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include "dat.h"
 #include "edit.h"
 #include "fns.h"
@@ -514,7 +515,7 @@ parsecmd(int nest)
 						if(nextc() == 'g')
 							cmd.flag = getch();
 					}
-			
+
 				}
 			}
 		}
@@ -612,7 +613,7 @@ simpleaddr(void)
 		addr.num = getnum(1);
 		break;
 	case '0': case '1': case '2': case '3': case '4':
-	case '5': case '6': case '7': case '8': case '9': 
+	case '5': case '6': case '7': case '8': case '9':
 		addr.num = getnum(1);
 		addr.type='l';
 		break;
@@ -634,9 +635,11 @@ simpleaddr(void)
 		case '.':
 		case '$':
 		case '\'':
-			if(addr.type!='"')
+			if(addr.type=='"')
+				break;
+			/* fall through */
 		case '"':
-				editerror("bad address syntax");
+			editerror("bad address syntax");
 			break;
 		case 'l':
 		case '#':

@@ -123,7 +123,8 @@ buildenv(Job *j, int slot)
 			qp = strchr(cp+1, ')');
 			if(qp){
 				*qp = 0;
-				strcpy(w->s, cp+1);
+				/* strcpy, but might overlap */
+				memmove(w->s, cp+1, strlen(cp+1)+1);
 				l = &w->next;
 				w = w->next;
 				continue;
@@ -142,7 +143,7 @@ buildenv(Job *j, int slot)
 	for(i = 0; *p; i++, p++){
 		if((j->r->attr&REGEXP) && j->match[i])
 			envupd(*p, newword(j->match[i]));
-		else 
+		else
 			envupd(*p, newword(""));
 	}
 	return envy;

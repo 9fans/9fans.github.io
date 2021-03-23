@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stddef.h>
 
 #define	exits(x)	exit(x && *x ? 1 : 0)
 
 #define	nil	0
-

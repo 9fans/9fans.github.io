@@ -52,8 +52,12 @@ _ioproc(void *arg)
 	one = 1;
 	resized = 0;
 	for(;;){
-		if(_displayrdmouse(mc->display, &m, &resized) < 0)
+		if(_displayrdmouse(mc->display, &m, &resized) < 0) {
+			if(postnote(PNPROC, getpid(), "hangup") < 0)
+				fprint(2, "postnote: %r\n");
+			sleep(10*1000);
 			threadexitsall("mouse read error");
+		}
 		if(resized)
 			send(mc->resizec, &one);
 		send(mc->c, &m);
@@ -85,6 +89,11 @@ initmouse(char *file, Image *i)
 void
 setcursor(Mousectl *mc, Cursor *c)
 {
-	_displaycursor(mc->display, c);
+	_displaycursor(mc->display, c, nil);
 }
 
+void
+setcursor2(Mousectl *mc, Cursor *c, Cursor2 *c2)
+{
+	_displaycursor(mc->display, c, c2);
+}

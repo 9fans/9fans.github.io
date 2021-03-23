@@ -52,18 +52,18 @@
     and <i>signal</i>(2)). The group of a new process is by default the same
     as its parent, but if <tt><font size=+1>RFNOTEG</font></tt> is set (regardless of <tt><font size=+1>RFPROC</font></tt>), the
     process becomes the first in a new group, isolated from previous
-    processes. In Plan 9,
+    processes. In Plan
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
         
         <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-            a process can call <tt><font size=+1>rfork(RFNOTEG)</font></tt> and then be sure that it will
-            no longer receive console interrupts or other notes. Unix job-control
-            shells put each command in its own process group and then relay
-            notes to the current foreground command, making the idiom less
-            useful.<br>
+            9, a process can call <tt><font size=+1>rfork(RFNOTEG)</font></tt> and then be sure that it
+            will no longer receive console interrupts or other notes. Unix
+            job-control shells put each command in its own process group and
+            then relay notes to the current foreground command, making the
+            idiom less useful.<br>
             
         </table>
         

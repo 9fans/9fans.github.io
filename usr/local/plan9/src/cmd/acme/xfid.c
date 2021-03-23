@@ -8,6 +8,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include "dat.h"
 #include "fns.h"
 
@@ -700,6 +701,24 @@ out:
 			winsetname(w, r, nr);
 			m += (q+1) - pp;
 		}else
+		if(strncmp(p, "font ", 5) == 0){		/* execute font command */
+			pp = p+5;
+			m = 5;
+			q = memchr(pp, '\n', e-pp);
+			if(q==nil || q==pp){
+				err = Ebadctl;
+				break;
+			}
+			*q = 0;
+			nulls = FALSE;
+			cvttorunes(pp, q-pp, r, &nb, &nr, &nulls);
+			if(nulls){
+				err = "nulls in font string";
+				break;
+			}
+			fontx(&w->body, nil, nil, FALSE, XXX, r, nr);
+			m += (q+1) - pp;
+		}else
 		if(strncmp(p, "dump ", 5) == 0){	/* set dump string */
 			pp = p+5;
 			m = 5;
@@ -789,10 +808,12 @@ out:
 		}else
 		if(strncmp(p, "nomenu", 6) == 0){	/* turn off automatic menu */
 			w->filemenu = FALSE;
+			settag = TRUE;
 			m = 6;
 		}else
 		if(strncmp(p, "menu", 4) == 0){	/* enable automatic menu */
 			w->filemenu = TRUE;
+			settag = TRUE;
 			m = 4;
 		}else
 		if(strncmp(p, "cleartag", 8) == 0){	/* wipe tag right of bar */

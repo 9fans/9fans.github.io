@@ -127,9 +127,11 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     When a window is in autoindent mode (see the <tt><font size=+1>Indent</font></tt> command below)
-    and a newline character is typed, acme copies leading white space
-    on the current line to the new line. The option <tt><font size=+1>&#8722;a</font></tt> causes each
-    window to start in autoindent mode.<br>
+    and a newline character is typed, <i>acme</i> copies leading white space
+    on the current line to the new line, and when a window is <tt><font size=+1>Put</font></tt>,
+    <i>acme</i> removes all trailing end-of-line white space before writing
+    the file. The option <tt><font size=+1>&#8722;a</font></tt> causes each window to start in autoindent
+    mode.
     <p><font size=+1><b>Directory context     </b></font><br>
     Each window&#8217;s tag names a directory: explicitly if the window
     holds a directory; implicitly if it holds a regular file (e.g.
@@ -149,7 +151,7 @@
     where <i>directory</i> is identified by the context of the command.
     These error windows are created when needed.<br>
     <p><font size=+1><b>Mouse button 1     </b></font><br>
-    Mouse button 1 selects text just as in <a href="../man1/sam.html"><i>sam</i>(1)</a> or <a href="../man1/rio.html"><i>rio</i>(1)</a><i>,</i> including
+    Mouse button 1 selects text just as in <a href="../man1/sam.html"><i>sam</i>(1)</a> or <i>rio</i>(1)<i>,</i> including
     the usual double-clicking conventions.<br>
     <p><font size=+1><b>Mouse button 2     </b></font><br>
     By an action similar to selecting text with button 1, button 2
@@ -188,7 +190,7 @@
         
     </table>
     <tt><font size=+1>Dump</font></tt>&nbsp;&nbsp;&nbsp;Write the state of <i>acme</i> to the file name, if specified, or
-    <tt><font size=+1>$home/acme.dump</font></tt> by default.<br>
+    <tt><font size=+1>$HOME/acme.dump</font></tt> by default.<br>
     <tt><font size=+1>Edit</font></tt>&nbsp;&nbsp;&nbsp;Treat the argument as a text editing command in the style
     of <a href="../man1/sam.html"><i>sam</i>(1)</a>. The full <tt><font size=+1>Sam</font></tt> language is implemented except for the
     commands <tt><font size=+1>k</font></tt>, <tt><font size=+1>n</font></tt>, <tt><font size=+1>q</font></tt>, and <tt><font size=+1>!</font></tt>. The <tt><font size=+1>=</font></tt> command is slightly different:
@@ -245,7 +247,7 @@
         
     </table>
     <tt><font size=+1>Kill</font></tt>&nbsp;&nbsp;&nbsp;Send a <tt><font size=+1>kill</font></tt> note to <i>acme</i>-initiated commands named as arguments.<br>
-    <tt><font size=+1>Load</font></tt>&nbsp;&nbsp;&nbsp;Restore the state of <i>acme</i> from a file (default <tt><font size=+1>$home/acme.dump</font></tt>)
+    <tt><font size=+1>Load</font></tt>&nbsp;&nbsp;&nbsp;Restore the state of <i>acme</i> from a file (default <tt><font size=+1>$HOME/acme.dump</font></tt>)
     created by the <tt><font size=+1>Dump</font></tt> command.<br>
     <tt><font size=+1>Local</font></tt>In the Plan 9 <i>acme</i>, this prefix causes a command to be run
     in <i>acme</i>&#8217;s<i>own</i> file name space and environment variable group. On
@@ -312,15 +314,15 @@
     with button 2 runs <a href="../man1/date.html"><i>date</i>(1)</a>. The standard and error outputs of
     commands are sent to the error window associated with the directory
     from which the command was run, which will be created if necessary.
-    For example, in a window
-    <tt><font size=+1>/etc/passwd</font></tt> executing <tt><font size=+1>pwd</font></tt> will produce the output <tt><font size=+1>/etc</font></tt> in a (possibly
-    newly-created) window labeled <tt><font size=+1>/etc/+Errors</font></tt>; in a window containing
-    <tt><font size=+1>/home/rob/sam/sam.c</font></tt> executing <tt><font size=+1>mk</font></tt> will run <a href="../man1/mk.html"><i>mk</i>(1)</a> in <tt><font size=+1>/home/rob/sam</font></tt>,
-    producing output in a window labeled <tt><font size=+1>/home/rob/sam/+Errors</font></tt>. The
-    environment of such commands contains the variable <tt><font size=+1>$%
-    </font></tt>and <tt><font size=+1>$samfile</font></tt> with value set to the filename of the window in which
-    the command is run, and <tt><font size=+1>$winid</font></tt> set to the window&#8217;s id number (see
-    <a href="../man4/acme.html"><i>acme</i>(4)</a>). 
+    For example, in a
+    window <tt><font size=+1>/etc/passwd</font></tt> executing <tt><font size=+1>pwd</font></tt> will produce the output <tt><font size=+1>/etc</font></tt>
+    in a (possibly newly-created) window labeled <tt><font size=+1>/etc/+Errors</font></tt>; in
+    a window containing <tt><font size=+1>/home/rob/sam/sam.c</font></tt> executing <tt><font size=+1>mk</font></tt> will run
+    <a href="../man1/mk.html"><i>mk</i>(1)</a> in <tt><font size=+1>/home/rob/sam</font></tt>, producing output in a window labeled <tt><font size=+1>/home/rob/sam/+Errors</font></tt>.
+    The environment of such commands contains the
+    variable <tt><font size=+1>$%</font></tt> and <tt><font size=+1>$samfile</font></tt> with value set to the filename of the
+    window in which the command is run, and <tt><font size=+1>$winid</font></tt> set to the window&#8217;s
+    id number (see <a href="../man4/acme.html"><i>acme</i>(4)</a>). 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     The environment variable <tt><font size=+1>$acmeshell</font></tt> determines which shell is
@@ -466,7 +468,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <tt><font size=+1>$home/acme.dump</font></tt>&nbsp;&nbsp;&nbsp;default file for <tt><font size=+1>Dump</font></tt> and <tt><font size=+1>Load</font></tt>; also where state
+    <tt><font size=+1>$HOME/acme.dump</font></tt>&nbsp;&nbsp;&nbsp;default file for <tt><font size=+1>Dump</font></tt> and <tt><font size=+1>Load</font></tt>; also where state
     is written if <i>acme</i> dies or is killed unexpectedly, e.g. by deleting
     its window.<br>
     <tt><font size=+1>/acme/*/guide</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;template files for applications<br>

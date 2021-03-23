@@ -47,7 +47,7 @@
     permission to remove the file from its directory. All other bits
     in <i>mode</i> should be zero. It is illegal to write a directory, truncate
     it, or attempt to remove it on close. If the file is marked for
-    exclusive use (see <a href="../man9/stat.html"><i>stat</i>(9P)</a>), only one client can have the file
+    exclusive use (see <i>stat</i>(9P)), only one client can have the file
     open at any time. That is, after such a file has been opened,
     further opens will fail until <i>fid</i> has been
     clunked. All these permissions are checked at the time of the

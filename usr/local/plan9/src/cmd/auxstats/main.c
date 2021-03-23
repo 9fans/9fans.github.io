@@ -21,7 +21,8 @@ notifyf(void *v, char *msg)
 
 	if(strstr(msg, "child"))
 		noted(NCONT);
-	postnote(PNPROC, pid, msg);
+	if(pid)
+		postnote(PNPROC, pid, msg);
 	exits(nil);
 }
 
@@ -120,4 +121,3 @@ tokens(int i)
 	}
 	ntok = tokenize(line[i], tok, nelem(tok));
 }
-

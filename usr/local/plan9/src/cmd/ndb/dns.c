@@ -121,6 +121,12 @@ checkaddress(void)
 		fprint(2, "warning: announce mismatch %s %s\n", udpaddr, tcpaddr);
 }
 
+int
+threadmaybackground(void)
+{
+	return 1;
+}
+
 void
 threadmain(int argc, char *argv[])
 {
@@ -170,7 +176,7 @@ threadmain(int argc, char *argv[])
 	default:
 		usage();
 	}ARGEND
-	
+
 	if(argc)
 		usage();
 	if(serveudp && servetcp)

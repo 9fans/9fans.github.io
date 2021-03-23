@@ -8,6 +8,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include "dat.h"
 #include "fns.h"
 
@@ -462,7 +463,7 @@ fsyswalk(Xfid *x, Fid *f)
 			qunlock(&row.lk);
 			dir = dirtabw;
 			goto Accept;
-	
+
     Regular:
 			if(strcmp(x->fcall.wname[i], "new") == 0){
 				if(w)

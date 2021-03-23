@@ -228,8 +228,8 @@
     it is impossible to change those disk structures, and thus impossible
     to rename the <i>id</i>. The translation from <i>name</i> to <i>id</i> allows the appearance
     of renaming the user even though the on-disk structures still
-    record the old name. (In a
-    conventional Unix file system, the <i>id</i> is stored as a small integer
+    record the old name. (In
+    a conventional Unix file system, the <i>id</i> is stored as a small integer
     rather than a string.) <i>Leader</i> and <i>members</i> are names, not ids.
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
@@ -440,10 +440,10 @@
     low epoch to <i>n</i>. In response, <i>fossil</i> scans <tt><font size=+1>/archive</font></tt> and <tt><font size=+1>/snapshot</font></tt>
     for snapshots that would be discarded, printing their epoch numbers
     and the <i>clri</i> commands necessary to remove them. The epoch is changed
-    only if
-    no such paths are found. The usual sequence of commands is (1)
-    run epoch to print the snapshots and their epochs, (2) clri some
-    snapshots, (3) run epoch again. If the file system is completely
+    only
+    if no such paths are found. The usual sequence of commands is
+    (1) run epoch to print the snapshots and their epochs, (2) clri
+    some snapshots, (3) run epoch again. If the file system is completely
     full (there are no free blocks), <i>clri</i> may fail because it needs
     to allocate blocks. For this situation, the <tt><font size=+1>&#8722;y</font></tt> flag to epoch forces
     the epoch change even when it

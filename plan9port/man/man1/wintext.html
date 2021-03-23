@@ -21,28 +21,27 @@
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
     <tt><font size=+1>wintext<br>
-    " </font></tt> [ <i>prefix</i> ]<br>
-    <tt><font size=+1>"" </font></tt> [ <i>prefix</i> ]<br>
+    "</font></tt> [ <i>prefix</i> ]<br>
+    <tt><font size=+1>""</font></tt> [ <i>prefix</i> ]<br>
     
 </table>
 <p><font size=+1><b>DESCRIPTION     </b></font><br>
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <i>Wintext</i> prints the text of the current <i>win</i> (see <a href="../man1/acme.html"><i>acme</i>(1)</a>) or <a href="../man1/9term.html"><i>9term</i>(1)</a>
-    window to standard output. 
+    <i>Wintext</i> prints the text of the current <i>win</i> (see <a href="../man1/acme.html"><i>acme</i>(1)</a>), <a href="../man1/9term.html"><i>9term</i>(1)</a>,
+    or (Unix&#8217;s) <a href="../man1/tmux.html"><i>tmux</i>(1)</a> window to standard output. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    <i>" </i> searches the window text for commands typed with a particular
+    <i>"</i> searches the window text for commands typed with a particular
     prefix and prints them, indented, to standard output. <i>Prefix</i> is
     a regular expression that is matched against the beginning of
-    the command-line. If <i>prefix</i> is omitted, <i>" </i> prints the last command
-    executed. <i>"" </i> prints the last command that <i>" </i> would print and then
-    executes it by piping it into <a href="../man1/rc.html"><i>rc</i>(1)</a>.
-    
+    the command-line. If <i>prefix</i> is omitted, <i>"</i> prints the last command
+    executed. <i>""</i> prints the last command that <i>"</i> would print and then
+    executes it by piping it into <a href="../man1/rc.html"><i>rc</i>(1)</a>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    Both <i>" </i> and <i>"" </i> identify commands in the window text by looking for
+    Both <i>"</i> and <i>""</i> identify commands in the window text by looking for
     lines beginning with a shell prompt. Prompts are assumed to be
     an unindented sequence of non-whitespace characters followed by
     one of the characters <tt><font size=+1>%</font></tt>, <tt><font size=+1>;</font></tt>, <tt><font size=+1>$</font></tt>, or <tt><font size=+1>#</font></tt>.<br>
@@ -83,7 +82,7 @@
             
         </table>
         ramfs &nbsp;&nbsp;&nbsp;rc &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;read &nbsp;&nbsp;&nbsp;&nbsp;rio &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rm<br>
-        % <br>
+        %<br>
         </font></tt>
     </table>
     
@@ -106,7 +105,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <i>" </i> and <i>"" </i> are hard to type in shells other than <a href="../man1/rc.html"><i>rc</i>(1)</a>.<br>
+    <i>"</i> and <i>""</i> are hard to type in shells other than <a href="../man1/rc.html"><i>rc</i>(1)</a>.<br>
     
 </table>
 

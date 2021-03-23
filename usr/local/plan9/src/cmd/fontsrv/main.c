@@ -13,8 +13,6 @@
 
 #include "a.h"
 
-Memsubfont *defont;
-
 void
 usage(void)
 {
@@ -54,7 +52,7 @@ enum
 #define QFONT(p) (((p) >> 4) & 0xFFFF)
 #define QSIZE(p) (((p) >> 20) & 0xFF)
 #define QANTIALIAS(p) (((p) >> 28) & 0x1)
-#define QRANGE(p) (((p) >> 29) & SubfontMask)
+#define QRANGE(p) (((p) >> 29) & 0xFFFFFF)
 static int sizes[] = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 28 };
 
 static vlong
@@ -72,7 +70,7 @@ dostat(vlong path, Qid *qid, Dir *dir)
 	vlong length;
 	XFont *f;
 	char buf[100];
-	
+
 	q.type = 0;
 	q.vers = 0;
 	q.path = path;
@@ -100,11 +98,11 @@ dostat(vlong path, Qid *qid, Dir *dir)
 		snprint(buf, sizeof buf, "%lld%s", QSIZE(path), QANTIALIAS(path) ? "a" : "");
 		name = buf;
 		break;
-	
+
 	case Qfontfile:
 		f = &xfont[QFONT(path)];
 		load(f);
-		length = 11+1+11+1+f->nrange*(6+1+6+1+9+1);
+		length = 11+1+11+1+f->nfile*(6+1+6+1+9+1);
 		name = "font";
 		break;
 
@@ -113,7 +111,7 @@ dostat(vlong path, Qid *qid, Dir *dir)
 		name = buf;
 		break;
 	}
-	
+
 	if(qid)
 		*qid = q;
 	if(dir) {
@@ -191,9 +189,9 @@ xwalk1(Fid *fid, char *name, Qid *qid)
 			goto NotFound;
 		p++;
 		n = strtoul(p, &p, 16);
-		if(p != name+5 || n%SubfontSize != 0 || strcmp(p, ".bit") != 0 || !f->range[(n/SubfontSize) & SubfontMask])
+		if(p < name+5 || p > name+5 && name[1] == '0' || n%SubfontSize != 0 || n/SubfontSize >= MaxSubfont || strcmp(p, ".bit") != 0 || !f->range[n/SubfontSize])
 			goto NotFound;
-		path += Qsubfontfile - Qsizedir + qpath(0, 0, 0, 0, (n/SubfontSize) & SubfontMask);
+		path += Qsubfontfile - Qsizedir + qpath(0, 0, 0, 0, n/SubfontSize);
 		break;
 	}
 Found:
@@ -216,7 +214,7 @@ fontgen(int i, Dir *d, void *v)
 {
 	vlong path;
 	Fid *f;
-	
+
 	f = v;
 	path = f->qid.path;
 	if(i >= 2*nelem(sizes))
@@ -231,7 +229,6 @@ sizegen(int i, Dir *d, void *v)
 	vlong path;
 	Fid *fid;
 	XFont *f;
-	int j;
 
 	fid = v;
 	path = fid->qid.path;
@@ -242,15 +239,10 @@ sizegen(int i, Dir *d, void *v)
 	i--;
 	f = &xfont[QFONT(path)];
 	load(f);
-	for(j=0; j<nelem(f->range); j++) {
-		if(f->range[j] == 0)
-			continue;
-		if(i == 0) {
-			path += Qsubfontfile - Qsizedir;
-			path += qpath(0, 0, 0, 0, j);
-			goto Done;
-		}
-		i--;
+	if(i < f->nfile) {
+		path += Qsubfontfile - Qsizedir;
+		path += qpath(0, 0, 0, 0, f->file[i]);
+		goto Done;
 	}
 	return -1;
 
@@ -282,7 +274,7 @@ void
 responderrstr(Req *r)
 {
 	char err[ERRMAX];
-	
+
 	rerrstr(err, sizeof err);
 	respond(r, err);
 }
@@ -297,7 +289,7 @@ xread(Req *r)
 	char *data;
 	Memsubfont *sf;
 	Memimage *m;
-	
+
 	path = r->fid->qid.path;
 	switch(QTYPE(path)) {
 	case Qroot:
@@ -317,23 +309,22 @@ xread(Req *r)
 			readstr(r, "font missing\n");
 			break;
 		}
-		height = 0;
-		ascent = 0;
-		if(f->unit > 0) {
-			height = f->height * (int)QSIZE(path)/f->unit + 0.99999999;
-			ascent = height - (int)(-f->originy * (int)QSIZE(path)/f->unit + 0.99999999);
+		if(f->fonttext == nil) {
+			height = 0;
+			ascent = 0;
+			if(f->unit > 0) {
+				height = f->height * (int)QSIZE(path)/f->unit + 0.99999999;
+				ascent = height - (int)(-f->originy * (int)QSIZE(path)/f->unit + 0.99999999);
+			}
+			if(f->loadheight != nil)
+				f->loadheight(f, QSIZE(path), &height, &ascent);
+			fmtprint(&fmt, "%11d %11d\n", height, ascent);
+			for(i=0; i<f->nfile; i++)
+				fmtprint(&fmt, "0x%04x 0x%04x x%04x.bit\n", f->file[i]*SubfontSize, ((f->file[i]+1)*SubfontSize) - 1, f->file[i]*SubfontSize);
+			f->fonttext = fmtstrflush(&fmt);
+			f->nfonttext = strlen(f->fonttext);
 		}
-		if(f->loadheight != nil)
-			f->loadheight(f, QSIZE(path), &height, &ascent);
-		fmtprint(&fmt, "%11d %11d\n", height, ascent);
-		for(i=0; i<nelem(f->range); i++) {
-			if(f->range[i] == 0)
-				continue;
-			fmtprint(&fmt, "0x%04x 0x%04x x%04x.bit\n", i*SubfontSize, ((i+1)*SubfontSize) - 1, i*SubfontSize);
-		}
-		data = fmtstrflush(&fmt);
-		readstr(r, data);
-		free(data);
+		readbuf(r, f->fonttext, f->nfonttext);
 		break;
 	case Qsubfontfile:
 		f = &xfont[QFONT(path)];
@@ -379,7 +370,7 @@ static void
 xdestroyfid(Fid *fid)
 {
 	Memsubfont *sf;
-	
+
 	sf = fid->aux;
 	if(sf == nil)
 		return;
@@ -422,7 +413,7 @@ dump(char *path)
 
 	// root
 	memset(&fid, 0, sizeof fid);
-	dostat(0, &fid.qid, nil);	
+	dostat(0, &fid.qid, nil);
 	qid = fid.qid;
 
 	path0 = path;
@@ -442,7 +433,7 @@ dump(char *path)
 			*p++ = '/';
 		path = p;
 	}
-	
+
 	memset(&r, 0, sizeof r);
 	xsrv.fake = 1;
 
@@ -515,7 +506,7 @@ main(int argc, char **argv)
 	default:
 		usage();
 	}ARGEND
-	
+
 	xsrv.attach = xattach;
 	xsrv.open = xopen;
 	xsrv.read = xread;
@@ -526,10 +517,9 @@ main(int argc, char **argv)
 	fmtinstall('R', Rfmt);
 	fmtinstall('P', Pfmt);
 	memimageinit();
-	defont = getmemdefont();
 	loadfonts();
 	qsort(xfont, nxfont, sizeof xfont[0], fontcmp);
-	
+
 	if(pflag) {
 		if(argc != 1 || chatty9p || chattyfuse)
 			usage();
@@ -603,4 +593,3 @@ dirpackage(uchar *buf, long ts, Dir **d)
 
 	return nn;
 }
-

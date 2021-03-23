@@ -65,8 +65,8 @@
     in one command (see <i>s</i> below) to specify a portion of a line which
     is to be replaced. If it is desired to use one of the regular
     expression metacharacters as an ordinary character, that character
-    may be preceded by &#8216;<tt><font size=+1>\</font></tt>&#8217;. This
-    also applies to the character bounding the regular expression
+    may be preceded by &#8216;<tt><font size=+1>\</font></tt>&#8217;.
+    This also applies to the character bounding the regular expression
     (often <tt><font size=+1>/</font></tt>) and to <tt><font size=+1>\</font></tt> itself. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
@@ -234,10 +234,13 @@
 
         List. Print the addressed lines in an unambiguous way: a tab is
         printed as <tt><font size=+1>\t</font></tt>, a backspace as <tt><font size=+1>\b</font></tt>, backslashes as <tt><font size=+1>\\</font></tt>, and non-printing
-        characters as a backslash, an <tt><font size=+1>x</font></tt>, and four hexadecimal digits.
-        Long lines are folded, with the second and subsequent sub-lines
-        indented one tab stop. If the last character in the line is a
-        blank, it is followed by
+        ASCII characters as a backslash, an <tt><font size=+1>x</font></tt>, and two hexadecimal digits.
+        non-ASCII characters in the Basic Multilingual Plane are printed
+        as a backslash, a small <tt><font size=+1>u</font></tt>, and four hexadecimal digits; and characters
+        above the Basic Multilingual Plane are printed as a backslash,
+        a big <tt><font size=+1>U</font></tt>, and eight hexadecimal digits. Long lines are folded,
+        with the second and subsequent sub-lines indented one tab stop.
+        If the last character in the line is a blank, it is followed by
         <tt><font size=+1>\n</font></tt>. An <tt><font size=+1>l</font></tt> may be appended, like <tt><font size=+1>p</font></tt>, to any non-I/O command.<br>
         
     </table>

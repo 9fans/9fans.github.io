@@ -29,7 +29,7 @@ questionmark(void)
 	static Image *im;
 
 	if(im)
-		return im;	
+		return im;
 	im = xallocimage(display, Rect(0,0,50,50), GREY1, 1, DBlack);
 	if(im == nil)
 		return nil;
@@ -165,10 +165,15 @@ static void
 raproc(void *a)
 {
 	Cached *c;
-	
+
 	c = a;
 	lockdisplay(display);
-	_cachedpage(c->doc, c->angle, c->page, "-ra");
+	/*
+	 * If there is only one page in a fwdonly file, we may reach EOF
+	 * while doing readahead and page will exit without showing anything.
+	 */
+	if(!c->doc->fwdonly)
+		_cachedpage(c->doc, c->angle, c->page, "-ra");
 	rabusy = 0;
 	unlockdisplay(display);
 	free(c);
@@ -182,7 +187,7 @@ cachedpage(Document *doc, int angle, int page)
 	Cached *c;
 	Image *im;
 	int ra;
-	
+
 	if(doc->npage < 1)
 		return display->white;
 

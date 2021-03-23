@@ -26,6 +26,7 @@ sys(char *buf, int devnull)
 		_exit(2);
 	default:
 		waitpid();
+		noteenable("sys: child");
 	}
 }
 
@@ -33,7 +34,7 @@ int
 rcstart(int argc, char **argv, int *pfd, int *tfd)
 {
 	int fd[2], i, pid;
-	char *cmd, *xargv[3];
+	char *cmd, *xargv[4];
 	char slave[256];
 	int sfd;
 
@@ -45,6 +46,11 @@ rcstart(int argc, char **argv, int *pfd, int *tfd)
 			argv[0] = "rc";
 		argv[1] = "-i";
 		argv[2] = 0;
+		if(loginshell){
+			argv[2] = "-l";
+			argv[3] = 0;
+			argc = 3;
+		}
 	}
 	cmd = argv[0];
 	if(loginshell){
@@ -63,15 +69,15 @@ rcstart(int argc, char **argv, int *pfd, int *tfd)
 	}
 	/*
 	 * notedisable("sys: window size change");
-	 * 
+	 *
 	 * Can't disable because will be inherited by other programs
 	 * like if you run an xterm from the prompt, and then xterm's
-	 * resizes won't get handled right.  Sigh.  
+	 * resizes won't get handled right.  Sigh.
 	 *
 	 * Can't not disable because when we stty below we'll get a
 	 * signal, which will drop us into the thread library note handler,
 	 * which will get all confused because we just forked and thus
-	 * have an unknown pid. 
+	 * have an unknown pid.
 	 *
 	 * So disable it internally.  ARGH!
 	 */
@@ -86,6 +92,7 @@ rcstart(int argc, char **argv, int *pfd, int *tfd)
 	// Set $termprog to 9term or win for those who care about what kind of
 	// dumb terminal this is.
 	putenv("termprog", (char*)termprog);
+	putenv("TERM_PROGRAM", (char*)termprog);
 
 	pid = fork();
 	switch(pid){
@@ -138,7 +145,7 @@ echoed(char *p, int n)
 	if(echo.w+n > sizeof echo.buf)
 		n = 0;
 	memmove(echo.buf+echo.w, p, n);
-	echo.w += n;	
+	echo.w += n;
 	unlock(&echo.l);
 }
 

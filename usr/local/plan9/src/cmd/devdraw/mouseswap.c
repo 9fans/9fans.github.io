@@ -2,6 +2,11 @@
 #include <libc.h>
 #include <draw.h>
 #include <memdraw.h>
+#include <memlayer.h>
+#include <mouse.h>
+#include <cursor.h>
+#include <keyboard.h>
+#include <drawfcall.h>
 #include "devdraw.h"
 
 enum
@@ -51,7 +56,7 @@ mouseswap(int but)
 
 	if(!map.init)
 		initmap();
-	
+
 	nbut = 0;
 	for(i=0; i<Nbutton; i++)
 		if((but&(1<<i)) && map.b[i] >= 0)

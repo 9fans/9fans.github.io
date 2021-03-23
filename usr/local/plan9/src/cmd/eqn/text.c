@@ -193,7 +193,7 @@ trans(int c, char *p1)
 			cadd(c);
 			psp++;
 		} else {
-			cadd(c);  
+			cadd(c);
 		}
 		return f;
 	case '-':
@@ -257,13 +257,13 @@ trans(int c, char *p1)
 
 char *pad(int n)	/* return the padding as a string */
 {
-	static char buf[20];
+	static char buf[30];
 
 	buf[0] = 0;
 	if (n < 0) {
 		sprintf(buf, "\\h'-%du*\\w'\\^'u'", -n);
 		return buf;
-	}	
+	}
 	for ( ; n > 1; n -= 2)
 		strcat(buf, "\\|");
 	if (n > 0)

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo %!PS-Adobe-2.0
+exec 9 psdownload -f -mfontmap -r $PLAN9'/postscript/font/lw+' "$@"

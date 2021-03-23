@@ -4,19 +4,22 @@ int nxfont;
 
 enum {
 	SubfontSize = 32,
-	SubfontMask = (1<<16)/SubfontSize - 1,
+	MaxSubfont = (Runemax+1)/SubfontSize,
 };
 
 struct XFont
 {
 	char *name;
 	int loaded;
-	uchar range[(1<<16)/SubfontSize];	// range[i] == whether to have subfont i*SubfontSize to (i+1)*SubfontSize - 1.
-	int nrange;
+	uchar range[MaxSubfont]; // range[i] = fontfile starting at i*SubfontSize exists
+	ushort file[MaxSubfont];	// file[i] == fontfile i's lo rune / SubfontSize
+	int nfile;
 	int unit;
 	double height;
 	double originy;
 	void (*loadheight)(XFont*, int, int*, int*);
+	char *fonttext;
+	int nfonttext;
 
 	// fontconfig workarround, as FC_FULLNAME does not work for matching fonts.
 	char *fontfile;
@@ -30,6 +33,5 @@ Memsubfont*	mksubfont(XFont*, char*, int, int, int, int);
 extern XFont *xfont;
 extern int nxfont;
 void *emalloc9p(ulong);
-extern Memsubfont *defont;
 
 void	drawpjw(Memimage*, Fontchar*, int, int, int, int);

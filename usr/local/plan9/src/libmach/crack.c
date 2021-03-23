@@ -10,7 +10,7 @@ Mach *mach;
 extern Mach mach386;
 extern Mach machpower;
 
-static Mach *machs[] = 
+static Mach *machs[] =
 {
 	&mach386,
 	&machpower,
@@ -69,6 +69,7 @@ crackhdr(char *name, int mode)
 			return hdr;
 		}
 	werrstr("unknown file type: %r");
+	free(hdr->filename);
 	free(hdr);
 	close(fd);
 	return nil;
@@ -89,6 +90,7 @@ uncrackhdr(Fhdr *hdr)
 	for(i=0; i<hdr->nthread; i++)
 		free(hdr->thread[i].ureg);
 	free(hdr->thread);
+	free(hdr->filename);
 	free(hdr);
 }
 
@@ -123,7 +125,7 @@ unmapfile(Fhdr *fp, Map *map)
 	for(i=0; i<map->nseg; i++){
 		while(i<map->nseg && map->seg[i].fd == fp->fd){
 			map->nseg--;
-			memmove(&map->seg[i], &map->seg[i+1], 
+			memmove(&map->seg[i], &map->seg[i+1],
 				(map->nseg-i)*sizeof(map->seg[0]));
 		}
 	}
@@ -147,4 +149,3 @@ coreregs(Fhdr *fp, uint id)
 	werrstr("thread not found");
 	return nil;
 }
-

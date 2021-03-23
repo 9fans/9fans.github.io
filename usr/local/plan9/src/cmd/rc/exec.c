@@ -135,11 +135,11 @@ main(int argc, char *argv[])
 	code bootstrap[32];
 	char num[12], *rcmain;
 	int i;
-	
+
 	/* needed for rcmain later */
 	putenv("PLAN9", unsharp("#9"));
 
-	argc = getflags(argc, argv, "SsrdiIlxepvVc:1m:1[command]", 1);
+	argc = getflags(argc, argv, "DSYsrdiIlxepvVc:1m:1[command]", 1);
 	if(argc==-1)
 		usage("[file [arg ...]]");
 	if(argv[0][0]=='-')
@@ -690,7 +690,7 @@ word*
 copynwords(word *a, word *tail, int n)
 {
 	word *v, **end;
-	
+
 	v = 0;
 	end = &v;
 	while(n-- > 0){
@@ -901,7 +901,7 @@ Xrdcmds(void)
 			promptstr="% ";
 	}
 	Noerror();
-	if(yyparse()){
+	if((flag['Y'] ? yyparse : parse)()){
 		if(!p->iflag || p->eof && !Eintr()){
 			if(p->cmdfile)
 				efree(p->cmdfile);

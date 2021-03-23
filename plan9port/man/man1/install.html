@@ -66,21 +66,14 @@
     for the environment variables <tt><font size=+1>$PLAN9</font></tt> and <tt><font size=+1>$PATH</font></tt>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    Plan 9 from User Space uses different threading implementations
-    on Linux 2.6 and later kernels than on 2.4 and earlier; and on
-    FreeBSD 5 and later kernels than on FreeBSD 4 and earlier. Running
-    binaries from one class on another will not work. 
-    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
-    
-    Some Linux 2.6 systems (e.g., Gentoo) do not use the new NPTL
-    pthread library even though the kernel supports them. On these
-    systems, plan9port must fall back on the threading code intended
-    for Linux 2.4. To accomplish this, <i>INSTALL</i> checks whether the
-    running system uses NPTL and sets <tt><font size=+1>SYSVERSION</font></tt> in <tt><font size=+1><a href="/usr/local/plan9/config">/usr/local/plan9/config</a>
-    </font></tt>accordingly. The file <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>LOCAL.config</font></tt> is appended
-    to <tt><font size=+1>config</font></tt> after this auto-detection and can be used to override
-    the choices. If <tt><font size=+1>LOCAL.config</font></tt> contains a line <tt><font size=+1>WSYSTYPE=nowsys</font></tt> then
-    the system is built without using X11. 
+    <i>INSTALL</i> writes various autodetected settings to <tt><font size=+1><a href="/usr/local/plan9/config">/usr/local/plan9/config</a></font></tt>.
+    The file <tt><font size=+1><a href="/usr/local/plan9/">/usr/local/plan9/</a>LOCAL.config</font></tt> is appended to <tt><font size=+1>config</font></tt> after
+    this auto-detection and can be used to override the choices. If
+    <tt><font size=+1>LOCAL.config</font></tt> contains a line <tt><font size=+1>WSYSTYPE=nowsys</font></tt> then the system is
+    built without using X11. <tt><font size=+1>LOCAL.config</font></tt> may also list
+    settings for <tt><font size=+1>CC9</font></tt> (the host C compiler) and <tt><font size=+1>CC9FLAGS</font></tt> (any additional
+    flags to pass to the compiler). Values more complex than single
+    words should be quoted with single quotes. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     On most Linux systems, the X11 header packages need to be installed

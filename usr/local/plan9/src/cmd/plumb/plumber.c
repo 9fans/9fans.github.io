@@ -7,6 +7,7 @@
 #include "plumber.h"
 
 int debug;
+int foreground=0;
 char	*plumbfile;
 char *user;
 char *home;
@@ -25,6 +26,12 @@ makeports(Ruleset *rules[])
 		addport(rules[i]->port);
 }
 
+int
+threadmaybackground(void)
+{
+	return 1;
+}
+
 void
 threadmain(int argc, char *argv[])
 {
@@ -36,6 +43,9 @@ threadmain(int argc, char *argv[])
 	ARGBEGIN{
 	case 'd':
 		debug = 1;
+		break;
+	case 'f':
+		foreground = 1;
 		break;
 	case 'p':
 		plumbfile = ARGF();
@@ -69,7 +79,7 @@ threadmain(int argc, char *argv[])
 	 */
 	printerrors = 0;
 	makeports(rules);
-	startfsys();
+	startfsys(foreground);
 	threadexits(nil);
 }
 

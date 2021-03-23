@@ -211,16 +211,21 @@
         </table>
         
     </table>
-    <tt><font size=+1>/graph/</font></tt><i>name</i><tt><font size=+1>/</font></tt><i>param</i><tt><font size=+1>/</font></tt><i>param<br>
+    <tt><font size=+1>/graph?arg=</font></tt><i>name</i><tt><font size=+1>[&amp;arg2=</font></tt><i>name]</i><tt><font size=+1>&amp;graph=</font></tt><i>type<br>
     </i>
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
         
         <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-            A PNG image graphing the named run-time statistic over time. The
-            details of names and parameters are undocumented; see <tt><font size=+1>httpd.c</font></tt>
-            in the venti sources.<br>
+            A PNG image graphing the run-time statistic over time. The details
+            of names and parameters are mostly undocumented; see the <tt><font size=+1>graphname</font></tt>
+            array in <tt><font size=+1>httpd.c</font></tt> in the venti code for a list of possible statistics.
+            The <i>type</i> of graph defaults to raw, see the <tt><font size=+1>xgraph</font></tt> function for
+            a list of types. Possible <i>param</i> include the timeframe <tt><font size=+1>(t0</font></tt> and
+            <tt><font size=+1>t1)</font></tt> ,
+            the y limits <tt><font size=+1>(min</font></tt> and <tt><font size=+1>max)<br>
+            </font></tt>etc.<br>
             
         </table>
         
@@ -292,7 +297,7 @@
     <tt><font size=+1>addr</font></tt> <i>netaddr</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;network address to announce venti service (default
     <tt><font size=+1>tcp!*!venti</font></tt>)<br>
     <tt><font size=+1>httpaddr</font></tt> <i>netaddr</i>network address to announce HTTP service (default
-    <tt><font size=+1>tcp!*!http</font></tt>)<br>
+    is not to start the service)<br>
     <tt><font size=+1>queuewrites</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue writes in memory (default is not to queue)<br>
     <tt><font size=+1>webroot</font></tt> <i>dir</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;directory tree containing files for <i>venti</i>&#8217;s internal
     HTTP server to consult for unrecognized URLs 

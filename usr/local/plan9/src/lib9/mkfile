@@ -22,6 +22,7 @@ FMTOFILES=\
 	fmtstr.$O\
 	fmtvprint.$O\
 	fprint.$O\
+	frexp.$O\
 	nan64.$O\
 	print.$O\
 	runefmtstr.$O\
@@ -85,14 +86,12 @@ LIB9OFILES=\
 	convM2D.$O\
 	convM2S.$O\
 	convS2M.$O\
-	create.$O\
 	crypt.$O\
 	ctime.$O\
 	dial.$O\
 	dirfstat.$O\
 	dirfwstat.$O\
 	dirmodefmt.$O\
-	dirread.$O\
 	dirstat.$O\
 	dirwstat.$O\
 	dup.$O\
@@ -102,8 +101,9 @@ LIB9OFILES=\
 	execl.$O\
 	exitcode.$O\
 	fcallfmt.$O\
+	frand.$O\
 	get9root.$O\
-	getcallerpc-$OBJTYPE.$O\
+	getcallerpc.$O\
 	getenv.$O\
 	getfields.$O\
 	getnetconn.$O\
@@ -139,7 +139,6 @@ LIB9OFILES=\
 	readn.$O\
 	rfork.$O\
 	searchpath.$O\
-	seek.$O\
 	sendfd.$O\
 	sleep.$O\
 	strdup.$O\

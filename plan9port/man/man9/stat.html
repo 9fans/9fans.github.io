@@ -112,7 +112,7 @@
     between directory entries and a C structure called a <tt><font size=+1>Dir</font></tt>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    The <i>mode</i> contains permission bits as described in <a href="../man9/intro.html"><i>intro</i>(9P)</a> and
+    The <i>mode</i> contains permission bits as described in <i>intro</i>(9P) and
     the following: <tt><font size=+1>0x80000000</font></tt> (<tt><font size=+1>DMDIR</font></tt>, this file is a directory), <tt><font size=+1>0x40000000</font></tt>
     (<tt><font size=+1>DMAPPEND</font></tt>, append only), <tt><font size=+1>0x20000000</font></tt> (<tt><font size=+1>DMEXCL</font></tt>, exclusive use), <tt><font size=+1>0x04000000</font></tt>
     (<tt><font size=+1>DMTMP</font></tt>, temporary); these are echoed in <tt><font size=+1>Qid.type</font></tt>. Writes to append-only
@@ -167,7 +167,7 @@
     <i>gid</i> can be changed: by the
     owner if also a member of the new group; or by the group leader
     of the file&#8217;s current group if also leader of the new group (see
-    <a href="../man9/intro.html"><i>intro</i>(9P)</a> for more information about permissions, users, and groups).
+    <i>intro</i>(9P) for more information about permissions, users, and groups).
     None of the other data can be altered by a <tt><font size=+1>wstat</font></tt> and attempts
     to change them will trigger an error. In particular, it is illegal
     to attempt to change the owner
@@ -194,7 +194,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     A <i>read</i> of a directory yields an integral number of directory entries
-    in the machine independent encoding given above (see <a href="../man9/read.html"><i>read</i>(9P)</a>).
+    in the machine independent encoding given above (see <i>read</i>(9P)).
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
@@ -217,7 +217,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    To make the contents of a directory, such as returned by <a href="../man9/read.html"><i>read</i>(9P)</a>,
+    To make the contents of a directory, such as returned by <i>read</i>(9P),
     easy to parse, each directory entry begins with a size field.
     For consistency, the entries in <tt><font size=+1>Twstat</font></tt> and <tt><font size=+1>Rstat</font></tt> messages also
     contain their size, which means the size appears twice. For example,

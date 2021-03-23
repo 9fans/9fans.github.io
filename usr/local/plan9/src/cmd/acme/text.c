@@ -8,6 +8,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include <complete.h>
 #include "dat.h"
 #include "fns.h"
@@ -198,6 +199,7 @@ textload(Text *t, uint q0, char *file, int setqid)
 	Dir *d, *dbuf;
 	char *tmp;
 	Text *u;
+	DigestState *h;
 
 	if(t->ncache!=0 || t->file->b.nc || t->w==nil || t!=&t->w->body)
 		error("text.load");
@@ -220,6 +222,7 @@ textload(Text *t, uint q0, char *file, int setqid)
 		goto Rescue;
 	}
 	nulls = FALSE;
+	h = nil;
 	if(d->qid.type & QTDIR){
 		/* this is checked in get() but it's possible the file changed underfoot */
 		if(t->file->ntext > 1){
@@ -264,9 +267,17 @@ textload(Text *t, uint q0, char *file, int setqid)
 	}else{
 		t->w->isdir = FALSE;
 		t->w->filemenu = TRUE;
-		q1 = q0 + fileload(t->file, q0, fd, &nulls);
+		if(q0 == 0)
+			h = sha1(nil, 0, nil, nil);
+		q1 = q0 + fileload(t->file, q0, fd, &nulls, h);
 	}
 	if(setqid){
+		if(h != nil) {
+			sha1(nil, 0, t->file->sha1, h);
+			h = nil;
+		} else {
+			memset(t->file->sha1, 0, sizeof t->file->sha1);
+		}
 		t->file->dev = d->dev;
 		t->file->mtime = d->mtime;
 		t->file->qidpath = d->qid.path;
@@ -377,7 +388,7 @@ textinsert(Text *t, uint q0, Rune *r, uint n, int tofile)
 					textscrdraw(u);
 				}
 			}
-					
+
 	}
 	if(q0 < t->iq1)
 		t->iq1 += n;
@@ -538,7 +549,7 @@ textbswidth(Text *t, Rune c)
 		if(r == '\n'){		/* eat at most one more character */
 			if(q == t->q0)	/* eat the newline */
 				--q;
-			break; 
+			break;
 		}
 		if(c == 0x17){
 			eq = isalnum(r);
@@ -760,7 +771,7 @@ texttype(Text *t, Rune r)
 	case Kcmd+'Z':	/* %-shift-Z: redo */
 	 	typecommit(t);
 		undo(t, nil, nil, FALSE, 0, nil, 0);
-		return;		
+		return;
 
 	Tagdown:
 		/* expand tag to show all text */
@@ -769,7 +780,7 @@ texttype(Text *t, Rune r)
 			winresize(t->w, t->w->r, FALSE, TRUE);
 		}
 		return;
-	
+
 	Tagup:
 		/* shrink tag to single line */
 		if(t->w->tagexpand){
@@ -1181,7 +1192,7 @@ void
 textsetselect(Text *t, uint q0, uint q1)
 {
 	int p0, p1, ticked;
-	
+
 	/* t->fr.p0 and t->fr.p1 are always right; t->q0 and t->q1 may be off */
 	t->q0 = q0;
 	t->q1 = q1;
@@ -1334,7 +1345,7 @@ textselect23(Text *t, uint *q0, uint *q1, Image *high, int mask)
 {
 	uint p0, p1;
 	int buts;
-	
+
 	p0 = xselect(&t->fr, mousectl, high, &p1);
 	buts = mousectl->m.buttons;
 	if((buts & mask) == 0){
@@ -1401,7 +1412,7 @@ textdoubleclick(Text *t, uint *q0, uint *q1)
 
 	if(textclickhtmlmatch(t, q0, q1))
 		return;
-	
+
 	for(i=0; left[i]!=nil; i++){
 		q = *q0;
 		l = left[i];
@@ -1433,7 +1444,7 @@ textdoubleclick(Text *t, uint *q0, uint *q1)
 			return;
 		}
 	}
-	
+
 	/* try filling out word to right */
 	while(*q1<t->file->b.nc && isalnum(textreadc(t, *q1)))
 		(*q1)++;
@@ -1507,7 +1518,7 @@ static int
 ishtmlend(Text *t, uint q, uint *q0)
 {
 	int c, c1, c2;
-	
+
 	if(q < 2)
 		return 0;
 	if(textreadc(t, --q) != '>')
@@ -1535,7 +1546,7 @@ textclickhtmlmatch(Text *t, uint *q0, uint *q1)
 {
 	int depth, n;
 	uint q, nq;
-	
+
 	q = *q0;
 	// after opening tag?  scan forward for closing tag
 	if(ishtmlend(t, q, nil) == 1) {
@@ -1572,7 +1583,7 @@ textclickhtmlmatch(Text *t, uint *q0, uint *q1)
 			q--;
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -1604,7 +1615,7 @@ textsetorigin(Text *t, uint org, int exact)
 	Rune *r;
 	uint n;
 
-	if(org>0 && !exact){
+	if(org>0 && !exact && textreadc(t, org-1) != '\n'){
 		/* org is an estimate of the char posn; find a newline */
 		/* don't try harder than 256 chars */
 		for(i=0; i<256 && org<t->file->b.nc; i++){

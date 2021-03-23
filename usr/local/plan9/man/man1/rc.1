@@ -50,7 +50,7 @@ exits or is terminated, the
 variable
 .B $status
 gets the process's wait message (see
-.IR wait (3));
+.MR wait (3) );
 it will be the null string if the command was successful.
 .PP
 A long command line may be continued on subsequent lines by typing
@@ -83,7 +83,7 @@ in a directory in
 .B $path
 is the program to be executed.
 To be executable, the user must have execute permission (see
-.IR stat (3))
+.MR stat (3) )
 and the file must be either an executable binary
 for the current machine's CPU type, or a shell script.
 Shell scripts begin with a line containing the full path name of a shell
@@ -109,7 +109,7 @@ The simplest kind of argument is the unquoted word:
 a sequence of one or more characters none of which is a blank, tab,
 newline, or any of the following:
 .EX
-	# ; & | ^ $ = ` ' { } ( ) < >
+	# ; & | ^ $ ` ' { } ( ) < >
 .EE
 An unquoted word that contains any of the characters
 .B *
@@ -290,28 +290,10 @@ then one operand must have one component, and the other must be non-empty,
 and concatenation is distributive.
 .PD
 .SS Free Carets
-In most circumstances,
-.I rc
+.I Rc
 will insert the
 .B ^
 operator automatically between words that are not separated by white space.
-Whenever one of
-.B $
-.B '
-.B `
-follows a quoted or unquoted word or an unquoted word follows a quoted word
-with no intervening blanks or tabs,
-a
-.B ^
-is inserted between the two.
-If an unquoted word immediately follows a
-.BR $ 
-and contains a character other than an alphanumeric, underscore,
-or
-.BR * ,
-a
-.B ^
-is inserted before the first such character.
 Thus
 .IP
 .B cc -$flags $stem.c
@@ -367,8 +349,8 @@ or
 .I Fd1
 is a previously opened file descriptor and
 .I fd0
-becomes a new copy (in the sense of 
-.IR dup (3))
+becomes a new copy (in the sense of
+.MR dup (3) )
 of it.
 A file descriptor may be closed by writing
 .BI >[ fd0 =]
@@ -477,7 +459,7 @@ is executed.
 The
 .I command
 is executed once for each
-.IR argument 
+.IR argument
 with that argument assigned to
 .IR name .
 If the argument list is omitted,
@@ -561,7 +543,7 @@ function definition.
 A function with a special name will be called when
 .I rc
 receives a corresponding note; see
-.IR notify (3).
+.MR notify (3) .
 The valid note names (and corresponding notes) are
 .B sighup
 .RB ( hangup ),
@@ -680,7 +662,7 @@ is composed of the bitwise OR of the
 .B rfork
 flags specified by the option letters
 (see
-.IR fork (2)).
+.MR fork (2) ).
 If no
 .I flags
 are given, they default to
@@ -824,6 +806,10 @@ is set to its process id.
 .B $home
 The default directory for
 .BR cd .
+Defaults to
+.B $HOME
+or else
+.LR / .
 .TP
 .B $ifs
 The input field separators used in backquote substitutions.
@@ -843,7 +829,7 @@ parsing the
 .B $PATH
 variable
 (as in
-.IR sh (1))
+.MR sh (1) )
 or by
 .BR "path=(.\ /bin)" .
 The variables
@@ -982,8 +968,6 @@ changes
 .PP
 Functions that use here documents don't work.
 .PP
-Free carets don't get inserted next to keywords.
-.PP
 The
 .BI <{ command }
 syntax depends on the underlying operating system
@@ -1009,3 +993,9 @@ and then
 .B fstab
 ensures causes FreeBSD to mount the file system
 automatically at boot time.)
+.PP
+Some systems require
+.B \*9/bin/rc
+to be listed in
+.B /etc/shells
+before it can be used as a login shell.

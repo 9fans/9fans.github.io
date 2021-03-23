@@ -70,7 +70,7 @@
     <tt><font size=+1>DMAPPEND</font></tt> bit is set. Exclusive-use files may be open for I/O by
     only one client at a time, but the
     file descriptor may become invalid if no I/O is done for an extended
-    period; see <a href="../man9/open.html"><i>open</i>(9p)</a>. 
+    period; see <i>open</i>(9p). 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Create</i> fails if the path up to the last element of <i>file</i> cannot
@@ -85,7 +85,7 @@
     is necessary for those applications that require an atomic create
     operation. If the <tt><font size=+1>OEXCL</font></tt> (<tt><font size=+1>0x1000</font></tt>) bit is set in the <i>mode</i> for a
     <i>create,</i> the call succeeds only if the file does not already exist;
-    see <a href="../man9/open.html"><i>open</i>(9p)</a> for details. 
+    see <i>open</i>(9p) for details. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Close</i> closes the file associated with a file descriptor. Provided

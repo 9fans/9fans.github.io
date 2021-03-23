@@ -94,7 +94,7 @@ threadmain(int argc, char **argv)
 			threadexitsall(0);
 		}
 	}
-	usage();	
+	usage();
 }
 
 CFsys*
@@ -168,7 +168,7 @@ xread(int argc, char **argv)
 	fsclose(fid);
 	if(n < 0)
 		sysfatal("read error: %r");
-	threadexitsall(0);	
+	threadexitsall(0);
 }
 
 void
@@ -192,7 +192,7 @@ xreadfd(int argc, char **argv)
 			sysfatal("write error: %r");
 	if(n < 0)
 		sysfatal("read error: %r");
-	threadexitsall(0);	
+	threadexitsall(0);
 }
 
 void
@@ -246,7 +246,7 @@ xwrite(int argc, char **argv)
 	if(n < 0)
 		sysfatal("read error: %r");
 	fsclose(fid);
-	threadexitsall(0);	
+	threadexitsall(0);
 }
 
 void
@@ -270,7 +270,7 @@ xwritefd(int argc, char **argv)
 			sysfatal("write error: %r");
 	if(n < 0)
 		sysfatal("read error: %r");
-	threadexitsall(0);	
+	threadexitsall(0);
 }
 
 void
@@ -302,8 +302,10 @@ void
 xrdwr(int argc, char **argv)
 {
 	char buf[4096];
+	char *p;
 	int n;
 	CFid *fid;
+	Biobuf *b;
 
 	ARGBEGIN{
 	default:
@@ -313,6 +315,8 @@ xrdwr(int argc, char **argv)
 	if(argc != 1)
 		usage();
 
+	if((b = Bfdopen(0, OREAD)) == nil)
+		sysfatal("out of memory");
 	fid = xopen(argv[0], ORDWR);
 	for(;;){
 		fsseek(fid, 0, 0);
@@ -322,16 +326,16 @@ xrdwr(int argc, char **argv)
 			if(write(1, buf, n) < 0 || write(1, "\n", 1) < 0)
 				sysfatal("write error: %r");
 		}
-		n = read(0, buf, sizeof buf);
-		if(n <= 0)
+		if((p = Brdstr(b, '\n', 1)) == nil)
 			break;
-		if(buf[n-1] == '\n')
-			n--;
-		if(fswrite(fid, buf, n) != n)
+		n = strlen(p);
+		if(fswrite(fid, p, n) != n)
 			fprint(2, "write: %r\n");
+		free(p);
 	}
 	fsclose(fid);
-	threadexitsall(0);	
+	Bterm(b);
+	threadexitsall(0);
 }
 
 void
@@ -346,10 +350,10 @@ xcreate(int argc, char **argv)
 	default:
 		usage();
 	}ARGEND
-	
+
 	if(argc == 0)
 		usage();
-	
+
 	for(i=0; i<argc; i++){
 		fs = xparse(argv[i], &p);
 		if((fid=fscreate(fs, p, OREAD, 0666)) == nil)
@@ -371,10 +375,10 @@ xrm(int argc, char **argv)
 	default:
 		usage();
 	}ARGEND
-	
+
 	if(argc == 0)
 		usage();
-	
+
 	for(i=0; i<argc; i++){
 		fs = xparse(argv[i], &p);
 		if(fsremove(fs, p) < 0)
@@ -389,7 +393,7 @@ rdcon(void *v)
 	int n;
 	char buf[4096];
 	CFid *fid;
-	
+
 	fid = v;
 	for(;;){
 		n = read(0, buf, sizeof buf);
@@ -408,7 +412,7 @@ xcon(int argc, char **argv)
 	char buf[4096], *r, *w, *e;
 	int n, nocr;
 	CFid *fid;
-	
+
 	nocr = 1;
 
 	ARGBEGIN{
@@ -438,12 +442,12 @@ xcon(int argc, char **argv)
 			threadexitsall(0);
 	}
 	fsclose(fid);
-	threadexitsall(0);	
+	threadexitsall(0);
 }
 
-static char *mon[] = 
+static char *mon[] =
 {
-	"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+	"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 	"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
 
@@ -454,7 +458,7 @@ timefmt(Fmt *fmt)
 	ulong u;
 	static ulong time0;
 	Tm *tm;
-	
+
 	if(time0 == 0)
 		time0 = time(0);
 	u = va_arg(fmt->args, ulong);
@@ -470,7 +474,7 @@ static int
 dircmp(const void *va, const void *vb)
 {
 	Dir *a, *b;
-	
+
 	a = (Dir*)va;
 	b = (Dir*)vb;
 	return strcmp(a->name, b->name);
@@ -480,7 +484,7 @@ static int
 timecmp(const void *va, const void *vb)
 {
 	Dir *a, *b;
-	
+
 	a = (Dir*)va;
 	b = (Dir*)vb;
 	if(a->mtime < b->mtime)
@@ -520,12 +524,12 @@ xls(int argc, char **argv)
 		tflag = 1;
 		break;
 	}ARGEND
-	
+
 	fmtinstall('D', dirfmt);
 	fmtinstall('M', dirmodefmt);
 	quotefmtinstall();
 	fmtinstall('T', timefmt);
-	
+
 	if(argc == 0){
 		argv = dot;
 		argc = 1;
@@ -600,4 +604,3 @@ xls(int argc, char **argv)
 	}
 	threadexitsall(err);
 }
-

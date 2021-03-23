@@ -36,6 +36,7 @@ buildfont(Display *d, char *buf, char *name)
 	if(fnt->name==0 || fnt->cache==0 || fnt->subf==0){
     Err2:
 		free(fnt->name);
+		free(fnt->namespec);
 		free(fnt->cache);
 		free(fnt->subf);
 		free(fnt->sub);
@@ -131,7 +132,7 @@ freefont(Font *f)
 	}
 	for(i=0; i<f->nsubf; i++){
 		s = f->subf[i].f;
-		if(s && (!display || s!=display->defaultsubfont))
+		if(s)
 			freesubfont(s);
 	}
 	freeimage(f->cacheimage);
@@ -153,7 +154,7 @@ freefont(Font *f)
 			f->display->firstfont = f->next;
 	}
 
-	if(f->lodpi != f)	
+	if(f->lodpi != f)
 		freefont(f->lodpi);
 	if(f->hidpi != f)
 		freefont(f->hidpi);

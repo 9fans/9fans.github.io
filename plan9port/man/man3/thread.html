@@ -19,9 +19,10 @@
     threaddata, threadexec, threadexecl, threadexits, threadexitsall,
     threadgetgrp, threadgetname, threadint, threadintgrp, threadkill,
     threadkillgrp,
-    threadmain, threadnotify, threadid, threadpid, threadpin, threadunpin,
-    threadsetgrp, threadsetname, threadsetstate, threadspawn, threadspawnd,
-    threadspawnl, threadwaitchan, yield &ndash; thread and proc management<br>
+    threadmain, threadmaybackground, threadnotify, threadid, threadpid,
+    threadpin, threadunpin, threadsetgrp, threadsetname, threadsetstate,
+    threadspawn, threadspawnd, threadspawnl, threadwaitchan, yield
+    &ndash; thread and proc management<br>
     
 </table>
 <p><font size=+1><b>SYNOPSIS     </b></font><br>
@@ -57,6 +58,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threadmain(int argc, char *argv[])<br>
+    int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threadmaybackground(void)<br>
     int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mainstacksize<br>
     int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;proccreate(void (*fn)(void*), void *arg, uint stacksize)<br>
     int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threadcreate(void (*fn)(void*), void *arg, uint stacksize)<br>
@@ -118,11 +120,15 @@
     A <i>proc</i> is a Plan 9 process that contains one or more cooperatively
     scheduled <i>threads</i>. Programs using threads must replace <i>main</i> by
     <i>threadmain</i>. The thread library provides a <i>main</i> function that sets
-    up a proc with a single thread executing <i>threadmain</i> on a stack
-    of size <i>mainstacksize</i> (default eight kilobytes). To set <i>mainstacksize</i>,
-    declare a global
-    variable initialized to the desired value (<i>e.g.</i>, <tt><font size=+1>int mainstacksize
-    = 1024</font></tt>). 
+    up a proc with a single thread executing <i>threadmain</i>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Every thread is backed by an operating system-provided <i>pthread</i>
+    and runs on its system-provided stack; <i>mainstacksize</i> and the the
+    stack size arguments to <i>proccreate</i> and <i>threadcreate</i> are ignored.
+    Although each thread is backed by a separate <i>pthread</i>, the threads
+    in a proc are still scheduled non-preemptively as on Plan 9 and
+    as described below. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Threadcreate</i> creates a new thread in the calling proc, returning
@@ -146,7 +152,13 @@
     
     When the last thread in <i>threadmain</i>&#8217;s proc exits, the program will
     appear to its parent to have exited. The remaining procs will
-    still run together, but as a background program. 
+    still run together, but as a background program. This functionality
+    can only be relied upon if the program defines a function <i>threadmaybackground</i>
+    returning a non-zero result. Programs that do not define such
+    a
+    <i>threadmaybackground</i> will crash instead should the last thread
+    in <i>threadmain</i>&#8217;s proc exit leaving behind other running procs.
+    
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     The threads in a proc are coroutines, scheduled nonpreemptively
@@ -302,8 +314,9 @@
     <i>elsize</i>. <i>Recvp</i>, <i>nbrecvp</i>, <i>recvul</i>, and <i>nbrecvul</i> receive a pointer
     or an unsigned long; they return zero when a zero is received,
     when interrupted, or (for <i>nbrecvp</i> and <i>nbrecvul</i>) when the operation
-    would have blocked. To
-    distinguish between these three cases, use <i>recv</i> or <i>nbrecv</i>. 
+    would have blocked.
+    To distinguish between these three cases, use <i>recv</i> or <i>nbrecv</i>.
+    
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Alt</i> can be used to recv from or send to one of a number of channels,

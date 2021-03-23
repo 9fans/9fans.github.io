@@ -8,11 +8,15 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include "dat.h"
 #include "fns.h"
 
 Rangeset	sel;
 Rune		*lastregexp;
+
+#undef class
+#define class regxclass /* some systems declare "class" in system headers */
 
 /*
  * Machine Information

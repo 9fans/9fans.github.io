@@ -1,4 +1,5 @@
 <$PLAN9/src/mkhdr
+<|osxvers
 <|sh ../devdraw/mkwsysrules.sh
 <|sh freetyperules.sh $WSYSTYPE $X11H
 
@@ -12,8 +13,6 @@ OFILES=\
 	$WSYSTYPE.$O\
 
 <$PLAN9/src/mkone
-
-osx-cocoa.$O: osx.c
 
 showpjw: showpjw.c
 	9c showpjw.c

@@ -1,0 +1,100 @@
+#!/bin/sh
+
+I_WANT_A_BROKEN_PS=yes
+export I_WANT_A_BROKEN_PS
+all=no
+if [ "x$1" = "x-a" ]
+then
+	all=yes
+fi
+export all
+
+cat >/tmp/awk.xxx$$ <<'!'
+BEGIN{
+	state["D"] = "Spinwait";
+	state["I"] = "Idle";
+	state["J"] = "Jail";
+	state["R"] = "Ready";
+	state["O"] = "Running";
+	state["S"] = "Sleep";
+	state["T"] = "Stopped";
+	state["Z"] = "Zombie";
+	state["W"] = "Fault";
+	state["X"] = "Moribund";
+}
+
+function statestr(s, wchan)
+{
+	if(wchan != s && wchan != "?" && wchan != "-")
+		return wchan;
+	t = state[substr(s, 1, 1)];
+	if(t == "")
+		return s;
+	return t;
+}
+
+# rsc  36706   starttime 0:00.17  1076 Is+  -bash (bash)
+{
+	i=1
+	user=$i; i++
+	pid=$i; i++
+	start=$i; i++
+	if(start ~ /^[A-Z][a-z][a-z]$/){
+		start = start "-" $i; i++
+	}
+	cputime=$i; i++
+	mem=$i; i++
+	stat=$i; i++
+	wchan=$i; i++
+	cmd=$i; i++	
+	if(ENVIRON["all"] == "yes"){
+		for(; i<=NF; i++)
+			cmd = cmd " " $i;
+	}else{
+		sub(/.*\//, "", cmd);
+		sub(/:$/, "", cmd);
+		sub(/^-/, "", cmd);
+		s = " " cmd;
+	}
+	sub(/\.[0-9][0-9]$/, "", cputime);	# drop .hundredths of second
+	if(cputime ~ /..:..:../){	# convert hh:mm:ss into mm:ss
+		split(cputime, a, ":");
+		cputime = sprintf("%d:%02d", a[1]*60+a[2], a[3]);
+	}
+	if(start ~ /..:..:../){	# drop :ss
+		sub(/:..$/, "", start);
+	}
+	sub(/[ 	]+$/, "", cmd);
+	line[0+nline++] = sprintf("%s\001%d\001%s\001%s\001%dK\001%s\001%s",
+		user, pid, start, cputime, mem, statestr(stat, wchan), cmd);
+}
+
+END{
+	for(i=0; i<nline; i++){
+		split(line[i], a, "\001");
+		for(j=1; j<=7; j++)
+			if(length(a[j]) > max[j])
+				max[j] = length(a[j]);
+	}
+	for(i=0; i<nline; i++){
+		split(line[i], a, "\001");
+		printf("%-*s %*s %*s %*s %*s %-*s %s\n",
+			max[1], a[1], max[2], a[2], max[3], a[3], max[4], a[4],
+			max[5], a[5], max[6], a[6], a[7]);
+	}
+}
+!
+
+case "${SYSNAME:-`uname`}" in 
+SunOS)
+	/bin/ps -aA -o 'user,pid,stime,time,rss,s,s,args' | sed 1d |
+		nawk -f /tmp/awk.xxx$$ | sort -n +1
+	;;
+*)
+	/bin/ps -axww -o 'user,pid,start,time,rss,stat,wchan,command' | sed 1d |
+		awk -f /tmp/awk.xxx$$ | sort -n +1
+	;;
+esac
+
+rm -f /tmp/awk.xxx$$
+

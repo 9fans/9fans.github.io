@@ -1,14 +1,14 @@
 <$PLAN9/src/mkhdr
 
-SYSOFILES=`{sh ./sysofiles.sh}
 LIB=libthread.a
 OFILES=\
-	$SYSOFILES\
+	bg.$O\
 	channel.$O\
 	daemonize.$O\
 	exec.$O\
 	ioproc.$O\
 	iorw.$O\
+	pthread.$O\
 	ref.$O\
 	thread.$O\
 	wait.$O\
@@ -16,8 +16,6 @@ OFILES=\
 <$PLAN9/src/mksyslib
 
 HFILES=thread.h threadimpl.h
-FreeBSD.$O: BSD.c
-NetBSD.$O: Linux.c
 
 tprimes: test/tprimes.$O
 	9l -o $target test/$target.$O
@@ -25,6 +23,8 @@ tspawn: test/tspawn.$O
 	9l -o $target test/$target.$O
 tspawnloop: test/tspawnloop.$O
 	9l -o $target test/$target.$O
+
+tprimes tspawn tspawnloop: $PLAN9/lib/$LIB
 
 %.$O: %.c
 	$CC -o $target $CFLAGS -I. $stem.c
@@ -39,8 +39,8 @@ OpenBSD-%-asm.$O:	OpenBSD-%-asm.S
 Linux-sparc64-context.$O: Linux-sparc64-context.S
 	$CC -m64 -mcpu=v9 $CFLAGS Linux-sparc64-context.S
 
-Linux-sparc64-swapcontext.$O: Linux-sparc64-swapcontext.c
-	$CC -m64 -mcpu=v9 $CFLAGS Linux-sparc64-swapcontext.c
+sparc64-ucontext.$O: sparc64-ucontext.c
+	$CC -m64 -mcpu=v9 $CFLAGS sparc64-ucontext.c
 
 test:V: tprimes tspawn
 	primes 1 10007 >p1.txt
@@ -52,4 +52,5 @@ test:V: tprimes tspawn
 	echo tspawn should take 3 seconds, not 6
 	$PLAN9/bin/time ./tspawn sleep 3 >/dev/null
 
-CLEANFILES=p1.txt p2.txt tp1.txt tp2.txt test/*.$O
+CLEANFILES=p1.txt p2.txt tp1.txt tp2.txt test/*.$O tprimes tspawn
+

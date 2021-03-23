@@ -143,7 +143,7 @@ output(void)
 	char buf[4096];
 	char *s;
 
-	if(!nflag)
+	if(!nflag && dirbuf!=0)
 		qsort(dirbuf, ndir, sizeof dirbuf[0], (int (*)(const void*, const void*))compar);
 	for(i=0; i<ndir; i++)
 		dowidths(dirbuf[i].d);
@@ -249,7 +249,7 @@ growto(long n)
 	if(dirbuf == 0){
 		fprint(2, "ls: malloc fail\n");
 		exits("malloc fail");
-	}		
+	}
 }
 
 int
@@ -305,4 +305,3 @@ asciitime(long l)
 	buf[12] = 0;
 	return buf;
 }
-

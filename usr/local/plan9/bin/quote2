@@ -1,0 +1,10 @@
+#!/usr/local/plan9/bin/rc
+
+cmd = `{quote1 $* | tail -1}
+if (~ $#cmd 0) {
+	echo no such command found >[1=2]
+	exit notfound
+}
+
+echo '	' $cmd >[1=2]
+rc -c $"cmd

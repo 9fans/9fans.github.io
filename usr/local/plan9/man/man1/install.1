@@ -15,7 +15,7 @@ cd \*9; ./INSTALL
 .SH DESCRIPTION
 To obtain the Plan 9 tree, use Git
 (see
-.IR git (1))
+.MR git (1) )
 or download a tar file from
 .HR https://9fans.github.io/plan9port "" .
 .PP
@@ -25,14 +25,14 @@ usual place is
 In the root of the tree, run
 .BR ./INSTALL .
 This script builds the Plan 9 build program
-.IR mk (1)
+.MR mk (1)
 if necessary,
 cleans all previously built object files and libraries out of the tree,
 rebuilds and installs everything, and then cleans up.
 .PP
 There are a few files in tree which have the root
 hard-coded in them.
-After the build, 
+After the build,
 .I INSTALL
 edits these files to replace the string
 .B /usr/local/plan9
@@ -71,35 +71,33 @@ expectations of certain package management systems.
 .PP
 At the end of the installation,
 .I INSTALL
-prints suggested settings for the environment variables 
+prints suggested settings for the environment variables
 .B $PLAN9
 and
 .BR $PATH .
 .PP
-Plan 9 from User Space uses different threading implementations on Linux 2.6 and
-later kernels than on 2.4 and earlier;
-and on FreeBSD 5 and later kernels than on FreeBSD 4 and earlier.
-Running binaries from one class on another will not work.
-.PP
-Some Linux 2.6 systems (e.g., Gentoo) do not use the new NPTL pthread library
-even though the kernel supports them.  On these systems, plan9port must 
-fall back on the threading code intended for Linux 2.4.  To accomplish this,
 .I INSTALL
-checks whether the running system uses NPTL and sets
-.B SYSVERSION
-in
-.B \*9/config
-accordingly.
+writes various autodetected settings to
+.BR \*9/config .
 The file
 .B \*9/LOCAL.config
 is appended to
 .B config
 after this auto-detection and can be used to override the choices.
-If 
+If
 .B LOCAL.config
 contains a line
 .B WSYSTYPE=nowsys
 then the system is built without using X11.
+.B LOCAL.config
+may also list settings for
+.B CC9
+(the host C compiler)
+and
+.B CC9FLAGS
+(any additional flags to pass to the compiler).
+Values more complex than single words should be quoted
+with single quotes.
 .PP
 On most Linux systems, the X11 header packages need to be installed
 to build using X11.  On Debian. the required packages are
@@ -110,8 +108,8 @@ On Ubuntu, it suffices to install xorg-dev.
 can safely be repeated to rebuild the system from scratch.
 .PP
 Once the system is built for the first time,
-it can be maintained and rebuilt using 
-.IR mk (1).
+it can be maintained and rebuilt using
+.MR mk (1) .
 To rebuild individual commands or libraries,
 run
 .B mk
@@ -121,7 +119,7 @@ and
 .B clean
 in the appropriate source directory
 (see
-.IR src (1)).
+.MR src (1) ).
 .SH FILES
 .TP
 .B \*9/lib/moveplan9.files
@@ -134,7 +132,7 @@ the script that edits the files
 .TP
 .B \*9/src/mkmk.sh
 the shell script used to build
-.IR mk (1)
+.MR mk (1)
 .TP
 .B \*9/dist/manweb
 the shell script that builds the HTML manual
@@ -150,5 +148,5 @@ logged output from the last run of
 a summary of
 .B install.log
 .SH SEE ALSO
-.IR intro (1),
-.IR git (1)
+.MR intro (1) ,
+.MR git (1)

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# add plan 9 postscript fonts
+GS_FONTPATH=$GS_FONTPATH:$PLAN9/postscript/font
+export GS_FONTPATH
+
+# 
+# gv has decided to rename all its -foo options to --foo.
+# 
+if gv -v 2>/dev/null | grep Usage >/dev/null
+then
+	gv --nosafer --swap --style=$PLAN9/lib/gv.style --ad=$PLAN9/lib/gv.resource "$@"
+else
+	gv -nosafer -swap -style $PLAN9/lib/gv.style -ad $PLAN9/lib/gv.resource "$@"
+fi

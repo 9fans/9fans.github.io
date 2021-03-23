@@ -3,10 +3,13 @@
 
 TARG=devdraw
 
+SHORTLIB=draw memdraw
+
 WSYSOFILES=\
 	devdraw.$O\
 	latin1.$O\
 	mouseswap.$O\
+	srv.$O\
 	winsize.$O\
 
 <|sh ./mkwsysrules.sh
@@ -14,14 +17,15 @@ WSYSOFILES=\
 OFILES=$WSYSOFILES
 
 HFILES=\
+	bigarrow.h\
 	devdraw.h\
+	glendapng.h\
+	latin1.h\
+	$WSYSHFILES\
 
 <$PLAN9/src/mkone
 
-$O.drawclient: drawclient.$O drawfcall.$O
-	$LD -o $target $prereq
-
-$O.snarf: x11-alloc.$O x11-cload.$O x11-draw.$O x11-fill.$O x11-get.$O x11-init.$O x11-itrans.$O x11-keysym2ucs.$O x11-load.$O x11-pixelbits.$O x11-unload.$O x11-wsys.$O snarf.$O latin1.$O devdraw.$O
+$O.drawclient: drawclient.$O
 	$LD -o $target $prereq
 
 $O.mklatinkbd: mklatinkbd.$O
@@ -35,13 +39,13 @@ latin1.h: $PLAN9/lib/keyboard $O.mklatinkbd
 $O.macargv: $MACARGV
 	$LD -o $target $prereq
 
-%-objc.$O: %.m
-	$CC $CFLAGS -o $target $stem.m
+%.$O: %.m
+	$CC $CFLAGS $OBJCFLAGS -fobjc-arc -o $target $stem.m
 
-CLEANFILES=$O.macargv $O.mklatinkbd latin1.h
+CLEANFILES=$O.devdraw $O.macargv $O.drawclient $O.mklatinkbd latin1.h
 
 install: mklatinkbd.install
-install:Q: 
+install:Q:
 	if [ $MACARGV ]; then
 		mk $MKFLAGS macargv.install
 	fi

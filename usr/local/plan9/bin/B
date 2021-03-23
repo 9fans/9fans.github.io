@@ -1,0 +1,56 @@
+#!/bin/sh
+
+files=""
+dest=""
+
+line=""
+if [ $# -gt 0 ]; then
+	case "$1" in
+	+[0-9]*)
+		line="`echo $1 | sed 's/+/:/'`"
+		shift
+		;;
+	esac
+fi
+
+if [ $# -eq 0 ]
+then
+	echo 'usage: B [+line] file...' 2>&1
+	exit 1
+fi
+
+if [ "x$DISPLAY" = "x" ]
+then
+	sam="/tmp/.sam.$USER"
+else
+	if [ "$DISPLAY" = ":0" ]
+	then
+		DISPLAY=:0.0
+	fi
+	sam="/tmp/.sam.$USER.$DISPLAY"
+fi
+
+if [ ! -p $sam ]
+then
+	pwd="`pwd`"
+	for i
+	do
+		i="$i$line"
+		i=`cleanname -d "$pwd" "$i"`
+		plumb -s B -d edit "$i"
+	done
+else
+	for i
+	do
+		i="$i$line"
+		pwd=`pwd`
+		file=`cleanname -d $pwd $i`
+		line=`echo $file | sed 's/.*://'`
+		file=`echo $file | sed 's/:.*//'`
+		echo "B $file" >>$sam
+		if [ "x$line" != "x" -a "x$line" != "x$file" ]
+		then
+			echo "$line" >> $sam
+		fi
+	done
+fi

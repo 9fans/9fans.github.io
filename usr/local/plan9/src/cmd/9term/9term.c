@@ -47,17 +47,23 @@ usage(void)
 	threadexitsall("usage");
 }
 
+int
+threadmaybackground(void)
+{
+	return 1;
+}
+
 void
 threadmain(int argc, char *argv[])
 {
 	char *p;
-	
+
 	rfork(RFNOTEG);
 	font = nil;
 	_wantfocuschanges = 1;
 	mainpid = getpid();
 	messagesize = 8192;
-	
+
 	ARGBEGIN{
 	default:
 		usage();
@@ -80,7 +86,7 @@ threadmain(int argc, char *argv[])
 		winsize = EARGF(usage());
 		break;
 	}ARGEND
-	
+
 	if(fontname)
 		putenv("font", fontname);
 
@@ -92,7 +98,7 @@ threadmain(int argc, char *argv[])
 	if(maxtab <= 0)
 		maxtab = 4;
 	free(p);
-	
+
 	startdir = ".";
 
 	if(initdraw(derror, fontname, "9term") < 0)
@@ -100,7 +106,7 @@ threadmain(int argc, char *argv[])
 
 	notify(hangupnote);
 	noteenable("sys: child");
-	
+
 	mousectl = initmouse(nil, screen);
 	if(mousectl == nil)
 		error("cannot find mouse");
@@ -181,13 +187,13 @@ void
 resizethread(void *v)
 {
 	Point p;
-	
+
 	USED(v);
-	
+
 	for(;;){
 		p = stringsize(display->defaultfont, "0");
 		if(p.x && p.y)
-			updatewinsize(Dy(screen->r)/p.y, (Dx(screen->r)-Scrollwid-2)/p.x, 
+			updatewinsize(Dy(screen->r)/p.y, (Dx(screen->r)-Scrollwid-2)/p.x,
 				Dx(screen->r), Dy(screen->r));
 		wresize(w, screen, 0);
 		flushimage(display, 1);
@@ -197,7 +203,7 @@ resizethread(void *v)
 			sysfatal("can't reattach to window");
 	}
 }
-			
+
 void
 mousethread(void *v)
 {
@@ -229,7 +235,7 @@ mousethread(void *v)
 			bouncemouse(mouse);
 	}
 }
-		
+
 void
 wborder(Window *w, int type)
 {
@@ -288,6 +294,7 @@ enum
 	Paste,
 	Snarf,
 	Plumb,
+	Look,
 	Send,
 	Scroll,
 	Cook
@@ -298,6 +305,7 @@ char		*menu2str[] = {
 	"paste",
 	"snarf",
 	"plumb",
+	"look",
 	"send",
 	"cook",
 	"scroll",
@@ -346,6 +354,10 @@ button2menu(Window *w)
 
 	case Plumb:
 		wplumb(w);
+		break;
+
+	case Look:
+		wlook(w);
 		break;
 
 	case Send:
@@ -399,7 +411,7 @@ rcoutputproc(void *arg)
 	Conswritemesg cwm;
 	Rune *r;
 	Stringpair pair;
-	
+
 	i = 0;
 	cnt = 0;
 	for(;;){
@@ -426,11 +438,11 @@ rcoutputproc(void *arg)
 		if(nb < cnt)
 			memmove(data, data+nb, cnt-nb);
 		cnt -= nb;
-		
+
 		nr = label(r, nr);
 		if(nr == 0)
 			continue;
-		
+
 		recv(w->conswrite, &cwm);
 		pair.s = r;
 		pair.ns = nr;
@@ -442,7 +454,7 @@ void
 winterrupt(Window *w)
 {
 	char rubout[1];
-	
+
 	USED(w);
 	rubout[0] = getintr(sfd);
 	write(rcfd, rubout, 1);
@@ -468,7 +480,7 @@ label(Rune *sr, int n)
 {
 	Rune *sl, *el, *er, *r;
 	char *p, *dir;
-	
+
 	er = sr+n;
 	for(r=er-1; r>=sr; r--)
 		if(*r == '\007')
@@ -521,7 +533,7 @@ rcinputproc(void *arg)
 		recv(w->consread, &crm);
 		c1 = crm.c1;
 		c2 = crm.c2;
-		
+
 		pair.s = data;
 		pair.ns = sizeof data;
 		send(c1, &pair);
@@ -541,7 +553,7 @@ void
 rioputsnarf(void)
 {
 	char *s;
-	
+
 	s = smprint("%.*S", nsnarf, snarf);
 	if(s){
 		putsnarf(s);
@@ -642,7 +654,7 @@ textproc(void *arg)
 			for(x=0; x<p-buf; x+=n)
 				if((n = write(fd, buf+x, (p-x)-buf)) <= 0)
 					goto break2;
-			
+
 			if(i >= end)
 				break;
 			p = buf;
@@ -658,4 +670,3 @@ textproc(void *arg)
 break2:
 	close(fd);
 }
-

@@ -52,7 +52,7 @@ struct
 	"common",	Fword,
 	"con",		Lword,
 	"data",		Fword,
-	"dimension",	Fword,	
+	"dimension",	Fword,
 	"double",	Cword,
 	"extern",	Cword,
 	"bio",		I2,
@@ -86,7 +86,7 @@ struct
 enum	{
 		Normal	= 0,
 		First,		/* first entry for language spanning several ranges */
-		Multi,		/* later entries "   "       "  ... */ 
+		Multi,		/* later entries "   "       "  ... */
 		Shared,		/* codes used in several languages */
 	};
 
@@ -97,7 +97,7 @@ struct
 	int	low;
 	int	high;
 	char	*name;
-	
+
 } language[] =
 {
 	Normal, 0,	0x0080, 0x0080,	"Extended Latin",
@@ -127,8 +127,8 @@ struct
 	Shared,	0,	0x4e00,	0x9fff,	"CJK",
 	Normal,	0,	0,	0,	0,		/* terminal entry */
 };
-	
-	
+
+
 enum
 {
 	Fascii,		/* printable ascii */
@@ -342,7 +342,7 @@ filetype(int fd)
 	 * lookup dictionary words
 	 */
 	memset(wfreq, 0, sizeof(wfreq));
-	if(guess == Fascii || guess == Flatin || guess == Futf) 
+	if(guess == Fascii || guess == Flatin || guess == Futf)
 		wordfreq();
 	/*
 	 * call individual classify routines
@@ -519,10 +519,13 @@ Filemagic long0tab[] = {
 	0x32636170,	0xFFFF00FF,	"pac4 audio file\n",	OCTET,
 	0xBA010000,	0xFFFFFFFF,	"mpeg system stream\n",	OCTET,
 	0x30800CC0,	0xFFFFFFFF,	"inferno .dis executable\n", OCTET,
-	0x04034B50,	0xFFFFFFFF,	"zip archive\n", "application/zip",
+	0x04034B50,	0xFFFFFFFF,	"zip archive\n", "application/zip\n",
 	070707,		0xFFFF,		"cpio archive\n", OCTET,
-	0x2F7,		0xFFFF,		"tex dvi\n", "application/dvi",
-	0xfffa0000,	0xfffe0000,	"mp3 audio",	"audio/mpeg",
+	0x2F7,		0xFFFF,		"tex dvi\n", "application/dvi\n",
+	0xfffa0000,	0xfffe0000,	"mp3 audio\n",	"audio/mpeg\n",
+	0xcafebabe,	0xFFFFFFFF,	"Mach-O fat executable\n",	"application/x-mach-binary\n",
+	0xfeedface,	0xFFFFFFFE,	"Mach-O executable\n",	"application/x-mach-binary\n",
+	0xbebafeca,	0xFFFFFFFF,	"Java class\n",	"application/x-java-applet\n",
 };
 
 int
@@ -537,7 +540,7 @@ filemagic(Filemagic *tab, int ntab, ulong x)
 		}
 	return 0;
 }
-	
+
 int
 long0(void)
 {
@@ -873,7 +876,7 @@ yes:
 	}
 	if(wfreq[Alword] > 0)
 		print("alef program\n");
-	else 
+	else
 		print("c program\n");
 	return 1;
 }
@@ -1039,7 +1042,7 @@ depthof(char *s, int *newp)
 		s++;	/* skip letter */
 		d += strtoul(s, &s, 10);
 	}
-	
+
 	switch(d){
 	case 32:
 	case 24:

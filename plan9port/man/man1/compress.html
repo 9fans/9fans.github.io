@@ -1,0 +1,302 @@
+<head>
+<title>compress(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>COMPRESS(1)</b><td align=right><b>COMPRESS(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    compress, uncompress, zcat &ndash; compress and expand data<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>compress</font></tt> [ <tt><font size=+1>&ndash;f</font></tt> ] [ <tt><font size=+1>&ndash;v</font></tt> ] [ <tt><font size=+1>&ndash;c</font></tt> ] [ <tt><font size=+1>&ndash;V</font></tt> ] [ <tt><font size=+1>&ndash;b</font></tt> <i>bits</i> ] [ <i>name ...</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>uncompress</font></tt> [ <tt><font size=+1>&ndash;f</font></tt> ] [ <tt><font size=+1>&ndash;v</font></tt> ] [ <tt><font size=+1>&ndash;c</font></tt> ] [ <tt><font size=+1>&ndash;V</font></tt> ] [ <i>name ...</i> ] 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <tt><font size=+1>zcat</font></tt> [ <tt><font size=+1>&ndash;V</font></tt> ] [ <i>name ...</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Compress</i> reduces the size of the named files using adaptive Lempel-Ziv
+    coding. Whenever possible, each file is replaced by one with the
+    extension <tt><font size=+1>.Z,</font></tt> while keeping the same ownership modes, access and
+    modification times. If no files are specified, the standard input
+    is compressed to the standard output. Compressed files can be
+    restored to their
+    original form using <i>uncompress</i> or <i>zcat. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </i>
+    The <tt><font size=+1>&ndash;f</font></tt> option will force compression of <i>name.</i> This is useful for
+    compressing an entire directory, even if some of the files do
+    not actually shrink. If <tt><font size=+1>&ndash;f</font></tt> is not given and <i>compress</i> is run in
+    the foreground, the user is prompted as to whether an existing
+    file should be overwritten. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&ndash;c</font></tt> option makes <i>compress/uncompress</i> write to the standard output;
+    no files are changed. The nondestructive behavior of <i>zcat</i> is identical
+    to that of <i>uncompress </i><tt><font size=+1>&ndash;c. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <i>Compress</i> uses the modified Lempel-Ziv algorithm popularized in
+    &quot;A Technique for High Performance Data Compression&quot;, Terry A. Welch,
+    <i>IEEE Computer,</i> vol. 17, no. 6 (June 1984), pp. 8-19. Common substrings
+    in the file are first replaced by 9-bit codes 257 and up. When
+    code 512 is reached, the algorithm switches to 10-bit codes and
+    continues to
+    use more bits until the limit specified by the <tt><font size=+1>&ndash;b</font></tt> flag is reached
+    (default 16). <i>Bits</i> must be between 9 and 16. The default can be
+    changed in the source to allow <i>compress</i> to be run on a smaller
+    machine. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    After the <i>bits</i> limit is attained, <i>compress</i> periodically checks
+    the compression ratio. If it is increasing, <i>compress</i> continues
+    to use the existing code dictionary. However, if the compression
+    ratio decreases, <i>compress</i> discards the table of substrings and
+    rebuilds it from scratch. This allows the algorithm to adapt to
+    the next &quot;block&quot; of the file. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Note that the <tt><font size=+1>&ndash;b</font></tt> flag is omitted for <i>uncompress,</i> since the <i>bits</i>
+    parameter specified during compression is encoded within the output,
+    along with a magic number to ensure that neither decompression
+    of random data nor recompression of compressed data is attempted.
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The amount of compression obtained depends on the size of the
+    input, the number of <i>bits</i> per code, and the distribution of common
+    substrings. Typically, text such as source code or English is
+    reduced by 50&ndash;60%. Compression is generally much better than that
+    achieved by Huffman coding (as used in <i>pack</i>), or adaptive Huffman
+    coding (<i>compact</i>),
+    and takes less time to compute. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Under the <tt><font size=+1>&ndash;v</font></tt> option, a message is printed yielding the percentage
+    of reduction for each file compressed. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the <tt><font size=+1>&ndash;V</font></tt> option is specified, the current version and compile
+    options are printed on stderr. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Exit status is normally 0; if the last file is larger after (attempted)
+    compression, the status is 2; if an error occurs, exit status
+    is 1.<br>
+    
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    pack(1), compact(1)<br>
+    
+</table>
+<p><font size=+1><b>DIAGNOSTICS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Usage: compress [&ndash;dfvcV] [&ndash;b maxbits] [file ...]<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Invalid options were specified on the command line.<br>
+            
+        </table>
+        
+    </table>
+    Missing maxbits<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Maxbits must follow <tt><font size=+1>&ndash;b</font></tt>.<br>
+            
+        </table>
+        
+    </table>
+    <i>file</i>: not in compressed format<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            The file specified to <i>uncompress</i> has not been compressed.<br>
+            
+        </table>
+        
+    </table>
+    <i>file</i>: compressed with <i>xx</i> bits, can only handle <i>yy</i> bits<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            <i>File</i> was compressed by a program that could deal with more <i>bits</i>
+            than the compress code on this machine. Recompress the file with
+            smaller <i>bits</i>.<br>
+            
+        </table>
+        
+    </table>
+    <i>file</i>: already has .Z suffix -- no change<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            The file is assumed to be already compressed. Rename the file
+            and try again.<br>
+            
+        </table>
+        
+    </table>
+    <i>file</i>: filename too long to tack on .Z<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            The file cannot be compressed because its name is longer than
+            12 characters. Rename and try again. This message does not occur
+            on BSD systems.<br>
+            
+        </table>
+        
+    </table>
+    <i>file</i> already exists; do you wish to overwrite (y or n)?<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Respond &quot;y&quot; if you want the output file to be replaced; &quot;n&quot; if not.<br>
+            
+        </table>
+        
+    </table>
+    uncompress: corrupt input<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            A SIGSEGV violation was detected which usually means that the
+            input file has been corrupted.<br>
+            
+        </table>
+        
+    </table>
+    Compression: <i>xx.xx%<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            Percentage of the input saved by compression. (Relevant only for
+            <tt><font size=+1>&ndash;v</font></tt>.)<br>
+            
+        </table>
+        
+    </table>
+    -- not a regular file: unchanged<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            When the input file is not a regular file, (e.g. a directory),
+            it is left unaltered.<br>
+            
+        </table>
+        
+    </table>
+    -- has <i>xx</i> other links: unchanged<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            The input file has links; it is left unchanged. See <i>ln</i>(1) for
+            more information.<br>
+            
+        </table>
+        
+    </table>
+    -- file unchanged<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+            No savings is achieved by compression. The input remains virgin.<br>
+            
+        </table>
+        
+    </table>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="/usr/local/plan9/src/cmd/compress/compress.c">/usr/local/plan9/src/cmd/compress/compress.c</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>BUGS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    Although compressed files are compatible between machines with
+    large memory, <tt><font size=+1>&ndash;b</font></tt>12 should be used for file transfer to architectures
+    with a small process data space (64KB or less, as exhibited by
+    the DEC PDP series, the Intel 80286, etc.)<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="https://9fans.github.io/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

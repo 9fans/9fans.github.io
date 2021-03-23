@@ -9,6 +9,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include <9pclient.h>
 #include "dat.h"
 #include "fns.h"
@@ -191,8 +192,9 @@ execute(Text *t, uint aq0, uint aq1, int external, Text *argt)
 			f |= 2;
 		}
 		aa = getbytearg(argt, TRUE, TRUE, &a);
-		if(a){	
+		if(a){
 			if(strlen(a) > EVENTSIZE){	/* too big; too bad */
+				free(r);
 				free(aa);
 				free(a);
 				warning(nil, "argument string too long\n");
@@ -572,15 +574,27 @@ zeroxx(Text *et, Text *t, Text *_1, int _2, int _3, Rune *_4, int _5)
 		winunlock(t->w);
 }
 
+typedef struct TextAddr TextAddr;
+struct TextAddr {
+	long lorigin; // line+rune for origin
+	long rorigin;
+	long lq0; // line+rune for q0
+	long rq0;
+	long lq1; // line+rune for q1
+	long rq1;
+};
+
 void
 get(Text *et, Text *t, Text *argt, int flag1, int _0, Rune *arg, int narg)
 {
 	char *name;
 	Rune *r;
 	int i, n, dirty, samename, isdir;
+	TextAddr *addr, *a;
 	Window *w;
 	Text *u;
 	Dir *d;
+	long q0, q1;
 
 	USED(_0);
 
@@ -604,6 +618,14 @@ get(Text *et, Text *t, Text *argt, int flag1, int _0, Rune *arg, int narg)
 			warning(nil, "%s is a directory; can't read with multiple windows on it\n", name);
 			return;
 		}
+	}
+	addr = emalloc((t->file->ntext)*sizeof(TextAddr));
+	for(i=0; i<t->file->ntext; i++) {
+		a = &addr[i];
+		u = t->file->text[i];
+		a->lorigin = nlcount(u, 0, u->org, &a->rorigin);
+		a->lq0 = nlcount(u, 0, u->q0, &a->rq0);
+		a->lq1 = nlcount(u, u->q0, u->q1, &a->rq1);
 	}
 	r = bytetorune(name, &n);
 	for(i=0; i<t->file->ntext; i++){
@@ -630,9 +652,44 @@ get(Text *et, Text *t, Text *argt, int flag1, int _0, Rune *arg, int narg)
 	for(i=0; i<t->file->ntext; i++){
 		u = t->file->text[i];
 		textsetselect(&u->w->tag, u->w->tag.file->b.nc, u->w->tag.file->b.nc);
+		if(samename) {
+			a = &addr[i];
+			// warning(nil, "%d %d %d %d %d %d\n", a->lorigin, a->rorigin, a->lq0, a->rq0, a->lq1, a->rq1);
+			q0 = nlcounttopos(u, 0, a->lq0, a->rq0);
+			q1 = nlcounttopos(u, q0, a->lq1, a->rq1);
+			textsetselect(u, q0, q1);
+			q0 = nlcounttopos(u, 0, a->lorigin, a->rorigin);
+			textsetorigin(u, q0, FALSE);
+		}
 		textscrdraw(u);
 	}
+	free(addr);
 	xfidlog(w, "get");
+}
+
+static void
+checksha1(char *name, File *f, Dir *d)
+{
+	int fd, n;
+	DigestState *h;
+	uchar out[20];
+	uchar *buf;
+
+	fd = open(name, OREAD);
+	if(fd < 0)
+		return;
+	h = sha1(nil, 0, nil, nil);
+	buf = emalloc(8192);
+	while((n = read(fd, buf, 8192)) > 0)
+		sha1(buf, n, nil, h);
+	free(buf);
+	close(fd);
+	sha1(nil, 0, out, h);
+	if(memcmp(out, f->sha1, sizeof out) == 0) {
+		f->dev = d->dev;
+		f->qidpath = d->qid.path;
+		f->mtime = d->mtime;
+	}
 }
 
 void
@@ -642,17 +699,19 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 	Rune *r;
 	Biobuf *b;
 	char *s, *name;
-	int i, fd, q;
+	int i, fd, q, ret, retc;
 	Dir *d, *d1;
 	Window *w;
 	int isapp;
+	DigestState *h;
 
 	w = f->curtext->w;
 	name = runetobyte(namer, nname);
 	d = dirstat(name);
 	if(d!=nil && runeeq(namer, nname, f->name, f->nname)){
-		/* f->mtime+1 because when talking over NFS it's often off by a second */
-		if(f->dev!=d->dev || f->qidpath!=d->qid.path || labs((long)(f->mtime-d->mtime)) > 1){
+		if(f->dev!=d->dev || f->qidpath!=d->qid.path || f->mtime != d->mtime)
+			checksha1(name, f, d);
+		if(f->dev!=d->dev || f->qidpath!=d->qid.path || f->mtime != d->mtime) {
 			if(f->unread)
 				warning(nil, "%s not written; file already exists\n", name);
 			else
@@ -663,6 +722,7 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 			goto Rescue1;
 		}
 	}
+
 	fd = create(name, OWRITE, 0666);
 	if(fd < 0){
 		warning(nil, "can't create file %s: %r\n", name);
@@ -679,6 +739,7 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 	s = fbufalloc();
 	free(d);
 	d = dirfstat(fd);
+	h = sha1(nil, 0, nil, nil);
 	isapp = (d!=nil && d->length>0 && (d->qid.type&QTAPPEND));
 	if(isapp){
 		warning(nil, "%s not written; file is append only\n", name);
@@ -691,6 +752,7 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 			n = BUFSIZE/UTFmax;
 		bufread(&f->b, q, r, n);
 		m = snprint(s, BUFSIZE+1, "%.*S", n, r);
+		sha1((uchar*)s, m, nil, h);
 		if(Bwrite(b, s, m) != m){
 			warning(nil, "can't write file %s: %r\n", name);
 			goto Rescue2;
@@ -700,9 +762,14 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 		warning(nil, "can't write file %s: %r\n", name);
 		goto Rescue2;
 	}
-	Bterm(b);
+	ret = Bterm(b);
+	retc = close(fd);
 	free(b);
 	b = nil;
+	if(ret < 0 || retc < 0) {
+		warning(nil, "can't write file %s: %r\n", name);
+		goto Rescue2; // flush or close failed
+	}
 	if(runeeq(namer, nname, f->name, f->nname)){
 		if(q0!=0 || q1!=f->b.nc){
 			f->mod = TRUE;
@@ -719,10 +786,9 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 			// in case we don't have read permission.
 			// (The create above worked, so we probably
 			// still have write permission.)
-			close(fd);
 			fd = open(name, OWRITE);
-
 			d1 = dirfstat(fd);
+			close(fd);
 			if(d1 != nil){
 				free(d);
 				d = d1;
@@ -730,6 +796,8 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 			f->qidpath = d->qid.path;
 			f->dev = d->dev;
 			f->mtime = d->mtime;
+			sha1(nil, 0, f->sha1, h);
+			h = nil;
 			f->mod = FALSE;
 			w->dirty = FALSE;
 			f->unread = FALSE;
@@ -741,6 +809,7 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 	}
 	fbuffree(s);
 	fbuffree(r);
+	free(h);
 	free(d);
 	free(namer);
 	free(name);
@@ -752,16 +821,76 @@ putfile(File *f, int q0, int q1, Rune *namer, int nname)
 	if(b != nil) {
 		Bterm(b);
 		free(b);
+		close(fd);
 	}
+	free(h);
 	fbuffree(s);
 	fbuffree(r);
-	close(fd);
 	/* fall through */
 
     Rescue1:
 	free(d);
 	free(namer);
 	free(name);
+}
+
+static void
+trimspaces(Text *et)
+{
+	File *f;
+	Rune *r;
+	Text *t;
+	uint q0, n, delstart;
+	int c, i, marked;
+
+	t = &et->w->body;
+	f = t->file;
+	marked = 0;
+
+	if(t->w!=nil && et->w!=t->w){
+		/* can this happen when t == &et->w->body? */
+		c = 'M';
+		if(et->w)
+			c = et->w->owner;
+		winlock(t->w, c);
+	}
+
+	r = fbufalloc();
+	q0 = f->b.nc;
+	delstart = q0; /* end of current space run, or 0 if no active run; = q0 to delete spaces before EOF */
+	while(q0 > 0) {
+		n = RBUFSIZE;
+		if(n > q0)
+			n = q0;
+		q0 -= n;
+		bufread(&f->b, q0, r, n);
+		for(i=n; ; i--) {
+			if(i == 0 || (r[i-1] != ' ' && r[i-1] != '\t')) {
+				// Found non-space or start of buffer. Delete active space run.
+				if(q0+i < delstart) {
+					if(!marked) {
+						marked = 1;
+						seq++;
+						filemark(f);
+					}
+					textdelete(t, q0+i, delstart, TRUE);
+				}
+				if(i == 0) {
+					/* keep run active into tail of next buffer */
+					if(delstart > 0)
+						delstart = q0;
+					break;
+				}
+				delstart = 0;
+				if(r[i-1] == '\n')
+					delstart = q0+i-1; /* delete spaces before this newline */
+			}
+		}
+	}
+	fbuffree(r);
+
+	if(t->w!=nil && et->w!=t->w)
+		winunlock(t->w);
 }
 
 void
@@ -786,6 +915,8 @@ put(Text *et, Text *_0, Text *argt, int _1, int _2, Rune *arg, int narg)
 		warning(nil, "no file name\n");
 		return;
 	}
+	if(w->autoindent)
+		trimspaces(et);
 	namer = bytetorune(name, &nname);
 	putfile(f, 0, f->b.nc, namer, nname);
 	xfidlog(w, "put");

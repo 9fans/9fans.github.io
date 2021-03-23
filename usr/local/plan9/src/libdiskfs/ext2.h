@@ -27,6 +27,39 @@ enum
 
 	NAMELEN = 255,
 
+	/* some systems have these defined */
+	#undef IEXEC
+	#undef IWRITE
+	#undef IREAD
+	#undef ISVTX
+	#undef ISGID
+	#undef ISUID
+	#undef IFMT
+	#undef IFIFO
+	#undef IFCHR
+	#undef IFDIR
+	#undef IFBLK
+	#undef IFREG
+	#undef IFLNK
+	#undef IFSOCK
+	#undef IFWHT
+
+	#define IEXEC	EXT2_IEXEC
+	#define IWRITE	EXT2_IWRITE
+	#define IREAD	EXT2_IREAD
+	#define ISVTX	EXT2_ISVTX
+	#define ISGID	EXT2_ISGID
+	#define ISUID	EXT2_ISUID
+	#define IFMT	EXT2_IFMT
+	#define IFIFO	EXT2_IFIFO
+	#define IFCHR	EXT2_IFCHR
+	#define IFDIR	EXT2_IFDIR
+	#define IFBLK	EXT2_IFBLK
+	#define IFREG	EXT2_IFREG
+	#define IFLNK	EXT2_IFLNK
+	#define IFSOCK	EXT2_IFSOCK
+	#define IFWHT	EXT2_IFWHT
+
 	/* permissions in Inode.mode */
 	IEXEC = 00100,
 	IWRITE = 0200,
@@ -80,7 +113,7 @@ struct Super
 	u32int	revlevel;		/* Revision level */
 	u16int	defresuid;		/* Default uid for reserved blocks */
 	u16int	defresgid;		/* Default gid for reserved blocks */
-	
+
 	/* the following are only available with revlevel = 1 */
 	u32int	firstino;		/* First non-reserved inode */
 	u16int	inosize;		/* size of inode structure */
@@ -161,4 +194,3 @@ struct Ext2
 	Disk *disk;
 	Fsys *fsys;
 };
-

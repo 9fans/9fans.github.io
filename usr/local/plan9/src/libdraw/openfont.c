@@ -10,7 +10,7 @@ parsefontscale(char *name, char **base)
 {
 	char *p;
 	int scale;
-	
+
 	p = name;
 	scale = 0;
 	while('0' <= *p && *p <= '9') {
@@ -24,52 +24,64 @@ parsefontscale(char *name, char **base)
 		scale = 1;
 	}
 	return scale;
-}	
+}
+
+extern char _defontfile[];
 
 Font*
 openfont1(Display *d, char *name)
 {
 	Font *fnt;
 	int fd, i, n, scale;
-	char *buf, *nambuf, *fname, *freename;
+	char *buf, *nambuf, *nambuf0, *fname, *freename;
 
 	nambuf = 0;
 	freename = nil;
 	scale = parsefontscale(name, &fname);
 
+	if(strcmp(fname, "*default*") == 0) {
+		buf = strdup(_defontfile);
+		goto build;
+	}
 	fd = open(fname, OREAD);
 	if(fd < 0 && strncmp(fname, "/lib/font/bit/", 14) == 0){
 		nambuf = smprint("#9/font/%s", fname+14);
 		if(nambuf == nil)
 			return 0;
-		nambuf = unsharp(nambuf);
+		nambuf0 = unsharp(nambuf);
+		if(nambuf0 != nambuf)
+			free(nambuf);
+		nambuf = nambuf0;
 		if(nambuf == nil)
 			return 0;
 		if((fd = open(nambuf, OREAD)) < 0){
 			free(nambuf);
 			return 0;
 		}
-		fname = nambuf;
 		if(scale > 1) {
-			name = smprint("%d*%s", scale, fname);
+			name = smprint("%d*%s", scale, nambuf);
 			freename = name;
 		} else {
-			name = fname;
+			name = nambuf;
 		}
 	}
 	if(fd >= 0)
 		n = _drawflength(fd);
 	if(fd < 0 && strncmp(fname, "/mnt/font/", 10) == 0) {
 		fd = _fontpipe(fname+10);
-		n = 128*1024;
+		n = 1024*1024;
 	}
-	if(fd < 0)
+	if(fd < 0){
+		free(nambuf);
+		free(freename);
 		return 0;
+	}
 
 	buf = malloc(n+1);
 	if(buf == 0){
 		close(fd);
 		free(nambuf);
+		free(freename);
 		return 0;
 	}
 	i = readn(fd, buf, n);
@@ -77,9 +89,11 @@ openfont1(Display *d, char *name)
 	if(i <= 0){
 		free(buf);
 		free(nambuf);
+		free(freename);
 		return 0;
 	}
 	buf[i] = 0;
+build:
 	fnt = buildfont(d, buf, name);
 	free(buf);
 	free(nambuf);
@@ -100,7 +114,7 @@ swapfont(Font *targ, Font **oldp, Font **newp)
 
 	if(targ != *oldp)
 		sysfatal("bad swapfont %p %p %p", targ, *oldp, *newp);
-	
+
 	old = *oldp;
 	new = *newp;
 
@@ -161,12 +175,12 @@ hidpiname(Font *f)
 {
 	char *p, *q;
 	int size;
-	
+
 	// If font name has form x,y return y.
 	p = strchr(f->namespec, ',');
 	if(p != nil)
 		return strdup(p+1);
-	
+
 	// If font name is /mnt/font/Name/Size/font, scale Size.
 	if(strncmp(f->name, "/mnt/font/", 10) == 0) {
 		p = strchr(f->name+10, '/');
@@ -177,9 +191,9 @@ hidpiname(Font *f)
 		while('0' <= *q && *q <= '9')
 			size = size*10 + *q++ - '0';
 		return smprint("%.*s%d%s", utfnlen(f->name, p-f->name), f->name, size*2, q);
-	}		
+	}
 
-	// Otherwise use pixel doubling.	
+	// Otherwise use pixel doubling.
 scale:
 	return smprint("%d*%s", f->scale*2, f->name);
 }
@@ -196,7 +210,7 @@ loadhidpi(Font *f)
 		swapfont(f, &f->lodpi, &f->hidpi);
 		return;
 	}
-	
+
 	name = hidpiname(f);
 	fnew = openfont1(f->display, name);
 	if(fnew == nil)
@@ -213,7 +227,7 @@ openfont(Display *d, char *name)
 	Font *f;
 	char *p;
 	char *namespec;
-	
+
 	// If font name has form x,y use x for lodpi, y for hidpi.
 	name = strdup(name);
 	namespec = strdup(name);
@@ -224,8 +238,9 @@ openfont(Display *d, char *name)
 	if(!f)
 		return nil;
 	f->lodpi = f;
+	free(f->namespec);
 	f->namespec = namespec;
-	
+
 	/* add to display list for when dpi changes */
 	/* d can be nil when invoked from mc. */
 	if(d != nil) {
@@ -237,12 +252,12 @@ openfont(Display *d, char *name)
 		else
 			d->firstfont = f;
 		d->lastfont = f;
-	
+
 		/* if this is a hi-dpi display, find hi-dpi version and swap */
 		if(d->dpi >= DefaultDPI*3/2)
 			loadhidpi(f);
 	}
-	
+
 	free(name);
 
 	return f;
@@ -255,7 +270,7 @@ _fontpipe(char *name)
 	char c;
 	char buf[1024], *argv[10];
 	int nbuf, pid;
-	
+
 	if(pipe(p) < 0)
 		return -1;
 	pid = rfork(RFNOWAIT|RFFDG|RFPROC);
@@ -279,7 +294,7 @@ _fontpipe(char *name)
 		_exit(0);
 	}
 	close(p[1]);
-	
+
 	// success marked with leading \001.
 	// otherwise an error happened.
 	for(nbuf=0; nbuf<sizeof buf-1; nbuf++) {

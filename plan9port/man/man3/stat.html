@@ -59,13 +59,13 @@
     Given a file&#8217;s <i>name</i>, or an open file descriptor <i>fd</i>, these routines
     retrieve or modify file status information. <i>Stat</i>, <i>fstat</i>, <i>wstat</i>,
     and <i>fwstat</i> are the system calls; they deal with machine-independent
-    <i>directory entries</i>. Their format is defined by <a href="../man9/stat.html"><i>stat</i>(9p)</a>. <i>Stat</i> and
+    <i>directory entries</i>. Their format is defined by <i>stat</i>(9p). <i>Stat</i> and
     <i>fstat</i> retrieve information about <i>name</i> or <i>fd</i> into <i>edir</i>, a buffer
     of length <i>nedir</i>, defined in <tt><font size=+1>&lt;libc.h&gt;</font></tt>.
     <i>Wstat</i> and <i>fwstat</i> write information back, thus changing file attributes
     according to the contents of <i>edir</i>. The data returned from the
     kernel includes its leading 16-bit length field as described in
-    <a href="../man9/intro.html"><i>intro</i>(9p)</a>. For symmetry, this field must also be present when
+    <i>intro</i>(9p). For symmetry, this field must also be present when
     passing data to the kernel in a call to <i>wstat</i> and <i>fwstat</i>, but
     its value is ignored. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
@@ -183,10 +183,10 @@
     group leader of the file&#8217;s current group. The <i>gid</i> can be changed:
     by the owner if also a member of the new group; or by the group
     leader of the file&#8217;s
-    current group if also leader of the new group (see <a href="../man9/intro.html"><i>intro</i>(9p)</a> for
+    current group if also leader of the new group (see <i>intro</i>(9p) for
     more information about permissions, users, and groups). The <tt><font size=+1>length</font></tt>
     can be changed by anyone with write permission, provided the operation
-    is implemented by the server. (See <a href="../man9/intro.html"><i>intro</i>(9p)</a> for permission, user,
+    is implemented by the server. (See <i>intro</i>(9p) for permission, user,
     and group information). 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
@@ -214,7 +214,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <a href="../man3/intro.html"><i>intro</i>(3)</a>, <a href="../man3/fcall.html"><i>fcall</i>(3)</a>, <a href="../man3/dirread.html"><i>dirread</i>(3)</a>, <a href="../man9/stat.html"><i>stat</i>(9p)</a><br>
+    <a href="../man3/intro.html"><i>intro</i>(3)</a>, <a href="../man3/fcall.html"><i>fcall</i>(3)</a>, <a href="../man3/dirread.html"><i>dirread</i>(3)</a>, <i>stat</i>(9p)<br>
     
 </table>
 <p><font size=+1><b>DIAGNOSTICS     </b></font><br>

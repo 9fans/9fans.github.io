@@ -1,0 +1,80 @@
+#!/bin/sh
+
+plumbapple()
+{
+	case ${BROWSER:-none} in
+	none)
+		open "$@"
+		;;
+	*google-chrome*)
+		open -a "Google Chrome" "$@"
+		;;
+	*)
+		open -a "$BROWSER" "$@"
+		;;
+	esac
+}
+
+plumbunix()
+{
+	case "${BROWSER:=firefox}" in
+	# Other browsers here
+	# ...
+	*opera*)
+		$BROWSER -remote 'openURL('"$@"',new-page)'
+		;;
+	*firebird*)
+		$BROWSER -remote 'openURL('"$@"',new-window)'
+		;;
+	*firefox*)
+		$BROWSER -remote 'openURL('"$@"',new-tab)' ||
+		$BROWSER "$@"
+		;;
+	*mozilla*)
+		$BROWSER -remote 'openURL('"$@"',new-tab)' ||
+		$BROWSER "$@"
+		;;
+	?*)
+		$BROWSER "$@"
+		;;
+	esac
+}
+
+plumb1()
+{
+	case `uname` in
+	Darwin)
+		plumbapple "$@"
+		;;
+	*)
+		plumbunix "$@"
+		;;
+	esac
+}
+
+
+if [ $# = 0 ]
+then
+	plumb1 about:blank
+else
+	for i in "$@"
+	do
+		if [ -f "$i" ]
+		then
+			p=`pwd | sed 's/ /%20/g'`
+			i=`echo $i | sed 's/ /%20/g'`
+			i=`cleanname -d "$p" "$i"`
+			i=file://$i
+		else
+			i=`echo $i | tr -d ' '`
+		fi
+		echo p "$i"
+		plumb1 $i
+	done
+fi
+
+case $BROWSER in
+*opera*)
+	$BROWSER -remote 'raise()'
+esac
+

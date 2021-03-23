@@ -1,8 +1,8 @@
 /*
  * gs interface for page.
  * ps.c and pdf.c both use these routines.
- * a caveat: if you run more than one gs, only the last 
- * one gets killed by killgs 
+ * a caveat: if you run more than one gs, only the last
+ * one gets killed by killgs
  */
 #include <u.h>
 #include <libc.h>
@@ -88,7 +88,7 @@ spawnmonitor(void *cp)
 	threadexits(0);
 }
 
-int 
+int
 spawngs(GSInfo *g, char *safer)
 {
 	Channel *cp;
@@ -185,6 +185,10 @@ spawngs(GSInfo *g, char *safer)
 	chanfree(cp);
 
 	Binit(&g->gsrd, stdoutp[0], OREAD);
+
+	gscmd(g, "/PAGEDIDSHOWPAGE false def\n");
+	gscmd(g, "/showpage { /PAGEDIDSHOWPAGE true def showpage } bind def\n");
+	gscmd(g, "/PAGEFLUSH { PAGEDIDSHOWPAGE not {showpage} if /PAGEDIDSHOWPAGE false def } def\n");
 
 	gscmd(g, "/PAGEOUT (/dev/fd/4) (w) file def\n");
 	if(!strcmp(safer, "-dSAFER"))

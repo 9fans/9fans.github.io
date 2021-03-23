@@ -1,0 +1,115 @@
+<head>
+<title>paint(1) - Plan 9 from User Space</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>PAINT(1)</b><td align=right><b>PAINT(1)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    paint &ndash; create image files by drawing with a mouse or other pointing
+    device<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>paint</font></tt> [ <i>file</i> ]<br>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Paint</i> displays a canvas upon which can be drawn lines using the
+    mouse holding down buttons 1 or 2 for foreground or background
+    color. The canvas may be moved with button 3. Colors and brush
+    sizes may be selected by clicking on the palette at the bottom
+    of the screen with buttons 1 or 2. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    If the optional <i>file</i> argument is specified, then it is read and
+    used as the canvas. <i>Paint</i> only recognizes Plan 9 bitmap format
+    (see <a href="../man6/image.html"><i>image</i>(6)</a>). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    A number of immediate keyboard commands are recognized:<br>
+    <tt><font size=+1>u</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Undos the previous action.<br>
+    <tt><font size=+1>c</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clears the canvas with the background color.<br>
+    <tt><font size=+1>1&#8722;9</font></tt>&nbsp;&nbsp;&nbsp;Select brush size.<br>
+    <tt><font size=+1>f</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Select flood fill brush.<br>
+    <tt><font size=+1>+</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doubles magnification.<br>
+    <tt><font size=+1>&#8722;</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Halves magnification.<br>
+    <tt><font size=+1>esc</font></tt>&nbsp;&nbsp;&nbsp;Centers the canvas and resets magnification. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Hitting any other key on the keyboard shows a command prompt where
+    the following commands may be entered:<br>
+    <tt><font size=+1>r</font></tt><i>file</i>&nbsp;&nbsp;&nbsp;Reads the canvas from <i>file.<br>
+    </i><tt><font size=+1>w</font></tt><i>file</i>&nbsp;&nbsp;&nbsp;Writes the canvas to <i>file.<br>
+    </i><tt><font size=+1>&lt;</font></tt><i>command<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Executes <i>command</i> and reads the canvas from its standard output.<br>
+        
+    </table>
+    <tt><font size=+1>&gt;</font></tt><i>command<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Executes <i>command</i> and writes the canvas to its standard input.<br>
+        
+    </table>
+    <tt><font size=+1>|</font></tt><i>command<br>
+    </i>
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        Transforms the canvas by piping it thru <i>command.<br>
+        </i>
+    </table>
+    <tt><font size=+1>q</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quits the program.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>/sys/src/cmd/paint.c<br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <a href="../man1/resample.html"><i>resample</i>(1)</a>, <a href="../man1/rotate.html"><i>rotate</i>(1)</a>, <a href="../man1/crop.html"><i>crop</i>(1)</a>, <a href="../man1/jpg.html"><i>jpg</i>(1)</a>, <a href="../man1/page.html"><i>page</i>(1)</a>, <a href="../man6/image.html"><i>image</i>(6)</a><br>
+    
+</table>
+<p><font size=+1><b>HISTORY     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>Paint</i> first appeared in 9front (October, 2011).<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=15><td width=10><td><td width=10>
+<tr><td><td>
+<center>
+<a href="https://9fans.github.io/plan9port/"><img src="../../dist/glendacircle.png" alt="Space Glenda" border=0></a>
+</center>
+</table>
+<!-- TRAILER -->
+</body></html>

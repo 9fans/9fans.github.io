@@ -15,23 +15,12 @@ x-c)
 	doinstall=true
 	;;
 x-r)
-    shift
-    PLAN9_TARGET=$1 export PLAN9_TARGET
-    ;;
+	shift
+	PLAN9_TARGET=$1 export PLAN9_TARGET
+	;;
 *)
 	echo 'usage: INSTALL [-b | -c] [-r path]' 1>&2
 	exit 1
-esac
-
-PLAN9=`pwd` export PLAN9
-PATH=/bin:/usr/bin:$PLAN9/bin:$PATH export PATH
-case `uname` in
-SunOS)
-	awk=nawk
-	;;
-*)
-	awk=awk
-	;;
 esac
 
 echo "+ Mailing list: https://groups.google.com/group/plan9port-dev"
@@ -41,94 +30,80 @@ echo " "
 echo "* Resetting $PLAN9/config"
 rm -f config
 
+PLAN9=`pwd` export PLAN9
+PATH=/bin:/usr/bin:$PLAN9/bin:$PATH export PATH
+case `uname` in
+SunOS)
+	awk=nawk
+	;;
+DragonFly|*BSD)
+	case `cc -v 2>&1` in
+	*clang*)
+		echo "CC9=clang" >> $PLAN9/config
+		;;
+	*gcc*)
+		echo "CC9=gcc" >> $PLAN9/config
+		;;
+	esac
+	echo "* Running on" `uname`", adjusting linker flags"
+	case `uname` in
+	OpenBSD)
+		echo "LDFLAGS='-L/usr/X11R6/lib -pthread'" >> $PLAN9/config
+		;;
+	NetBSD)
+		echo "LDFLAGS='-L/usr/X11R7/lib -pthread'" >> $PLAN9/config
+		;;
+	*)
+		echo "LDFLAGS='-L/usr/local/lib -pthread'" >> $PLAN9/config
+		;;
+	esac
+	echo "CFLAGS='-pthread'" >> $PLAN9/config
+	awk=awk
+	;;
+*)
+	awk=awk
+	;;
+esac
+
 (
-echo "* Compiler version:"
-9c -v 2>&1 | grep -v 'Configured with:' | grep -i version | sed 's/^/	/'
-
-if [ `uname` = FreeBSD ]; then
-       echo "* Running on FreeBSD, adjusting linker flags"
-       echo "LDFLAGS='-L/usr/local/lib'" >> $PLAN9/config
-fi
-
-if [ `uname` = DragonFly ]; then
-       echo "* Running on DragonFly BSD, adjusting linker flags"
-       echo "LDFLAGS='-L/usr/local/lib -pthread'" >> $PLAN9/config
-       echo "CFLAGS='-pthread'" >> $PLAN9/config
-fi
-
-if [ `uname` = OpenBSD ]; then
-       echo "* Running on OpenBSD, adjusting linker flags"
-       echo "LDFLAGS='-L/usr/X11R6/lib -pthread'" >> $PLAN9/config
-fi
-
-if [ `uname` = Linux ]; then
-	# On Linux, we use the kernel version to decide whether
-	# to use pthreads or not.  On 2.6 versions that aren't
-	# linking with NPTL by default, pretend to be an older kernel.
-	echo "* Running on Linux: checking for NPTL..."
-	gcc lib/linux-isnptl.c -lpthread
-	if ./a.out >/dev/null
-	then	
-		echo "	NPTL found."
-		echo "SYSVERSION=2.6.x" >>$PLAN9/config
-	else
-		echo "	NPTL not found."
-		echo "SYSVERSION=2.4.x" >>$PLAN9/config
-	fi
-	rm -f ./a.out
-fi
-
 if [ `uname` = SunOS ]; then
 	# On Solaris x86, uname -p cannot be trusted.
-  echo "* Running on Solaris: checking architecture..."
-  case "$(isainfo -n)" in
+	echo "* Running on Solaris: checking architecture..."
+	case "$(isainfo -n)" in
 	*amd64*)
-		echo "	x86-64 found."
-		echo "OBJTYPE=x86_64" >>$PLAN9/config
+		echo "	x86-64 found; using gcc."
 		echo "CC9=gcc" >>$PLAN9/config # defaults to gcc on Solaris/amd64
 		;;
 	*i386*)
-		echo "	i386 found."
-		echo "OBJTYPE=386" >>$PLAN9/config
+		echo "	i386 found; using gcc."
 		echo "CC9=gcc" >>$PLAN9/config # defaults to gcc on Solaris/i386
 		;;
-  *sparc*)
+	*sparc*)
 		echo "	Sparc found."
-		echo "OBJTYPE=sparc" >>$PLAN9/config
 		;;
 	esac
 fi
 
 if [ `uname` = Darwin ]; then
+	export NPROC=$(sysctl hw.ncpu | sed 's/hw.ncpu: //')
 	# On Darwin, uname -m -p cannot be trusted.
-	echo "* Running on Darwin: checking architecture..."
+	echo "* Running on Darwin..."
 	rm -f ./a.out
-	if ! gcc lib/darwin-main.c >/dev/null 2>&1; then
-		echo "Cannot find gcc. You may need to install the command-line tools using Xcode." >&2
+	if ! xcrun --sdk macosx clang lib/darwin-main.c >/dev/null 2>&1; then
+		echo "Cannot find 'xcrun --sdk macosx clang'." >&2
+		echo "You may need to install the command-line tools using Xcode." >&2
 		echo "See http://swtch.com/go/xcodegcc for details." >&2
 		exit 1
 	fi
-	case "$(file ./a.out 2>/dev/null)" in
-	*x86_64*)
-		echo "	x86-64 found."
-		echo "OBJTYPE=x86_64" >>$PLAN9/config
-		;;
-	*i386*)
-		echo "	i386 found."
-		echo "OBJTYPE=386" >>$PLAN9/config
-		;;
-	*ppc*)
-		echo "  power found."
-		echo "OBJTYPE=power" >>$PLAN9/config
-		;;
-	esac
+	echo "CC9='xcrun --sdk macosx clang'" >>$PLAN9/config
 	rm -f ./a.out
 fi
 
 if [ `uname` != Darwin ]; then
 	# Determine whether fontsrv X11 files are available.
 	rm -f a.out
-	gcc -o a.out -c -Iinclude -I/usr/include -I/usr/local/include -I/usr/include/freetype2 -I/usr/local/include/freetype2 \
+	cc -o a.out -c -Iinclude -I/usr/include -I/usr/local/include -I/usr/include/freetype2 -I/usr/local/include/freetype2 \
+	    -I/usr/X11R7/include -I/usr/X11R7/include/freetype2 \
 	    -I/usr/X11R6/include -I/usr/X11R6/include/freetype2 src/cmd/fontsrv/x11.c >/dev/null 2>&1
 	if [ -f a.out ]; then
 		echo "	fontsrv dependencies found."
@@ -147,17 +122,19 @@ if [ -f LOCAL.config ]; then
 	cat LOCAL.config >>config
 fi
 
+echo "* Compiler version:"
+9c -v 2>&1 | grep -v 'Configured with:' | grep -i version | sed 's/^/	/'
+
 cd src
 if $dobuild; then
-	if [ ! -x ../bin/mk ]; then
-		echo "* Building mk..."
-		../dist/buildmk 2>&1 | sed 's/^[+] //'
-	fi
+	echo "* Building mk..."
+	../dist/buildmk 2>&1 | sed 's/^[+] //'
+
 	if [ ! -x ../bin/mk ]; then
 		echo "* Error: mk failed to build."
 		exit 1
 	fi
-	
+
 	echo "* Building everything (be patient)..."
 	mk clean
 	mk libs-nuke
@@ -205,13 +182,13 @@ if $doinstall; then
 			mk man
 		)
 	fi
-	
+
 	if [ -x LOCAL.INSTALL ]; then
 		echo "* Running local modifications..."
 		echo cd `pwd`';' ./LOCAL.INSTALL
 		./LOCAL.INSTALL
 	fi
-	
+
 	echo "* Done. "
 	echo "	"
 	echo "* Add these to your profile environment."

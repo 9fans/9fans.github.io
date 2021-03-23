@@ -209,16 +209,16 @@ int clrim_id(Image* clr)
 	int i;
 	for (i=0; clrtab[i].im!=clr; i++)
 		if (clrtab[i].c==DNofill)
-			exits("bad image color");
+			sysfatal("bad image color");
 	return i;
 }
 
-int clr_id(int clr)
+int clr_id(ulong clr)
 {
 	int i;
 	for (i=0; clrtab[i].c!=clr; i++)
 		if (clrtab[i].c==DNofill)
-			exits("bad color");
+			sysfatal("bad color %#x", clr);
 	return i;
 }
 
@@ -1547,7 +1547,7 @@ void all_set_clr(fpolygons* fps, Image* clr)
 	for (p=fps->p; p!=0; p=p->link)
 		p->clr = clr;
 }
-	
+
 
 void do_recolor(int but, Mouse* m, int alluniv)
 {
@@ -1819,7 +1819,7 @@ e_action* do_undo(e_action* a0)		/* pop off an e_action and (un)do it */
 	case Erecolor: a->fp->clr = a->clr;
 		eresized(0);
 		break;
-	case Edelete: 
+	case Edelete:
 		a->fp->link = univ.p;
 		univ.p = a->fp;
 		grow_bb(&univ.bb, &a->fp->bb);
@@ -1995,7 +1995,7 @@ void main(int argc, char *argv[])
 	} ARGEND
 
 	if(initdraw(0, 0, "gview") < 0)
-		exits("initdraw");
+		sysfatal("initdraw");
 	einit(Emouse|Ekeyboard);
 
 	e = doinput(*argv ? *argv : "-");

@@ -109,7 +109,7 @@ redraw(void)
 	line3(v[0x36], v[0x32]);
 	line3(v[0x32], v[0x3F]);
 	line3(v[0x3F], v[0]);
-	
+
 	line3(v[0xF0], v[0xF3]);
 	line3(v[0xF3], v[0xFF]);
 	line3(v[0xFF], v[0xFC]);
@@ -185,7 +185,8 @@ void main(int argc, char **argv){
 		break;
 	}ARGEND
 
-	initdraw(0,0,0);
+	if(initdraw(0,0,0) < 0)
+		sysfatal("initdraw: %r");
 	ncolor=256;
 	for(i=0;i!=ncolor;i++)
 		color[i] = allocimage(display, Rect(0, 0, 1, 1), CMAP8, 1, cmap2rgba(i));

@@ -32,7 +32,7 @@ smuglogin(void)
 		nil);
 	if(v == nil)
 		sysfatal("login failed: %r");
-	
+
 	memset(up->user, 'X', strlen(up->user));
 	memset(up->passwd, 'X', strlen(up->passwd));
 	free(up);
@@ -49,6 +49,12 @@ smuglogin(void)
 	userinfo = jincref(jwalk(v, "Login"));
 	jclose(v);
 	printerrors = 0;
+}
+
+int
+threadmaybackground(void)
+{
+	return 1;
 }
 
 void
@@ -80,13 +86,13 @@ threadmain(int argc, char **argv)
 	default:
 		usage();
 	}ARGEND
-	
+
 	if(argc != 0)
 		usage();
 
 	if(name == nil && mtpt == nil)
 		mtpt = "/n/smug";
-	
+
 	/*
 	 * Check twice -- if there is an exited smugfs instance
 	 * mounted there, the first access will fail but unmount it.

@@ -20,7 +20,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <tt><font size=+1>plumber</font></tt> [ <tt><font size=+1>&#8722;p</font></tt> <i>plumbing</i> ]<br>
+    <tt><font size=+1>plumber</font></tt> [ <tt><font size=+1>&#8722;f</font></tt> ] [ <tt><font size=+1>&#8722;p</font></tt> <i>plumbing</i> ]<br>
     
 </table>
 <p><font size=+1><b>DESCRIPTION     </b></font><br>
@@ -33,7 +33,7 @@
     in the format of <a href="../man7/plumb.html"><i>plumb</i>(7)</a>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    Its services are posted via <a href="../man4/9pserve.html"><i>9pserve</i>(4)</a> as <tt><font size=+1>plumb</font></tt>. and consist of
+    Its services are posted via <a href="../man4/9pserve.html"><i>9pserve</i>(4)</a> as <tt><font size=+1>plumb</font></tt>, and consist of
     two pre-defined files, <tt><font size=+1>plumb/send</font></tt> and <tt><font size=+1>plumb/rules</font></tt>, and a set of
     output <i>ports</i> for dispatching messages to applications. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
@@ -69,7 +69,10 @@
     text editor. However, ports are never deleted dynamically; if
     a new set of rules does not include a
     port that was defined in earlier rules, that port will still exist
-    (although no new messages will be delivered there).<br>
+    (although no new messages will be delivered there). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The <tt><font size=+1>&#8722;f</font></tt> option causes the process to run in the foreground.<br>
     
 </table>
 <p><font size=+1><b>FILES     </b></font><br>

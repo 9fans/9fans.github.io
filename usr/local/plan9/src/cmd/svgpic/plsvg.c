@@ -232,7 +232,7 @@ void arrow(double x0, double y0, double x1, double y1, double w, double h,
 		if(i == 1)
 			printf("M %.3f %.3f L %.3f %.3f", xconv(x1+dx), yconv(y1+dy), xconv(x1), yconv(y1));
 		else
-			printf(" L %.3f %.3f", xconv(x1+dx), yconv(y1+dy)); 
+			printf(" L %.3f %.3f", xconv(x1+dx), yconv(y1+dy));
 	}
 	if (nhead > 2)
 		printf(" Z");
@@ -288,14 +288,12 @@ void circle(double x, double y, double r)
 void spline(double x, double y, double n, ofloat *p, int attr, double ddval)
 {
 	int i;
-	double x1, y1, x2, y2;
+	double x1, y1;
 
 	printf("<path d=\"M %.3f %.3f", xconv(x), yconv(y));
 	x1 = 0;
 	y1 = 0;
 	for (i = 0; i < 2 * n; i += 2) {
-		x2 = x1;
-		y2 = y1;
 		x1 = x;
 		y1 = y;
 		x += p[i];

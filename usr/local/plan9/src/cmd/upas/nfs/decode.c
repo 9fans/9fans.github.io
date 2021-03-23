@@ -25,7 +25,7 @@ _decqp(uchar *out, int lim, char *in, int n, int underscores)
 {
 	char *p, *ep;
 	uchar *eout, *out0;
-	
+
 	out0 = out;
 	eout = out+lim;
 	for(p=in, ep=in+n; p<ep && out<eout; ){
@@ -73,7 +73,7 @@ decode(int kind, char *s, int *len)
 		*len = l;
 		t[l] = 0;
 		return t;
-	
+
 	case Base64:
 		l = strlen(s)+1;
 		t = emalloc(l);
@@ -127,7 +127,7 @@ static void
 twriter(void *v)
 {
 	Writeargs *w;
-	
+
 	w = v;
 	write(w->fd, w->s, strlen(w->s));
 	close(w->fd);
@@ -143,7 +143,6 @@ tcs(char *charset, char *s)
 	int fd[3], p[2], pp[2];
 	uchar *us;
 	char *t, *u;
-	char *argv[4];
 	Rune r;
 	Writeargs *w;
 
@@ -173,11 +172,6 @@ latin1:
 	goto latin1;
 
 tcs:
-	argv[0] = "tcs";
-	argv[1] = "-f";
-	argv[2] = charset;
-	argv[3] = nil;
-	
 	if(pipe(p) < 0 || pipe(pp) < 0)
 		sysfatal("pipe: %r");
 	fd[0] = p[0];
@@ -222,13 +216,13 @@ unrfc2047(char *s)
 	int len;
 	Rune r;
 	Fmt fmt;
-	
+
 	if(s == nil)
 		return nil;
 
 	if(strstr(s, "=?") == nil)
 		return s;
-	
+
 	fmtstrinit(&fmt);
 	for(p=s; *p; ){
 		/* =?charset?e?text?= */
@@ -276,7 +270,7 @@ unrfc2047(char *s)
 }
 
 #ifdef TEST
-char *test[] = 
+char *test[] =
 {
 	"hello world",
 	"hello =?iso-8859-1?q?this is some text?=",
@@ -294,7 +288,7 @@ void
 threadmain(int argc, char **argv)
 {
 	int i;
-	
+
 	for(i=0; i<nelem(test); i++)
 		print("%s\n\t%s\n", test[i], unrfc2047(estrdup(test[i])));
 	threadexitsall(0);

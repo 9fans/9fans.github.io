@@ -13,12 +13,18 @@ enum
 	FNSIZE	= 128,		/* file name */
 	LBSIZE	= 4096,		/* max line size */
 	BLKSIZE	= 4096,		/* block size in temp file */
-	NBLK	= 32767,		/* max size of temp file */
+	NBLK	= 32767,	/* max size of temp file */
 	ESIZE	= 256,		/* max size of reg exp */
 	GBSIZE	= 256,		/* max size of global command */
 	MAXSUB	= 9,		/* max number of sub reg exp */
 	ESCFLG	= 0xFFFF,	/* escape Rune - user defined code */
 	EOF	= -1
+};
+
+enum
+{
+	LINELEN = 70,	/* max number of glyphs in a display line */
+	BELL = 6	/* A char could require up to BELL glyphs to display */
 };
 
 void	(*oldhup)(int);
@@ -40,7 +46,7 @@ int	ichanged;
 int	io;
 Biobuf	iobuf;
 int	lastc;
-char	line[70];
+char	line[LINELEN];
 Rune*	linebp;
 Rune	linebuf[LBSIZE];
 int	listf;
@@ -203,7 +209,7 @@ commands(void)
 			a1 = dol;
 		if((addr2=a1) == 0) {
 			given = 0;
-			addr2 = dot;	
+			addr2 = dot;
 		} else
 			given = 1;
 		if(addr1 == 0)
@@ -726,7 +732,7 @@ getchr(void)
 		i++;
 		if(fullrune(s, i))
 			break;
-		
+
 	}
 	chartorune(&r, s);
 	lastc = r;
@@ -1050,7 +1056,7 @@ putline(void)
 		}
 	}
 	nl = tline;
-	tline += ((lp-linebuf) + 03) & 077776;
+	tline += ((lp-linebuf) + 03) & (NBLK-1);
 	return nl;
 }
 
@@ -1072,7 +1078,7 @@ Rune*
 getblock(int atl, int iof)
 {
 	int bno, off;
-	
+
 	static uchar ibuff[BLKSIZE];
 	static uchar obuff[BLKSIZE];
 
@@ -1488,7 +1494,7 @@ match(int *addr)
 	}
 	loc1 = loc2 = 0;
 	return 0;
-	
+
 }
 
 void
@@ -1543,7 +1549,7 @@ putchr(int ac)
 				*lp++ = 'n';
 			}
 		} else {
-			if(col > (72-6-2)) {
+			if(col > (LINELEN-BELL)) {
 				col = 8;
 				*lp++ = '\\';
 				*lp++ = '\n';
@@ -1558,15 +1564,32 @@ putchr(int ac)
 				if(c == '\t')
 					c = 't';
 				col++;
-			} else
-			if(c<' ' || c>='\177') {
+			} else if (c<' ' || c=='\177') {
 				*lp++ = '\\';
 				*lp++ = 'x';
-				*lp++ =  hex[c>>12];
-				*lp++ =  hex[c>>8&0xF];
-				*lp++ =  hex[c>>4&0xF];
-				c     =  hex[c&0xF];
+				*lp++ = hex[(c>>4)&0xF];
+				c     = hex[c&0xF];
+				col += 3;
+			} else if (c>'\177' && c<=0xFFFF) {
+				*lp++ = '\\';
+				*lp++ = 'u';
+				*lp++ = hex[(c>>12)&0xF];
+				*lp++ = hex[(c>>8)&0xF];
+				*lp++ = hex[(c>>4)&0xF];
+				c     = hex[c&0xF];
 				col += 5;
+			} else if (c>0xFFFF) {
+				*lp++ = '\\';
+				*lp++ = 'U';
+				*lp++ = hex[(c>>28)&0xF];
+				*lp++ = hex[(c>>24)&0xF];
+				*lp++ = hex[(c>>20)&0xF];
+				*lp++ = hex[(c>>16)&0xF];
+				*lp++ = hex[(c>>12)&0xF];
+				*lp++ = hex[(c>>8)&0xF];
+				*lp++ = hex[(c>>4)&0xF];
+				c     = hex[c&0xF];
+				col += 9;
 			}
 		}
 	}
@@ -1574,7 +1597,7 @@ putchr(int ac)
 	rune = c;
 	lp += runetochar(lp, &rune);
 
-	if(c == '\n' || lp >= &line[sizeof(line)-5]) {
+	if(c == '\n' || lp >= &line[LINELEN-BELL]) {
 		linp = line;
 		write(oflag? 2: 1, line, lp-line);
 		return;

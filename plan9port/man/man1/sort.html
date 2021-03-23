@@ -72,16 +72,16 @@
     form <i>m</i><tt><font size=+1>.</font></tt><i>n</i>, optionally followed by one or more of the flags <tt><font size=+1>Mbdfginr</font></tt>,
     where <i>m</i> tells a number of fields to skip from the beginning of
     the line and <i>n</i> tells a number of characters to skip further. If
-    any flags are present they
-    override all the global ordering options for this key. A missing
-    <tt><font size=+1>.</font></tt><i>n</i> means <tt><font size=+1>.0</font></tt>; a missing <tt><font size=+1>&#8722;</font></tt><i>pos2</i> means the end of the line. Under
-    the <tt><font size=+1>&#8722;t</font></tt><i>x</i> option, fields are strings separated by <i>x</i>; otherwise fields
-    are non-empty strings separated by white space. White space before
-    a field is part of the field, except under option <tt><font size=+1>&#8722;b</font></tt>. A <tt><font size=+1>b</font></tt> flag
-    may be attached
-    independently to <i>pos1</i> and <i>pos2.</i> 
+    any flags are present
+    they override all the global ordering options for this key. A
+    missing <tt><font size=+1>.</font></tt><i>n</i> means <tt><font size=+1>.0</font></tt>; a missing <tt><font size=+1>&#8722;</font></tt><i>pos2</i> means the end of the line.
+    Under the <tt><font size=+1>&#8722;t</font></tt><i>x</i> option, fields are strings separated by <i>x</i>; otherwise
+    fields are non-empty strings separated by white space. White space
+    before a field is part of the field, except under option <tt><font size=+1>&#8722;b</font></tt>. A
+    <tt><font size=+1>b</font></tt> flag may be attached
+    independently to <i>pos1</i> and <i>pos2. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
-    
+    </i>
     The notation <tt><font size=+1>&#8722;k</font></tt> <i>pos1</i>[,<i>pos2</i>] is how POSIX <i>sort</i> defines fields:
     <i>pos1</i> and <i>pos2</i> have the same format but different meanings. The
     value of <i>m</i> is origin 1 instead of origin 0 and a missing <tt><font size=+1>.</font></tt><i>n</i> in

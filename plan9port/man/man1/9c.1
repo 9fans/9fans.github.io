@@ -1,6 +1,6 @@
 .TH 9C 1
 .SH NAME
-9c, 9a, 9l, 9ar \- C compiler, assembler, linker, archiver
+9c, 9l, 9ar \- C compiler, assembler, linker, archiver
 .SH SYNOPSIS
 .B 9c
 [
@@ -11,10 +11,6 @@
 .B -D
 .I name
 ]
-.I file
-\&...
-.PP
-.B 9a
 .I file
 \&...
 .PP
@@ -79,15 +75,7 @@ to the include path.
 .I 9c
 also defines
 .B __sun__
-on SunOS systems and
-.B __Linux26__
-on Linux systems with 2.6-series kernels.
-.PP
-.I 9a
-assembles the named files into object files for the current system.
-Unlike some system assemblers, it does
-.I not
-promise to run the C preprocessor on the source files.
+on SunOS systems.
 .PP
 .I 9l
 links the named object files and libraries to create the target executable.
@@ -136,13 +124,13 @@ but
 always provides the following key characters:
 .TP
 .B d
-Delete 
-.I files 
+Delete
+.I files
 from the archive file.
 .TP
 .B r
 Replace
-.I files 
+.I files
 in the archive file, or add them if missing.
 .TP
 .B t
@@ -166,7 +154,7 @@ With
 .BR t ,
 give a long listing of all information about the files,
 somewhat like a listing by
-.IR ls (1),
+.MR ls (1) ,
 showing
 .br
 .ns
@@ -181,7 +169,7 @@ Normally
 will create a new archive when
 .I afile
 does not exist, and give a warning.
-Option 
+Option
 .B c
 discards any old contents and suppresses the warning.
 .PD
@@ -203,10 +191,6 @@ rebuilt whenever the archive is modified.
 .L
 9c file1.c file2.c file3.c
 Compile three C source files.
-.TP
-.L
-9a file4.s
-Assemble one assembler source file.
 .TP
 .L
 9ar rvc lib.a file[12].o

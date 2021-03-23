@@ -34,21 +34,23 @@
     windows to scroll forward. The up arrow scrolls backward. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    Characters in Plan 9 are runes (see <a href="../man7/utf.html"><i>utf</i>(7)</a>). Any 16-bit rune can
-    be typed using a compose key followed by several other keys. The
-    compose key is also generally near the lower right of the main
-    key area: the <tt><font size=+1>NUM PAD</font></tt> key on the Gnot, the <tt><font size=+1>Alternate</font></tt> key on the
-    Next, the <tt><font size=+1>Compose</font></tt> key on the SLC, the <tt><font size=+1>Option</font></tt> key on the Magnum,
-    and either <tt><font size=+1>Alt</font></tt> key
-    on the PC. After typing the compose key, type a capital <tt><font size=+1>X</font></tt> and
-    exactly four hexadecimal characters (digits and <tt><font size=+1>a</font></tt> to <tt><font size=+1>f</font></tt>) to type
-    a single rune with the value represented by the typed number.
-    There are shorthands for many characters, comprising the compose
-    key followed by a two- or three-character sequence. The full list
-    is too long to repeat here, but is
-    contained in the file <tt><font size=+1><a href="/usr/local/plan9/lib/keyboard">/usr/local/plan9/lib/keyboard</a></font></tt> in a format
-    suitable for <a href="../man1/grep.html"><i>grep</i>(1)</a> or <a href="../man1/look.html"><i>look</i>(1)</a>. To add a sequence, edit that
-    file and then rebuild <a href="../man1/devdraw.html"><i>devdraw</i>(1)</a>. 
+    Characters in Plan 9 are runes (see <a href="../man7/utf.html"><i>utf</i>(7)</a>). Any rune can be typed
+    using a compose key followed by several other keys. The compose
+    key is also generally near the lower right of the main key area:
+    the <tt><font size=+1>NUM PAD</font></tt> key on the Gnot, the <tt><font size=+1>Alternate</font></tt> key on the Next, the
+    <tt><font size=+1>Compose</font></tt> key on the SLC, the <tt><font size=+1>Option</font></tt> key on the Magnum, and either
+    <tt><font size=+1>Alt</font></tt> key on the
+    PC. To type a single rune with the value specified by a given
+    four-digit hexadecimal number, type the compose key, then a capital
+    <tt><font size=+1>X</font></tt>, and then the four hexadecimal digits (decimal digits and <tt><font size=+1>a</font></tt>
+    to <tt><font size=+1>f</font></tt>). For a longer rune, type <tt><font size=+1>X</font></tt> twice followed by five digits,
+    or type <tt><font size=+1>X</font></tt> three times followed by six digits. There are shorthands
+    for many characters, comprising
+    the compose key followed by a two- or three-character sequence.
+    The full list is too long to repeat here, but is contained in
+    the file <tt><font size=+1><a href="/usr/local/plan9/lib/keyboard">/usr/local/plan9/lib/keyboard</a></font></tt> in a format suitable for
+    <a href="../man1/grep.html"><i>grep</i>(1)</a> or <a href="../man1/look.html"><i>look</i>(1)</a>. To add a sequence, edit that file and then
+    rebuild <a href="../man1/devdraw.html"><i>devdraw</i>(1)</a>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     There are several rules guiding the design of the sequences, as

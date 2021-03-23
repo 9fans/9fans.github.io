@@ -33,12 +33,12 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     Image files are read and written using <tt><font size=+1>readimage</font></tt> and <tt><font size=+1>writeimage</font></tt>
-    (see <a href="../man3/allocimage.html"><i>allocimage</i>(3)</a>),<i>or</i> <tt><font size=+1>readmemimage</font></tt> and <tt><font size=+1>writememimage</font></tt> (see <a href="../man3/memdraw.html"><i>memdraw</i>(3)</a>).
+    (see <i>allocimage</i>(3)),<i>or</i> <tt><font size=+1>readmemimage</font></tt> and <tt><font size=+1>writememimage</font></tt> (see <a href="../man3/memdraw.html"><i>memdraw</i>(3)</a>).
     An uncompressed image file starts with 5 strings: <tt><font size=+1>chan</font></tt>, <tt><font size=+1>r.min.x</font></tt>,
     <tt><font size=+1>r.min.y</font></tt>, <tt><font size=+1>r.max.x</font></tt>, and <tt><font size=+1>r.max.y</font></tt>. Each is right-justified and blank
-    padded in 11 characters, followed by a blank. The <tt><font size=+1>chan</font></tt> value is
-    a textual string describing the pixel format (see <tt><font size=+1>strtochan</font></tt> in
-    <a href="../man3/graphics.html"><i>graphics</i>(3)</a> and the discussion of channel descriptors below),
+    padded in 11 characters, followed by a blank. The <tt><font size=+1>chan</font></tt> value
+    is a textual string describing the pixel format (see <tt><font size=+1>strtochan</font></tt>
+    in <a href="../man3/graphics.html"><i>graphics</i>(3)</a> and the discussion of channel descriptors below),
     and the rectangle coordinates are decimal strings. The rest of
     the file contains the <tt><font size=+1>r.max.y&#8722;r.min.y</font></tt> rows of pixel data. A <i>row</i>
     consists of the byte containing pixel <tt><font size=+1>r.min.x</font></tt> and all the bytes

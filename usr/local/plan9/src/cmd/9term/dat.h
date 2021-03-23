@@ -91,8 +91,8 @@ struct Mouseinfo
 	ulong	counter;	/* serial no. of last mouse event we received */
 	ulong	lastcounter;	/* serial no. of last mouse event sent to client */
 	int	lastb;	/* last button state we received */
-	uchar	qfull;	/* filled the queue; no more recording until client comes back */	
-};	
+	uchar	qfull;	/* filled the queue; no more recording until client comes back */
+};
 
 struct Window
 {
@@ -177,6 +177,7 @@ void		wmousectl(Window*);
 void		wmovemouse(Window*, Point);
 void		wpaste(Window*);
 void		wplumb(Window*);
+void		wlook(Window*);
 void		wrefresh(Window*, Rectangle);
 void		wrepaint(Window*);
 void		wresize(Window*, Image*, int);

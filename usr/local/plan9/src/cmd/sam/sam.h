@@ -9,6 +9,9 @@
 #undef warn
 #define warn samwarn
 
+#undef class
+#define class samclass
+
 /*
  * BLOCKSIZE is relatively small to keep memory consumption down.
  */
@@ -34,7 +37,6 @@ typedef struct Address	Address;
 typedef struct Block	Block;
 typedef struct Buffer	Buffer;
 typedef struct Disk	Disk;
-typedef struct Discdesc	Discdesc;
 typedef struct File	File;
 typedef struct List	List;
 typedef struct Range	Range;
@@ -237,6 +239,7 @@ int	Read(int, void*, int);
 void	Seek(int, long, int);
 int	plan9(File*, int, String*, int);
 int	Write(int, void*, int);
+void	Close(int);
 int	bexecute(File*, Posn);
 void	cd(String*);
 void	closefiles(File*, String*);
@@ -338,7 +341,6 @@ void	warn_S(Warn, String*);
 int	whichmenu(File*);
 void	writef(File*);
 Posn	writeio(File*);
-Discdesc *Dstart(void);
 
 extern Rune	samname[];	/* compiler dependent */
 extern Rune	*left[];

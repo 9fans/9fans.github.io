@@ -8,6 +8,7 @@
 #include <frame.h>
 #include <fcall.h>
 #include <plumb.h>
+#include <libsec.h>
 #include "dat.h"
 #include "fns.h"
 
@@ -131,7 +132,7 @@ errorwin(Mntdir *md, int owner)
 }
 
 /*
- * Incoming window should be locked. 
+ * Incoming window should be locked.
  * It will be unlocked and returned window
  * will be locked in its place.
  */
@@ -188,7 +189,7 @@ void
 addwarningtext(Mntdir *md, Rune *r, int nr)
 {
 	Warning *warn;
-	
+
 	for(warn = warnings; warn; warn=warn->next){
 		if(warn->md == md){
 			bufinsert(&warn->buf, warn->buf.nc, r, nr);
@@ -275,6 +276,8 @@ runeeq(Rune *s1, uint n1, Rune *s2, uint n2)
 {
 	if(n1 != n2)
 		return FALSE;
+	if(n1 == 0)
+		return TRUE;
 	return memcmp(s1, s2, n1*sizeof(Rune)) == 0;
 }
 

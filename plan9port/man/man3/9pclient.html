@@ -162,7 +162,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     A <tt><font size=+1>CFsys*</font></tt> represents a connection to a 9P server. A <tt><font size=+1>CFid*</font></tt> represents
-    an active fid on some connection; see <a href="../man9/intro.html"><i>intro</i>(9p)</a>. 
+    an active fid on some connection; see <i>intro</i>(9p). 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     A new connection to a 9P server is typically established by <i>fsmount</i>
@@ -180,11 +180,11 @@
     9P conversation on the file descriptor <i>fd</i> and then calls <i>fsversion</i>
     to initialize the connection. <i>Nsinit</i> does the same for name space
     services. <i>Fsversion
-    </i>executes a <a href="../man9/version.html"><i>version</i>(9p)</a> transaction to establish maximum message
-    size and 9P version. <i>Fsauth</i> executes an <a href="../man9/auth.html"><i>auth</i>(9p)</a> transaction,
+    </i>executes a <i>version</i>(9p) transaction to establish maximum message
+    size and 9P version. <i>Fsauth</i> executes an <i>auth</i>(9p) transaction,
     returning the new auth fid. (<i>Fsread</i> and <i>fswrite</i> can then be used
     to run the authentication protocol over the fid.) <i>Fsattach</i> executes
-    an <a href="../man9/attach.html"><i>attach</i>(9p)</a> transaction to connect to the root of a file tree
+    an <i>attach</i>(9p) transaction to connect to the root of a file tree
     served by the server. It
     presents <i>afid</i> (which may be nil) to establish identity. <i>Fssetroot</i>
     sets the root fid used by <i>fsopen</i>, <i>fsopenfd</i>, <i>fsdirstat</i>, and <i>fsdirwstat</i>,
@@ -206,7 +206,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Fscreate</i> and <i>fsopen</i> establish new fids using the <i>walk</i>, <i>create</i>
-    and <i>open</i> transactions (see <a href="../man9/walk.html"><i>walk</i>(9p)</a> and <a href="../man9/open.html"><i>open</i>(9p)</a>). The <i>path</i> argument
+    and <i>open</i> transactions (see <i>walk</i>(9p) and <i>open</i>(9p)). The <i>path</i> argument
     is evaluated relative to the <tt><font size=+1>CFsys</font></tt> root (see <i>fsroot</i> and <i>fssetroot</i>
     above). The path is parsed as a slash-separated sequence of path
     elements, as on Unix and Plan 9. Elements that are empty or dot
@@ -223,7 +223,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     Once opened, fids can be read and written using <i>fspread</i> and <i>fspwrite</i>,
-    which execute <i>read</i> and <i>write</i> transactions (see <a href="../man9/read.html"><i>read</i>(9p)</a>). The
+    which execute <i>read</i> and <i>write</i> transactions (see <i>read</i>(9p)). The
     library maintains an offset for each fid, analagous to the offset
     maintained by the kernel for each open file descriptor. <i>Fsread</i>
     and <i>fswrite</i> read and write from this offset, and update it after
@@ -247,7 +247,7 @@
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     Reading an open a directory returns directory entries encoded
-    as described in <a href="../man9/stat.html"><i>stat</i>(9p)</a>. 
+    as described in <i>stat</i>(9p). 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Fsprint</i> and <i>fsvprint</i> are like <i>fprint</i> and <i>vfprint</i> (see <a href="../man3/print.html"><i>print</i>(3)</a>)
@@ -261,7 +261,7 @@
     freed with <i>free</i> (see <i>malloc</i>(3)) when no longer needed. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    <i>Fsdirfstat</i> and <i>fsdirfwstat</i> execute <i>stat</i> and <i>wstat</i> (see <a href="../man9/stat.html"><i>stat</i>(9p)</a>)
+    <i>Fsdirfstat</i> and <i>fsdirfwstat</i> execute <i>stat</i> and <i>wstat</i> (see <i>stat</i>(9p))
     transactions. The <tt><font size=+1>Dir</font></tt> structure returned by <i>fsdirfstat</i> should
     be freed with <i>free</i> (see <i>malloc</i>(3)) when no longer needed. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
@@ -302,7 +302,7 @@
 
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-    <a href="../man4/intro.html"><i>intro</i>(4)</a>, <a href="../man9/intro.html"><i>intro</i>(9p)</a>, <i>fsaopen</i> and <i>nsaopen</i> in <a href="../man3/auth.html"><i>auth</i>(3)</a><br>
+    <a href="../man4/intro.html"><i>intro</i>(4)</a>, <i>intro</i>(9p), <i>fsaopen</i> and <i>nsaopen</i> in <a href="../man3/auth.html"><i>auth</i>(3)</a><br>
     
 </table>
 <p><font size=+1><b>BUGS     </b></font><br>
@@ -310,11 +310,11 @@
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
     The implementation should use a special version string to distinguish
-    between servers that support <a href="../man9/openfd.html"><i>openfd</i>(9p)</a> and servers that do not.
+    between servers that support <i>openfd</i>(9p) and servers that do not.
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    The interface does not provide access to the <a href="../man9/walk.html"><i>walk</i>(9p)</a> transaction,
+    The interface does not provide access to the <i>walk</i>(9p) transaction,
     or to <i>open</i> and <i>create</i> on already-established fids.<br>
     
 </table>

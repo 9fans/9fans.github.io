@@ -199,7 +199,6 @@ struct Display
 	int		obufsize;
 	uchar		*obufp;
 	Font		*defaultfont;
-	Subfont		*defaultsubfont;
 	Image		*windows;
 	Image		*screenimage;
 	int		_isnewdisplay;
@@ -291,7 +290,7 @@ struct Cachefont
 
 struct Cacheinfo
 {
-	ushort		x;		/* left edge of bits */
+	int		x;		/* left edge of bits */
 	uchar		width;		/* width of baseline */
 	schar		left;		/* offset of baseline */
 	Rune		value;	/* value of character at this slot in cache */
@@ -312,8 +311,8 @@ struct Font
 	Display		*display;
 	short		height;	/* max height of image, interline spacing */
 	short		ascent;	/* top of image to baseline */
-	short		width;	/* widest so far; used in caching only */	
-	short		nsub;	/* number of subfonts */
+	short		width;	/* widest so far; used in caching only */
+	int		nsub;	/* number of subfonts */
 	u32int		age;	/* increasing counter; used for LRU */
 	int		maxdepth;	/* maximum depth of all loaded subfonts */
 	int		ncache;	/* size of cache */
@@ -498,7 +497,6 @@ extern Point	strsubfontwidth(Subfont*, char*);
 extern int	loadchar(Font*, Rune, Cacheinfo*, int, int, char**);
 extern char*	subfontname(char*, char*, int);
 extern Subfont*	_getsubfont(Display*, char*);
-extern Subfont*	getdefont(Display*);
 extern void		lockdisplay(Display*);
 extern void	unlockdisplay(Display*);
 extern int		drawlsetrefresh(u32int, int, void*, void*);
@@ -508,8 +506,6 @@ extern void	swapfont(Font*, Font**, Font**);
 /*
  * Predefined 
  */
-extern	uchar	defontdata[];
-extern	int		sizeofdefont;
 extern	Point		ZP;
 extern	Rectangle	ZR;
 
@@ -520,6 +516,7 @@ extern	Display	*display;
 extern	Font		*font;
 extern	Image	*screen;
 extern	Screen	*_screen;
+extern	int	drawmousemask; /* set bits to disable receiving those buttons */
 extern	int	_cursorfd;
 extern	int	_drawdebug;	/* set to 1 to see errors from flushimage */
 extern	void	_setdrawop(Display*, Drawop);
@@ -568,9 +565,10 @@ int	mousescrollsize(int);
  */
 struct Mouse;
 struct Cursor;
+struct Cursor2;
 int		_displaybouncemouse(Display *d, struct Mouse *m);
 int		_displayconnect(Display *d);
-int		_displaycursor(Display *d, struct Cursor *c);
+int		_displaycursor(Display *d, struct Cursor *c, struct Cursor2 *c2);
 int		_displayinit(Display *d, char *label, char *winsize);
 int		_displaylabel(Display *d, char *label);
 int		_displaymoveto(Display *d, Point p);

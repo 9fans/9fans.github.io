@@ -59,7 +59,7 @@
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
     The X Window library implementation of <i>XLookupString</i> allocates
-    some very large buffers on the stack, so <tt><font size=+1><a href="/usr/local/plan9/src/cmd/devdraw/x11-itrans.c">/usr/local/plan9/src/cmd/devdraw/x11&#8722;itrans.c</a></font></tt>
+    some very large buffers on the stack, so <tt><font size=+1><a href="/usr/local/plan9/src/cmd/devdraw/">/usr/local/plan9/src/cmd/devdraw/</a>x11&#8722;itrans.c</font></tt>
     calls <tt><font size=+1>needstack(64*1024)</font></tt> before making calls to <i>XLookupString</i>.
     If a thread (in this case, the keyboard-reading thread used inside
     the <a href="../man3/draw.html"><i>draw</i>(3)</a> library) does not allocate a large

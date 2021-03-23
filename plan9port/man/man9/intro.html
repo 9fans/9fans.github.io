@@ -223,7 +223,7 @@
     
     <tt><font size=+1>Openfd</font></tt> is an extension used by Unix utilities to allow traditional
     Unix programs to have their input or output attached to fids on
-    9P servers. See <a href="../man9/openfd.html"><i>openfd</i>(9p)</a> and <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a> for details. 
+    9P servers. See <i>openfd</i>(9p) and <a href="../man3/9pclient.html"><i>9pclient</i>(3)</a> for details. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     The <tt><font size=+1>stat</font></tt> transaction retrieves information about the file. The
@@ -271,8 +271,8 @@
 <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
     Directories are created by <tt><font size=+1>create</font></tt> with <tt><font size=+1>DMDIR</font></tt> set in the permissions
-    argument (see <a href="../man9/stat.html"><i>stat</i>(9P)</a>). The members of a directory can be found
-    with <a href="../man9/read.html"><i>read</i>(9P)</a>. All directories must support <tt><font size=+1>walks</font></tt> to the directory
+    argument (see <i>stat</i>(9P)). The members of a directory can be found
+    with <i>read</i>(9P). All directories must support <tt><font size=+1>walks</font></tt> to the directory
     <tt><font size=+1>..</font></tt> (dot-dot) meaning parent directory, although by convention
     directories contain no explicit entry for <tt><font size=+1>..</font></tt> or <tt><font size=+1>.</font></tt> (dot). The parent
     of the root directory of
@@ -291,7 +291,7 @@
     
     Each file server maintains a set of user and group names. Each
     user can be a member of any number of groups. Each group has a
-    <i>group leader</i> who has special privileges (see <a href="../man9/stat.html"><i>stat</i>(9P)</a> and Plan
+    <i>group leader</i> who has special privileges (see <i>stat</i>(9P) and Plan
     9&#8217;s <i>users</i>(6)). Every file request has an implicit user id (copied
     from the original <tt><font size=+1>attach</font></tt>) and an implicit set of groups (every
     group of which the user is a

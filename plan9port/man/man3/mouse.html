@@ -114,7 +114,7 @@
         
         <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-            Mouse;<br>
+            Mouse &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m;<br>
             Channel &nbsp;&nbsp;&nbsp;*c; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/* chan(Mouse)[16] */<br>
             Channel &nbsp;&nbsp;&nbsp;*resizec; &nbsp;&nbsp;&nbsp;/* chan(int)[2] */<br>
             char &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*file;<br>
@@ -150,10 +150,11 @@
     to reconnect to the window. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    <i>Readmouse</i> updates the <tt><font size=+1>Mouse</font></tt> structure held in the <tt><font size=+1>Mousectl</font></tt>, blocking
-    if the state has not changed since the last <i>readmouse</i> or message
-    sent on the channel. It calls <tt><font size=+1>flushimage</font></tt> (see <a href="../man3/graphics.html"><i>graphics</i>(3)</a>) before
-    blocking, so any buffered graphics requests are displayed. 
+    <i>Readmouse</i> updates the <tt><font size=+1>Mouse</font></tt> structure <tt><font size=+1>m</font></tt> held in the <tt><font size=+1>Mousectl</font></tt>,
+    blocking if the state has not changed since the last <i>readmouse</i>
+    or message sent on the channel. It calls <tt><font size=+1>flushimage</font></tt> (see <a href="../man3/graphics.html"><i>graphics</i>(3)</a>)
+    before blocking, so any buffered graphics requests are displayed.
+    
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Closemouse</i> closes the file descriptors associated with the mouse,

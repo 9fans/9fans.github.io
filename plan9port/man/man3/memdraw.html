@@ -286,7 +286,6 @@
     Memsubfont* openmemsubfont(char *name)<br>
     void &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;freememsubfont(Memsubfont *f)<br>
     Point &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memsubfontwidth(Memsubfont *f, char *s)<br>
-    Memsubfont* getmemdefont(void)<br>
     Point &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memimagestring(Memimage *dst, Point p, Memimage *color,<br>
      
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
@@ -360,7 +359,7 @@
     pixel. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    <i>Allocmemimage</i> allocages images with a given rectangle and channel
+    <i>Allocmemimage</i> allocates images with a given rectangle and channel
     descriptor (see <tt><font size=+1>strtochan</font></tt> in <a href="../man3/graphics.html"><i>graphics</i>(3)</a>), creating a fresh <tt><font size=+1>Memdata</font></tt>
     structure and associated storage. <i>Allocmemimaged</i> is similar but
     uses the supplied <i>Memdata</i> structure rather than a new one. The
@@ -395,11 +394,10 @@
     are identical to the <i>arc</i>, <i>poly</i>, <i>ellipse</i>, <i>fillpoly</i>, <i>line</i>, and <i>gendraw</i>,
     routines described in <a href="../man3/draw.html"><i>draw</i>(3)</a>, except that they operate on <tt><font size=+1>Memimage</font></tt>s
     rather than <tt><font size=+1>Image</font></tt>s. Similarly, <i>allocmemsubfont</i>, <i>openmemsubfont</i>,
-    <i>freememsubfont</i>, <i>memsubfontwidth</i>, <i>getmemdefont</i>, and
-    <i>memimagestring</i> are the <tt><font size=+1>Memimage</font></tt> analogues of <i>allocsubfont</i>, <i>openfont</i>,
-    <i>freesubfont</i>, <i>strsubfontwidth</i>, <i>getdefont</i>, and <tt><font size=+1>string</font></tt> (see <a href="../man3/subfont.html"><i>subfont</i>(3)</a>
-    and <a href="../man3/graphics.html"><i>graphics</i>(3)</a>), except that they operate only on <tt><font size=+1>Memsubfont</font></tt>s
-    rather than <tt><font size=+1>Font</font></tt>s. 
+    <i>freememsubfont</i>, <i>memsubfontwidth</i>, and <i>memimagestring</i> are the
+    <tt><font size=+1>Memimage</font></tt> analogues of <i>allocsubfont</i>, <i>openfont</i>, <i>freesubfont</i>, <i>strsubfontwidth</i>,
+    and <tt><font size=+1>string</font></tt> (see <a href="../man3/subfont.html"><i>subfont</i>(3)</a> and <a href="../man3/graphics.html"><i>graphics</i>(3)</a>), except that they
+    operate only on <tt><font size=+1>Memsubfont</font></tt>s rather than <tt><font size=+1>Font</font></tt>s. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     <i>Drawclip</i> takes the images involved in a draw operation, together

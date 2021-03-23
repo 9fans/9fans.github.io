@@ -178,7 +178,6 @@ extern Memsubfont*	allocmemsubfont(char*, int, int, int, Fontchar*, Memimage*);
 extern Memsubfont*	openmemsubfont(char*);
 extern void		freememsubfont(Memsubfont*);
 extern Point		memsubfontwidth(Memsubfont*, char*);
-extern Memsubfont*	getmemdefont(void);
 
 /*
  * Predefined 
@@ -217,7 +216,6 @@ extern Memdrawparam*	_memimagedrawsetup(Memimage*,
 				Rectangle, Memimage*, Point, Memimage*,
 				Point, int);
 extern void		_memimagedraw(Memdrawparam*);
-extern void		_drawreplacescreenimage(Memimage*);
 
 #if defined(__cplusplus)
 }

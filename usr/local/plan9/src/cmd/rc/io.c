@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <errno.h>
 #include "rc.h"
 #include "exec.h"
 #include "io.h"
@@ -44,7 +45,10 @@ pfmt(io *f, char *fmt, ...)
 			pstr(f, va_arg(ap, char *));
 			break;
 		case 't':
-			pcmd(f, va_arg(ap, struct tree *));
+			pcmd(f, va_arg(ap, tree *));
+			break;
+		case 'u':
+			pcmdu(f, va_arg(ap, tree *));
 			break;
 		case 'v':
 			pval(f, va_arg(ap, struct word *));
@@ -254,7 +258,15 @@ int
 emptybuf(io *f)
 {
 	int n;
-	if(f->fd==-1 || (n = Read(f->fd, f->buf, NBUF))<=0) return EOF;
+	if(f->fd==-1)
+		return EOF;
+Loop:
+	errno = 0;
+	n = Read(f->fd, f->buf, NBUF);
+	if(n < 0 && errno == EINTR)
+		goto Loop;
+	if(n <= 0)
+		return EOF;
 	f->bufp = f->buf;
 	f->ebuf = f->buf+n;
 	return *f->bufp++&0xff;

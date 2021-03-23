@@ -88,7 +88,7 @@
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
-        <tt><font size=+1># ; &amp; | ^ $ = ` ' { } ( ) &lt; &gt;<br>
+        <tt><font size=+1># ; &amp; | ^ $ ` ' { } ( ) &lt; &gt;<br>
         </font></tt>
     </table>
     An unquoted word that contains any of the characters <tt><font size=+1>* ? [</font></tt> is
@@ -225,14 +225,8 @@
         
     </table>
     <p><font size=+1><b>Free Carets    </b></font><br>
-    In most circumstances, <i>rc</i> will insert the <tt><font size=+1>^</font></tt> operator automatically
-    between words that are not separated by white space. Whenever
-    one of <tt><font size=+1>$ ' `</font></tt> follows a quoted or unquoted word or an unquoted
-    word follows a quoted word with no intervening blanks or tabs,
-    a <tt><font size=+1>^</font></tt> is inserted between the two. If an unquoted word immediately
-    follows a <tt><font size=+1>$</font></tt> and contains a
-    character other than an alphanumeric, underscore, or <tt><font size=+1>*</font></tt>, a <tt><font size=+1>^</font></tt> is
-    inserted before the first such character. Thus<br>
+    <i>Rc</i> will insert the <tt><font size=+1>^</font></tt> operator automatically between words that
+    are not separated by white space. Thus<br>
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
@@ -398,11 +392,11 @@
         corresponding notes) are <tt><font size=+1>sighup</font></tt> (<tt><font size=+1>hangup</font></tt>), <tt><font size=+1>sigint</font></tt> (<tt><font size=+1>interrupt</font></tt>),
         <tt><font size=+1>sigalrm</font></tt> (<tt><font size=+1>alarm</font></tt>), and <tt><font size=+1>sigfpe</font></tt> (floating point trap). By default
         <i>rc</i> exits on receiving any signal, except when run interactively,
-        in which case interrupts
-        and quits normally cause <i>rc</i> to stop whatever it&#8217;s doing and start
-        reading a new command. The second form causes <i>rc</i> to handle a signal
-        in the default manner. <i>Rc</i> recognizes an artificial note, <tt><font size=+1>sigexit</font></tt>,
-        which occurs when <i>rc</i> is about to finish executing.<br>
+        in which case
+        interrupts and quits normally cause <i>rc</i> to stop whatever it&#8217;s doing
+        and start reading a new command. The second form causes <i>rc</i> to
+        handle a signal in the default manner. <i>Rc</i> recognizes an artificial
+        note, <tt><font size=+1>sigexit</font></tt>, which occurs when <i>rc</i> is about to finish executing.<br>
         
     </table>
     <i>name</i><tt><font size=+1>=</font></tt><i>argument command<br>
@@ -551,7 +545,7 @@
     on completion of the <tt><font size=+1>.</font></tt> or function.<br>
     <tt><font size=+1>$apid</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;Whenever a process is started asynchronously with <tt><font size=+1>&amp;</font></tt>, <tt><font size=+1>$apid</font></tt>
     is set to its process id.<br>
-    <tt><font size=+1>$home</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;The default directory for <tt><font size=+1>cd</font></tt>.<br>
+    <tt><font size=+1>$home</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;The default directory for <tt><font size=+1>cd</font></tt>. Defaults to <tt><font size=+1>$HOME</font></tt> or else <tt><font size=+1>/</font></tt>.<br>
     <tt><font size=+1>$ifs</font></tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The input field separators used in backquote substitutions.
     If <tt><font size=+1>$ifs</font></tt> is not set in <i>rc</i>&#8217;s environment, it is initialized to blank,
     tab and newline.<br>
@@ -624,9 +618,6 @@
     Functions that use here documents don&#8217;t work. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
-    Free carets don&#8217;t get inserted next to keywords. 
-    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
-    
     The <tt><font size=+1>&lt;{</font></tt><i>command</i><tt><font size=+1>}</font></tt> syntax depends on the underlying operating system
     providing a file descriptor device tree at <tt><font size=+1>/dev/fd</font></tt>. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
@@ -644,7 +635,11 @@
     </table>
     to <tt><font size=+1>/etc/fstab</font></tt>, and then <tt><font size=+1>mount /dev/fd</font></tt>. (Adding the line to <tt><font size=+1>fstab</font></tt>
     ensures causes FreeBSD to mount the file system automatically
-    at boot time.)<br>
+    at boot time.) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    Some systems require <tt><font size=+1><a href="/usr/local/plan9/bin/rc">/usr/local/plan9/bin/rc</a></font></tt> to be listed in <tt><font size=+1>/etc/shells</font></tt>
+    before it can be used as a login shell.<br>
     
 </table>
 

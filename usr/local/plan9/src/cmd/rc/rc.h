@@ -33,6 +33,12 @@
 #undef pipe	/* so that /dev/fd works */
 #define searchpath rcsearchpath	/* avoid new libc function */
 
+/* some systems define a global "var", "thread" */
+#undef var
+#define var rcvar
+#undef thread
+#define thread rcthread
+
 typedef struct tree tree;
 typedef struct word word;
 typedef struct io io;
@@ -71,7 +77,6 @@ union code{
 	char *s;
 };
 char *promptstr;
-int doprompt;
 #define	NTOK	8192
 char tok[NTOK];
 #define	APPEND	1
@@ -126,7 +131,7 @@ int mypid;
 char **argp;
 char **args;
 int nerror;		/* number of errors encountered during compilation */
-int doprompt;		/* is it time for a prompt? */
+extern int doprompt;		/* is it time for a prompt? */
 /*
  * Which fds are the reading/writing end of a pipe?
  * Unfortunately, this can vary from system to system.

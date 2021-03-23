@@ -30,7 +30,7 @@ enum
 	Up		= 1,
 	Down	= 0,
 	Mag		= 4,
-	Maxmag	= 10
+	Maxmag	= 20
 };
 
 enum
@@ -112,32 +112,32 @@ Cursor sight = {
 Cursor pixel = {
 	{-7, -7},
 	{0x1f, 0xf8, 0x3f, 0xfc,  0x7f, 0xfe,  0xf8, 0x1f,
-	0xf0, 0x0f,  0xe0, 0x07, 0xe0, 0x07, 0xfe, 0x7f, 
-	0xfe, 0x7f, 0xe0, 0x07, 0xe0, 0x07, 0xf0, 0x0f, 
+	0xf0, 0x0f,  0xe0, 0x07, 0xe0, 0x07, 0xfe, 0x7f,
+	0xfe, 0x7f, 0xe0, 0x07, 0xe0, 0x07, 0xf0, 0x0f,
 	0x78, 0x1f, 0x7f, 0xfe, 0x3f, 0xfc, 0x1f, 0xf8, },
-	{0x00, 0x00, 0x0f, 0xf0, 0x31, 0x8c, 0x21, 0x84, 
-	0x41, 0x82, 0x41, 0x82, 0x41, 0x82, 0x40, 0x02, 
-	0x40, 0x02, 0x41, 0x82, 0x41, 0x82, 0x41, 0x82, 
+	{0x00, 0x00, 0x0f, 0xf0, 0x31, 0x8c, 0x21, 0x84,
+	0x41, 0x82, 0x41, 0x82, 0x41, 0x82, 0x40, 0x02,
+	0x40, 0x02, 0x41, 0x82, 0x41, 0x82, 0x41, 0x82,
 	0x21, 0x84, 0x31, 0x8c, 0x0f, 0xf0, 0x00, 0x00, }
 };
 
 Cursor busy = {
 	{-7, -7},
-	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	 0x00, 0x00, 0x00, 0x0c, 0x00, 0x8e, 0x1d, 0xc7,
-	 0xff, 0xe3, 0xff, 0xf3, 0xff, 0xff, 0x7f, 0xfe, 
+	 0xff, 0xe3, 0xff, 0xf3, 0xff, 0xff, 0x7f, 0xfe,
 	 0x3f, 0xf8, 0x17, 0xf0, 0x03, 0xe0, 0x00, 0x00,},
-	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	 0x00, 0x00, 0x00, 0x08, 0x00, 0x04, 0x00, 0x82,
-	 0x04, 0x41, 0xff, 0xe1, 0x5f, 0xf1, 0x3f, 0xfe, 
+	 0x04, 0x41, 0xff, 0xe1, 0x5f, 0xf1, 0x3f, 0xfe,
 	 0x17, 0xf0, 0x03, 0xe0, 0x00, 0x00, 0x00, 0x00,}
 };
 
 Cursor skull = {
 	{-7,-7},
-	{0x00, 0x00, 0x00, 0x00, 0xc0, 0x03, 0xe7, 0xe7, 
-	 0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc, 0x1f, 0xf8, 
-	 0x0f, 0xf0, 0x3f, 0xfc, 0xff, 0xff, 0xff, 0xff, 
+	{0x00, 0x00, 0x00, 0x00, 0xc0, 0x03, 0xe7, 0xe7,
+	 0xff, 0xff, 0xff, 0xff, 0x3f, 0xfc, 0x1f, 0xf8,
+	 0x0f, 0xf0, 0x3f, 0xfc, 0xff, 0xff, 0xff, 0xff,
 	 0xef, 0xf7, 0xc7, 0xe3, 0x00, 0x00, 0x00, 0x00,},
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x03,
 	 0xE7, 0xE7, 0x3F, 0xFC, 0x0F, 0xF0, 0x0D, 0xB0,
@@ -161,7 +161,7 @@ Image		*values[256];
 Image		*greyvalues[256];
 uchar		data[8192];
 
-Thing*	tget(char*);
+Thing*	tget(char*, int);
 void	mesg(char*, ...);
 void	drawthing(Thing*, int);
 void	xselect(void);
@@ -184,6 +184,7 @@ main(volatile int argc, char **volatile argv)
 	volatile int i;
 	Event e;
 	Thing *t;
+	Thing *nt;
 
 	ARGBEGIN{
 	case 'W':
@@ -209,9 +210,14 @@ main(volatile int argc, char **volatile argv)
 	setjmp(err);
 	for(; i<argc; i++){
 		file = argv[i];
-		t = tget(argv[i]);
-		if(t)
+		t = tget(argv[i], 1);
+		if(t) {
+			nt = t->next;
+			t->next = 0;
 			drawthing(t, 1);
+			if(nt)
+				drawthing(nt, 1);
+		}
 		flushimage(display, 1);
 	}
 	file = 0;
@@ -366,7 +372,7 @@ stext(Thing *t, char *l0, char *l1)
 	char buf[256];
 
 	l1[0] = 0;
-	sprint(buf, "depth:%d r:%d %d  %d %d ", 
+	sprint(buf, "depth:%d r:%d %d  %d %d ",
 		t->b->depth, t->b->r.min.x, t->b->r.min.y,
 		t->b->r.max.x, t->b->r.max.y);
 	if(t->parent)
@@ -382,6 +388,8 @@ stext(Thing *t, char *l0, char *l1)
 	}else if(t->s)
 		sprint(l1, "offset(hex): %ux n:%d  height:%d  ascent:%d",
 			t->off, t->s->n, t->s->height, t->s->ascent);
+	else if(t->face == CURSOR)
+		sprint(l0+strlen(l0), " cursor:%d", Dx(t->b->r));
 }
 
 void
@@ -569,7 +577,7 @@ tohex(int c)
 }
 
 Thing*
-tget(char *file)
+tget(char *file, int extra)
 {
 	int i, j, fd, face, x, y, c, chan;
 	Image *b;
@@ -577,8 +585,9 @@ tget(char *file)
 	Thing *t;
 	Dir *volatile d;
 	jmp_buf oerr;
-	uchar buf[256];
+	uchar buf[300];
 	char *data;
+	Rectangle r;
 
 	buf[0] = '\0';
 	errstr((char*)buf, sizeof buf);	/* flush pending error message */
@@ -628,17 +637,15 @@ tget(char *file)
 			close(fd);
 			goto Err;
 		}
-		b = allocimage(display, Rect(0, 0, 16, 32), GREY1, 0, DNofill);
-		if(b == 0){
-			mesg("image alloc failed file %s: %r", file);
-			free(data);
-			close(fd);
-			goto Err;
-		}
 		i = 0;
-		for(x=0;x<64; ){
-			if((c=data[i]) == '\0')
-				goto ill;
+		for(x=0;; ){
+			if((c=data[i]) == '\0' || x > 256) {
+				if(x == 64 || x == 256)
+					goto HaveCursor;
+				mesg("ill-formed cursor file %s", file);
+				close(fd);
+				goto Err;
+			}
 			if(c=='0' && data[i+1] == 'x'){
 				i += 2;
 				continue;
@@ -650,7 +657,19 @@ tget(char *file)
 			}
 			i++;
 		}
-		loadimage(b, Rect(0, 0, 16, 32), buf, sizeof buf);
+	HaveCursor:
+		if(x == 64)
+			r = Rect(0, 0, 16, 32);
+		else
+			r = Rect(0, 0, 32, 64);
+		b = allocimage(display, r, GREY1, 0, DNofill);
+		if(b == 0){
+			mesg("image alloc failed file %s: %r", file);
+			free(data);
+			close(fd);
+			goto Err;
+		}
+		loadimage(b, r, buf, sizeof buf);
 		free(data);
 	}else if(memcmp(buf, "0x", 2)==0){
 		/*
@@ -752,7 +771,7 @@ tget(char *file)
 			s = readsubfonti(display, file, fd, b, 0);
 	}
 	close(fd);
-	t = malloc(sizeof(Thing));
+	t = mallocz(sizeof(Thing), 1);
 	if(t == 0){
    nomem:
 		mesg("malloc failed: %r");
@@ -775,6 +794,40 @@ tget(char *file)
 	t->c = -1;
 	t->mag = 1;
 	t->off = 0;
+	if(face == CURSOR && extra && Dx(t->b->r) == 16) {
+		// Make 32x32 cursor as second image.
+		Thing *nt;
+		Cursor c;
+		Cursor2 c2;
+
+		nt = mallocz(sizeof(Thing), 1);
+		if(nt == 0)
+			goto nomem;
+		nt->name = strdup("");
+		if(nt->name == 0) {
+			free(nt);
+			goto nomem;
+		}
+		b = allocimage(display, Rect(0, 0, 32, 64), GREY1, 0, DNofill);
+		if(b == nil) {
+			free(nt->name);
+			free(nt);
+			goto nomem;
+		}
+		memmove(c.clr, buf, 64);
+		scalecursor(&c2, &c);
+		memmove(buf, c2.clr, 256);
+		loadimage(b, b->r, buf, sizeof buf);
+		t->next = nt;
+		nt->b = b;
+		nt->s = 0;
+		nt->face = CURSOR;
+		nt->mod = 0;
+		nt->parent = 0;
+		nt->c = -1;
+		nt->mag = 1;
+		nt->off = 0;
+	}
 	memmove(err, oerr, sizeof err);
 	return t;
 }
@@ -1089,7 +1142,7 @@ textedit(Thing *t, char *tag)
 		fc = f->info;
 		for(i=0; i<=w && i<=f->n; i++)
 			nfc[i] = fc[i];
-		if(w+1 < i)
+		if(i < w+1)
 			memset(nfc+i, 0, ((w+1)-i)*sizeof(Fontchar));
 		x = fc[f->n].x;
 		for(; i<=w; i++)
@@ -1344,7 +1397,7 @@ openedit(Thing *t, Point pt, int c)
 	}
 	br = t->b->r;
 	if(t->s == 0){
-		c = -1; 
+		c = -1;
 		/* if big enough to bother, sweep box */
 		if(Dx(br)<=16 && Dy(br)<=16)
 			r = br;
@@ -1637,18 +1690,13 @@ twrite(Thing *t)
 					Bprint(&buf, "%.2x", data[i+j]);
 				Bprint(&buf, ", ");
 			}
-			if(t->face == CURSOR){
-				switch(y){
-				case 3: case 7: case 11: case 19: case 23: case 27:
-					Bprint(&buf, "\n ");
-					break;
-				case 15:
+			if(t->face == CURSOR) {
+				if(y == Dy(r)/2-1)
 					Bprint(&buf, "},\n{");
-					break;
-				case 31:
+				else if(y == Dy(r)-1)
 					Bprint(&buf, "}\n");
-					break;
-				}
+				else
+					Bprint(&buf, "\n\t");
 			}else
 				Bprint(&buf, "\n");
 		}
@@ -1759,7 +1807,7 @@ tread(Thing *t)
 
 	if(t->parent)
 		t = t->parent;
-	new = tget(t->name);
+	new = tget(t->name, 0);
 	if(new == 0)
 		return;
 	nclosed = 0;
@@ -2025,7 +2073,7 @@ menu(void)
 	switch(sel){
 	case Mopen:
 		if(type(buf, "file")){
-			t = tget(buf);
+			t = tget(buf, 0);
 			if(t)
 				drawthing(t, 1);
 		}
