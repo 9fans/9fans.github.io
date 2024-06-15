@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test -f $PLAN9/config && . $PLAN9/config
+test -f "$PLAN9/config" && . "$PLAN9/config"
 usegcc()
 {
 	cc=${CC9:-gcc}
@@ -18,6 +18,9 @@ usegcc()
 		-Wno-stringop-truncation \
 		-Wno-stringop-overflow \
 		-Wno-format-truncation \
+		-Wno-deprecated-pragma \
+		-Wno-unused-but-set-variable \
+		-Wno-deprecated-declarations \
 		-fno-omit-frame-pointer \
 		-fsigned-char \
 		-fcommon \
@@ -52,7 +55,7 @@ quiet()
 	ignore=$ignore'|warn_unused_result'
 	ignore=$ignore'|expanded from macro'
 
-	grep -v '__p9l_autolib_' $1 |
+	grep -v '__p9l_autolib_' "$1" |
 	egrep -v "$ignore" |
 	sed 's/ .first use in this function.$//; s/\"\([^\"][^\"]*\)\", line \([0-9][0-9]*\)/\1:\2/g' |
 	$(which uniq) 1>&2  # avoid built-in uniq on SunOS
@@ -77,6 +80,8 @@ useclang()
 		-Wno-gnu-designator \
 		-Wno-array-bounds \
 		-Wno-unneeded-internal-declaration \
+		-Wno-deprecated-pragma \
+		-Wno-unused-but-set-variable \
 		-fsigned-char \
 		-fno-caret-diagnostics \
 		-fcommon \
@@ -90,7 +95,7 @@ usexlc()
 	cc=${CC9:-xlc_r}
 	cflags=" \
 		-c \
-		-O0 \
+		-O2 \
 		-qmaxmem=-1 \
 		-qsuppress=1506-236 \
 		-qsuppress=1506-358 \
@@ -99,7 +104,7 @@ usexlc()
 		-qsuppress=1506-1300 \
 		-qsuppress=1506-342 \
 	"
-	cflags="$cflags -g -qfullpath"
+	cflags="$cflags -g -qdbxextra -qfullpath"
 	cflags="$cflags $CC9FLAGS"
 }
 
@@ -143,10 +148,10 @@ case "$tag" in
 	exit 1
 esac
 
-# N.B. Must use temp file to avoid pipe; pipe loses status.
+# Must use temp file to avoid pipe; pipe loses status.
 xtmp=${TMPDIR-/tmp}/9c.$$.$USER.out
-$cc -DPLAN9PORT -I$PLAN9/include $cflags "$@" 2>$xtmp
+$cc -DPLAN9PORT -I"$PLAN9/include" $cflags "$@" 2>"$xtmp"
 status=$?
-quiet $xtmp
-rm -f $xtmp
+quiet "$xtmp"
+rm -f "$xtmp"
 exit $status

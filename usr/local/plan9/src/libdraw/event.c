@@ -203,11 +203,12 @@ newebuf(Slave *s, int n)
 static Muxrpc*
 startrpc(int type)
 {
-	uchar buf[100];
+	uchar buf[512];
 	Wsysmsg w;
 
 	w.type = type;
-	convW2M(&w, buf, sizeof buf);
+	if(convW2M(&w, buf, sizeof buf) == 0)
+		return nil;
 	return muxrpcstart(display->mux, buf);
 }
 

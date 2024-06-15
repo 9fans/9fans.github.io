@@ -16,12 +16,14 @@ x-c)
 	;;
 x-r)
 	shift
-	PLAN9_TARGET=$1 export PLAN9_TARGET
+	PLAN9_TARGET=$1
 	;;
 *)
 	echo 'usage: INSTALL [-b | -c] [-r path]' 1>&2
 	exit 1
 esac
+
+PLAN9=`pwd` export PLAN9
 
 echo "+ Mailing list: https://groups.google.com/group/plan9port-dev"
 echo "+ Issue tracker: https://github.com/9fans/plan9port/issues/"
@@ -32,6 +34,9 @@ rm -f config
 
 PLAN9=`pwd` export PLAN9
 PATH=/bin:/usr/bin:$PLAN9/bin:$PATH export PATH
+[ -z "$PLAN9_TARGET" ] && PLAN9_TARGET="$PLAN9"
+export PLAN9_TARGET
+
 case `uname` in
 SunOS)
 	awk=nawk
@@ -95,7 +100,15 @@ if [ `uname` = Darwin ]; then
 		echo "See http://swtch.com/go/xcodegcc for details." >&2
 		exit 1
 	fi
-	echo "CC9='xcrun --sdk macosx clang'" >>$PLAN9/config
+	CC9="xcrun --sdk macosx clang"
+	case "$(uname -a)" in
+	*ARM64*)
+		CC9="$CC9 -arch arm64"
+		echo '	Forcing arm64 binaries with clang.'
+		;;
+	esac
+
+	echo "CC9='$CC9'" >>$PLAN9/config
 	rm -f ./a.out
 fi
 

@@ -353,7 +353,10 @@
     the text. The address is evaluated, the resulting text highlighted,
     and the mouse moved to it. Thus, in <i>acme</i>, one must type <tt><font size=+1>:/regexp</font></tt>
     or <tt><font size=+1>:127</font></tt> not just <tt><font size=+1>/regexp</font></tt> or <tt><font size=+1>127</font></tt>. (There is an easier way to locate
-    literal text; see below.) 
+    literal text; see below.) If
+    shift is held down during the selection or click, any leading
+    regular expression search defaults to searching backward in the
+    text instead of forward. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     If the text is a file name followed by a colon and an address,
@@ -372,7 +375,8 @@
     of a word in a file, just click button 3 on the word. Because
     of the rule of using the selection as the button 3
     action, subsequent clicks will find subsequent occurrences without
-    moving the mouse. 
+    moving the mouse. If shift is held down during the selection or
+    click, the search looks backward in the file. 
     <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
     
     In all these actions, the mouse motion is not done if the text

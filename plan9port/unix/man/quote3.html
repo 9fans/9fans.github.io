@@ -1,0 +1,143 @@
+<head>
+<title>quote(3) - Ported from Plan 9</title>
+<meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellpadding=0 cellspacing=0 width=100%>
+<tr height=10><td>
+<tr><td width=20><td>
+<tr><td width=20><td><b>QUOTE(3)</b><td align=right><b>QUOTE(3)</b>
+<tr><td width=20><td colspan=2>
+    <br>
+<p><font size=+1><b>NAME     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    quotestrdup, quoterunestrdup, unquotestrdup, unquoterunestrdup,
+    quotestrfmt, quoterunestrfmt, quotefmtinstall, fmtdoquote &ndash; quoted
+    character strings<br>
+    
+</table>
+<p><font size=+1><b>SYNOPSIS     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1>#include &lt;utf.h&gt;<br>
+    #include &lt;fmt.h&gt; 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char *quotestrdup(char *s) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Rune *quoterunestrdup(Rune *s) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>char *unquotestrdup(char *s) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>Rune *unquoterunestrdup(Rune *s) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int quotestrfmt(Fmt*) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int quoterunestrfmt(Fmt*) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>void quotefmtinstall(void) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    <tt><font size=+1>int (*fmtdoquote)(int c) 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    </font></tt>
+    
+</table>
+<p><font size=+1><b>DESCRIPTION     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    These routines manipulate character strings, either adding or
+    removing quotes as necessary. In the quoted form, the strings
+    are in the style of <i>rc</i>(1)<i>,</i> with single quotes surrounding the
+    string. Embedded single quotes are indicated by a doubled single
+    quote. For instance,<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>Don't worry!<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    when quoted becomes<br>
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+        <tt><font size=+1>'Don''t worry!'<br>
+        
+        <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+        </font></tt>
+        
+    </table>
+    The empty string is represented by two quotes, <tt><font size=+1>''</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The first four functions act as variants of <tt><font size=+1>strdup</font></tt> (see <i>strcat</i>(3)).
+    Each returns a freshly allocated copy of the string, created using
+    <i>malloc</i>(3). <i>Quotestrdup</i> returns a quoted copy of <i>s</i>, while <i>unquotestrdup</i>
+    returns a copy of <i>s</i> with the quotes evaluated. The <i>rune</i> versions
+    of these functions do the same for strings (see <i>runestrcat</i>(3)).
+    
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The string returned by <i>quotestrdup</i> or <i>quoterunestrdup</i> has the
+    following properties:<br>
+    1.&nbsp;&nbsp;&nbsp;&nbsp;If the original string <i>s</i> is empty, the returned string is <tt><font size=+1>''</font></tt>.<br>
+    2.&nbsp;&nbsp;&nbsp;&nbsp;If <i>s</i> contains no quotes, blanks, or control characters, the
+    returned string is identical to <i>s</i>.<br>
+    3.&nbsp;&nbsp;&nbsp;&nbsp;If <i>s</i> needs quotes to be added, the first character of the returned
+    string will be a quote. For example, <tt><font size=+1>hello world</font></tt> becomes <tt><font size=+1>'hello
+    world'</font></tt> not <tt><font size=+1>hello' 'world</font></tt>. 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    The function pointer <i>fmtdoquote</i> is <tt><font size=+1>nil</font></tt> by default. If it is non-nil,
+    characters are passed to that function to see if they should be
+    quoted. This mechanism allows programs to specify that characters
+    other than blanks, control characters, or quotes be quoted. Regardless
+    of the return value of <i>*fmtdoquote</i>, blanks, control characters,
+    and quotes are always
+    quoted. <i>Needsrcquote</i> is provided as a <i>fmtdoquote</i> function that
+    flags any character special to <i>rc</i>(1). 
+    <table border=0 cellpadding=0 cellspacing=0><tr height=5><td></table>
+    
+    <i>Quotestrfmt</i> and <i>quoterunestrfmt</i> are <i>print</i>(3) formatting routines
+    that produce quoted strings as output. They may be installed by
+    hand, but <i>quotefmtinstall</i> installs them under the standard format
+    characters <tt><font size=+1>q</font></tt> and <tt><font size=+1>Q</font></tt>. (They are not installed automatically.) If
+    the format string includes the alternate format character <tt><font size=+1>#</font></tt>, for
+    example <tt><font size=+1>%#q</font></tt>, the printed string will
+    always be quoted; otherwise quotes will only be provided if necessary
+    to avoid ambiguity.<br>
+    
+</table>
+<p><font size=+1><b>SOURCE     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <tt><font size=+1><a href="https://9fans.github.io/plan9port/unix">https://9fans.github.io/plan9port/unix</a><br>
+    </font></tt>
+</table>
+<p><font size=+1><b>SEE ALSO     </b></font><br>
+
+<table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
+
+    <i>rc</i>(1), <i>malloc</i>(3), <i>print</i>(3), <i>strcat</i>(3)<br>
+    
+</table>
+
+<td width=20>
+<tr height=20><td>
+</table>
+<!-- TRAILER -->
+</body></html>

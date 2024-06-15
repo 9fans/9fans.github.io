@@ -518,6 +518,7 @@ mousethread(void *v)
 	Mouse m;
 	char *act;
 	enum { MResize, MMouse, MPlumb, MWarnings, NMALT };
+	enum { Shift = 5 };
 	static Alt alts[NMALT+1];
 
 	USED(v);
@@ -661,9 +662,9 @@ mousethread(void *v)
 				}else if(m.buttons & 2){
 					if(textselect2(t, &q0, &q1, &argt))
 						execute(t, q0, q1, FALSE, argt);
-				}else if(m.buttons & 4){
+				}else if(m.buttons & (4|(4<<Shift))){
 					if(textselect3(t, &q0, &q1))
-						look3(t, q0, q1, FALSE);
+						look3(t, q0, q1, FALSE, (m.buttons&(4<<Shift))!=0);
 				}
 				if(w)
 					winunlock(w);
@@ -770,7 +771,7 @@ waitthread(void *v)
 					pids = p;
 				}
 			}else{
-				if(search(t, c->name, c->nname)){
+				if(search(t, c->name, c->nname, FALSE)){
 					textdelete(t, t->q0, t->q1, TRUE);
 					textsetselect(t, 0, 0);
 				}
@@ -1054,7 +1055,7 @@ iconinit(void)
 		textcols[HTEXT] = display->black;
 	}
 
-	r = Rect(0, 0, Scrollwid+ButtonBorder, font->height+1);
+	r = Rect(0, 0, Scrollwid, font->height+1);
 	if(button && eqrect(r, button->r))
 		return;
 
@@ -1066,13 +1067,11 @@ iconinit(void)
 
 	button = allocimage(display, r, screen->chan, 0, DNofill);
 	draw(button, r, tagcols[BACK], nil, r.min);
-	r.max.x -= ButtonBorder;
 	border(button, r, ButtonBorder, tagcols[BORD], ZP);
 
 	r = button->r;
 	modbutton = allocimage(display, r, screen->chan, 0, DNofill);
 	draw(modbutton, r, tagcols[BACK], nil, r.min);
-	r.max.x -= ButtonBorder;
 	border(modbutton, r, ButtonBorder, tagcols[BORD], ZP);
 	r = insetrect(r, ButtonBorder);
 	tmp = allocimage(display, Rect(0,0,1,1), screen->chan, 1, DMedblue);

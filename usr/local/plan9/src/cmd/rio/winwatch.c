@@ -36,14 +36,12 @@ int showwmnames;
 Font *font;
 Image *lightblue;
 
-XErrorHandler oldxerrorhandler;
 
 enum {
 	PAD = 3,
 	MARGIN = 5
 };
 
-static jmp_buf savebuf;
 
 int
 winwatchxerrorhandler(XDisplay *disp, XErrorEvent *xe)
@@ -53,11 +51,7 @@ winwatchxerrorhandler(XDisplay *disp, XErrorEvent *xe)
 	XGetErrorText(disp, xe->error_code, buf, 100);
 	fprint(2, "winwatch: X error %s, request code %d\n",
 	    buf, xe->request_code);
-	XFlush(disp);
-	XSync(disp, False);
-	XSetErrorHandler(oldxerrorhandler);
-	longjmp(savebuf, 1);
-	return(0);  /* Not reached */
+	return 0;  
 }
 
 void*
@@ -89,12 +83,9 @@ getproperty(XWindow w, Atom a)
 
 	n = 100;
 	p = nil;
-	oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
 	s = XGetWindowProperty(dpy, w, a, 0, 100L, 0,
 	    AnyPropertyType, &type, &fmt, &n, &dummy, &p);
-	XFlush(dpy);
-	XSync(dpy, False);
-	XSetErrorHandler(oldxerrorhandler);
+
 	if(s!=0){
 		XFree(p);
 		return(nil);
@@ -108,7 +99,7 @@ findname(XWindow w)
 {
 	int i;
 	uint nxwin;
-	XWindow dw1, dw2, *xwin;
+	XWindow dw1, dw2, *xwin, rwin;
 	char *p;
 	int s;
 	Atom net_wm_name;
@@ -126,27 +117,22 @@ findname(XWindow w)
 		return(w);
 	}
 
-	oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
+	rwin = 0;
+
 	s = XQueryTree(dpy, w, &dw1, &dw2, &xwin, &nxwin);
-	XFlush(dpy);
-	XSync(dpy, False);
-	XSetErrorHandler(oldxerrorhandler);
-	if(s == 0) {
-		if (xwin != NULL)
-			XFree(xwin);
-		return 0;
-	}
 
-	for (i = 0; i < nxwin; i++) {
-		w = findname(xwin[i]);
-		if (w != 0) {
-			XFree(xwin);
-			return w;
+	if(s!=0){	
+		for (i = 0; i < nxwin; i++){
+			w = findname(xwin[i]);
+			if(w != 0){
+				rwin = w;
+				break ;
+			}
 		}
+	XFree(xwin); 
 	}
-	XFree(xwin);
 
-	return 0;
+	return rwin;
 }
 
 int
@@ -200,12 +186,8 @@ refreshwin(void)
 	Status s;
 	Atom net_wm_name;
 
-
-	oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
 	s = XQueryTree(dpy, root, &dw1, &dw2, &xwin, &nxwin);
-	XFlush(dpy);
-	XSync(dpy, False);
-	XSetErrorHandler(oldxerrorhandler);
+
 	if(s==0){
 		if(xwin!=NULL)
 			XFree(xwin);
@@ -220,11 +202,8 @@ refreshwin(void)
 		if(xwin[i]==0)
 			continue;
 
-		oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
 		s = XGetWindowAttributes(dpy, xwin[i], &attr);
-		XFlush(dpy);
-		XSync(dpy, False);
-		XSetErrorHandler(oldxerrorhandler);
+
 		if(s==0)
 			continue;
 		if (attr.width <= 0 ||
@@ -232,11 +211,7 @@ refreshwin(void)
 		    attr.map_state != IsViewable)
 			continue;
 
-		oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
 		s = XGetClassHint(dpy, xwin[i], &class);
-		XFlush(dpy);
-		XSync(dpy, False);
-		XSetErrorHandler(oldxerrorhandler);
 
 		if(s==0)
 			continue;
@@ -290,11 +265,7 @@ refreshwin(void)
 		nw++;
 	}
 
-	oldxerrorhandler = XSetErrorHandler(winwatchxerrorhandler);
-	XFree(xwin);
-	XFlush(dpy);
-	XSync(dpy, False);
-	XSetErrorHandler(oldxerrorhandler);
+	XFree(xwin); 
 
 	while(nwin>nw)
 		free(win[--nwin].label);
@@ -481,7 +452,6 @@ main(int argc, char **argv)
 	if(argc)
 	    usage();
 
-	/* moved up from original winwatch.c for p9p because there can be only one but we want to restart when needed */
 	einit(Emouse | Ekeyboard);
 	Etimer = etimer(0, 1000);
 
@@ -500,8 +470,7 @@ main(int argc, char **argv)
 	if(font==nil)
 		sysfatal("font '%s' not found", fontname);
 
-	/* reentry point upon X server errors */
-	setjmp(savebuf);
+	XSetErrorHandler(winwatchxerrorhandler);
 
 	refreshwin();
 	redraw(screen, 1);

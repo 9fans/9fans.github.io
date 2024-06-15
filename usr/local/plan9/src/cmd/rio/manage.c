@@ -116,9 +116,10 @@ manage(Client *c, int mapped)
 		}
 
 		if(c->is9term && !(fixsize ? drag(c, Button3) : sweep(c, Button3))){
+			ScreenInfo *screen = c->screen;
 			XKillClient(dpy, c->window);
 			rmclient(c);
-			if(current && current->screen == c->screen)
+			if(current && current->screen == screen)
 				cmapfocus(current);
 			return 0;
 		}
@@ -319,6 +320,11 @@ getcmaps(Client *c)
 	c->cmapwins = cw;
 
 	c->wmcmaps = (Colormap*)malloc(n*sizeof(Colormap));
+	if (!c->wmcmaps){
+		fprintf(stderr, "rio: Failed to allocate memory\n");
+		exit(1);
+	}
+
 	for(i = 0; i < n; i++){
 		if(cw[i] == c->window)
 			c->wmcmaps[i] = c->cmap;

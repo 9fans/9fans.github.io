@@ -121,14 +121,15 @@
     offset. Text written to <tt><font size=+1>body</font></tt> is always appended; the file offset
     is ignored.<br>
     <tt><font size=+1>ctl</font></tt>&nbsp;&nbsp;&nbsp;may be read to recover the five numbers as held in the <tt><font size=+1>index</font></tt>
-    file, described above, plus three more fields: the width of the
-    window in pixels, the name of the font used in the window, and
-    the width of a tab character in pixels. Text messages may be written
-    to <tt><font size=+1>ctl</font></tt> to affect the window. Each message is terminated by a newline
-    and multiple
+    file, described above, plus five more fields: the width of the
+    window in pixels; the name of the font used in the window; the
+    width of a tab character in pixels; a 1 if there is undo history,
+    0 otherwise; a 1 if there is redo history, 0 otherwise. Text messages
+    may be written to <tt><font size=+1>ctl</font></tt> to affect
     
     <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
 
+        the window. Each message is terminated by a newline and multiple
         messages may be sent in a single write.<br>
         
         <table border=0 cellpadding=0 cellspacing=0><tr height=2><td><tr><td width=20><td>
@@ -216,8 +217,10 @@
         <tt><font size=+1>D</font></tt> for text deleted from the body, <tt><font size=+1>d</font></tt> for text deleted from the
         tag, <tt><font size=+1>I</font></tt> for text inserted to the body,
         <tt><font size=+1>i</font></tt> for text inserted to the tag, <tt><font size=+1>L</font></tt> for a button 3 action in the
-        body, <tt><font size=+1>l</font></tt> for a button 3 action in the tag, <tt><font size=+1>X</font></tt> for a button 2 action
-        in the body, and <tt><font size=+1>x</font></tt> for a button 2 action in the tag.<br>
+        body, <tt><font size=+1>l</font></tt> for a button 3 action in the tag, <tt><font size=+1>R</font></tt> for a shifted button
+        3 action in the body, <tt><font size=+1>r</font></tt> for a shifted button 3 action in the tag,
+        <tt><font size=+1>X</font></tt> for a button 2 action in the body, and <tt><font size=+1>x</font></tt> for a button 2 action
+        in the tag.<br>
         If the relevant text has less than 256 characters, it is included
         in the message; otherwise it is elided, the fourth number is 0,
         and the program must read it from the <tt><font size=+1>data</font></tt> file if needed. No
