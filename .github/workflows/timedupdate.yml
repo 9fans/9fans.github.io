@@ -1,0 +1,61 @@
+name: Timed Update
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
+
+permissions:
+  contents: write
+
+jobs:
+  Timed-Update:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout Main Repo
+        uses: actions/checkout@v4
+        with:
+          repository: 9fans/plan9port
+          path: /home/runner/work/9fans.github.io/9fans.github.io/plan9
+      - name: Checkout this Repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          path: /home/runner/work/9fans.github.io/9fans.github.io/web
+      - name: Install Dependecy
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential xorg-dev tree
+      - name: Compile Plan9port
+        run: |
+          cd /home/runner/work/9fans.github.io/9fans.github.io/
+          sudo cp -r plan9 /usr/local
+          cd /usr/local/plan9
+          sudo ./INSTALL
+      - name: Update Web
+        run: |
+          cd /home/runner/work/9fans.github.io/9fans.github.io/web
+          cp -r /home/runner/work/9fans.github.io/9fans.github.io/plan9 /home/runner/work/9fans.github.io/9fans.github.io/web/usr/local/
+          cp -r /usr/local/plan9/dist /home/runner/work/9fans.github.io/9fans.github.io/web/plan9port
+          cp -r /usr/local/plan9/man /home/runner/work/9fans.github.io/9fans.github.io/web/plan9port
+          cp -r /usr/local/plan9/unix /home/runner/work/9fans.github.io/9fans.github.io/web/unix
+      - name: Commit and Push
+        run: |
+          cd /home/runner/work/9fans.github.io/9fans.github.io/web
+          git config --global user.email "aelnosu@gmail.com"
+          git config --global user.name "Eason Lu (Automated, Github Actions)"
+          git add .
+          if ! git diff --cached --exit-code &> /dev/null; then
+          git commit -m "Automated Update"
+          git push
+          else
+          git diff --cached --exit-code
+          echo "No changes to commit."
+          fi
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: /home/runner/work/9fans.github.io/9fans.github.io/web
+          retention-days: 1
+          compression-level: 0

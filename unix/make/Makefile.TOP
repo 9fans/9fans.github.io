@@ -1,0 +1,22 @@
+
+# this works in gnu make
+SYSNAME:=${shell uname}
+
+# this works in bsd make
+SYSNAME!=uname
+
+# the gnu rules will mess up bsd but not vice versa,
+# hence the gnu rules come first.
+
+RANLIB=true
+
+include Make.$(SYSNAME)
+
+PREFIX=/usr/local
+
+NUKEFILES=
+
+TGZFILES=
+
+CLEANFILES=
+

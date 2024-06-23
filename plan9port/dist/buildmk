@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# run this in the src directory
+. ../src/mkenv
+export SYSNAME INSTALL
+sh -x mkmk.sh
