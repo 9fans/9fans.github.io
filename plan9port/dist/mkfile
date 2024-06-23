@@ -1,0 +1,12 @@
+MKSHELL=$PLAN9/bin/rc
+
+check.out:V:
+	cd ../man; mk indices
+	cd ..
+	9 awk -f dist/checkman.awk man/man*/*.[0-9]* >dist/check.out
+
+man:V:
+	9 rc ./manweb
+
+push:V:
+	9 rc ./publish

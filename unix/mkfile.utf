@@ -1,0 +1,35 @@
+MAKEALL=`{cd ../make; ls Make.*}
+CFILES=`{9 ls -p $PLAN9/src/lib9/utf/*.c}
+TARG=\
+	$MAKEALL\
+	NOTICE\
+	README\
+	Makefile\
+	$CFILES\
+	plan9.h\
+	utf.h\
+	utfdef.h\
+	isalpharune.3\
+	rune.3\
+	runestrcat.3\
+	utf.7\
+
+WHAT=utf
+
+<../mkfile.what
+
+utf.h: $PLAN9/include/utf.h
+	cp $prereq $target
+
+%: $PLAN9/src/lib9/utf/%
+	cp $prereq $target
+
+utf1.c:D: plan9.h $CFILES
+	(cat plan9.h; \
+	 echo '#include <stdlib.h>'; \
+	 echo '#include <string.h>'; \
+	 echo '#include <unistd.h>'; \
+	 echo '#define bsearch utf_bsearch'; \
+	 echo '#include "utf.h"'; \
+	 grep -hv '^#include' $CFILES) >$target
+

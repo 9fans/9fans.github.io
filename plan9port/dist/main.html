@@ -1,0 +1,197 @@
+
+<html>
+<!--
+Edit ./^$/,s/<table border=0 cellspacing=0 cellpadding=0 width=100%/<Table/g
+Edit ./^$/,s/<Table/<table border=0 cellspacing=0 cellpadding=0 width=100%/g
+-->
+
+<head>
+<base href="https://9fans.github.io/plan9port/">
+<title>Plan 9 from User Space</title>
+</head>
+<body bgcolor=#ffffff>
+<table border=0 cellspacing=0 cellpadding=0 width=100%>
+  <tr height=10><td width=20><td><td width=20>
+  <tr><td><td>
+    <center>
+      <img src="dist/spaceglenda100.png" alt="Space Glenda">
+    </center>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+    <center>
+      <font size=+1><b>Plan 9 from User Space</b></font>
+    </center>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+    <center>
+      <a href="man/man1/intro.html">overview</a>
+      |
+      <a href="screenshots/">screen shots</a>
+      |
+      <a href="man/">manual</a>
+      |
+      <a href="man/man1/install.html">install notes</a>
+      |
+      <a href="/usr/local/plan9/">browse</a>
+      |
+      <a href="https://github.com/9fans/plan9port">github</a>
+      |
+      <a href="unix/">unix</a>
+      |
+      <a href="http://webhostinggeeks.com/science/plan9port-be">Belorussian</a>
+    </center>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+    Plan 9 from User Space (aka plan9port)
+    is a port of many Plan 9 programs from their native
+    <a href="http://9p.io/plan9/">Plan 9</a>
+    environment to Unix-like operating systems.
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>supported systems</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        Linux <font size=-1>(x86, x86-64, PowerPC, and ARM)</font>,
+        FreeBSD <font size=-1>(x86, x86-64)</font>,
+        Mac OS X <font size=-1>(x86, x86-64, and Power PC)</font>,
+        NetBSD <font size=-1>(x86 and PowerPC)</font>,
+        OpenBSD <font size=-1>(x86 and PowerPC)</font>,
+        SunOS <font size=-1>(x86-64 and Sparc)</font>,
+	Dragonfly BSD <font size=-1>(x86-64)</font>.
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>getting started</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        Start with the overview in
+        <a href="man/man1/intro.html"><i>intro</i>(1)</a>.
+        For information on installing the system, see
+        <a href="man/man1/install.html"><i>install</i>(1)</a>.
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>download</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        using git: <code>git clone https://github.com/9fans/plan9port plan9</code>
+        <p>
+        latest tree: <a href="https://github.com/9fans/plan9port/archive/master.zip">plan9port-master.zip</a>
+        <font size=-1>(<a href="https://github.com/9fans/plan9port/commits/master">list of recent changes</a>;
+          <a href="/usr/local/plan9/LICENSE">license</a>)</font>
+        <br>
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>acknowledgements</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+
+        Most obviously, plan9port derives from
+        <a href="http://9p.io/plan9">Plan 9 from Bell Labs</a>
+        and would not exist without the work of the Plan 9 team over the
+        past many years.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        Rob Pike suggested the original X11 port of libdraw years ago,
+        as part of drawterm, and strongly encouraged the Mac OS X work.
+        He has also been a consistent source of good ideas to hide
+        the ugliness of modern Unix.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        William Josephson handled
+        <a href="man/man1/troff.html"><i>troff</i>(1)</a>
+        (with Taj Khattra) and many of
+        the supporting programs.  He also inspired the thread library
+        clean-up and has ported a handful of applications.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        Andrey Mirtchovski and Axel Belinfante have done significant
+        work dealing with X11 corner cases and fine-tuning
+        <a href="man/man1/rio.html"><i>rio</i>(1)</a>.
+        Axel never tires of finding bugs in the SunOS port.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+        
+        Latchesar Ionkov has contributed many fixes to tricky bugs, and 
+        got <a href="man/man4/factotum.html"><i>factotum</i>(4)</a> up and running.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        Many other people have provided help,
+        ported programs, written bug reports,
+        sent useful patches, and gotten plan9port running on new
+        systems.
+        
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+        
+        Bigelow &amp; Holmes, Inc. created the screen fonts in the
+        <i>luc</i>, <i>lucm</i>, <i>lucsans</i>, and <i>pelm</i> 
+        directories and granted permission to redistribute them with plan9port.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        Thanks to all.
+
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>contact</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        mailing list <font size=-1>(<a href="http://groups.google.com/group/plan9port-dev">plan9port-dev on Google groups</a>)</font><br />
+        issue tracker <font size=-1>(<a href="https://github.com/9fans/plan9port/issues">https://github.com/9fans/plan9port/issues</a>)</font><br />
+        Russ Cox <font size=-1>(<a href="mailto:rsc@swtch.com">rsc@swtch.com</a>)</font><br />
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>unix extracts</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        The UTF-8 library, the formatted print library,
+        the buffered I/O library, the (Unicode-capable) regular expression
+        library, and mk are available in packaging separate from plan9port.
+
+        <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=10><td></table>
+
+        See <a href="/plan9port/unix/">https://9fans.github.io/plan9port/unix/</a>.
+    </table>
+
+    <table border=0 cellspacing=0 cellpadding=0 width=100%><tr height=20><td></table>
+    <b>history</b>
+    <table border=0 cellspacing=0 cellpadding=0 width=100%>
+      <tr height=10><td width=20><td>
+      <tr><td><td>
+        <a href="https://9fans.github.io/usr/local/plan9/9pm/README">
+          An early version
+        </a>
+        of Plan 9 from User Space for Windows.  Only for reference.
+        <br>
+        <a href="https://9p.io/plan9/addons.html">
+          Sean Quinlan's 9pm
+        </a> &#8722; a port of an earlier Plan 9 (including <a href="man/man1/sam.html"><i>sam</i>(1)</a>) to Windows
+        <br>
+        <a href="http://www.cs.usyd.edu.au/~matty/9term/">
+          Matty Farrow's 9term
+        </a> &#8722; a native X11 version that inspired <a href="man/man1/9term.html"><i>9term</i>(1)</a>
+        <br>
+        <a href="http://unauthorised.org/dhog/9wm.html">David Hogan's 9wm</a>
+        and
+        <a href="ftp://ftp.freefriends.org/arnold/Source/9menu.shar.gz">Arnold Robbins's 9menu</a> &#8722; precursor to
+            <a href="man/man1/rio.html"><i>rio</i>(1)</a>
+        <br>
+        <a href="http://www.star.le.ac.uk/~tjg/rc/">Byron Rakitzis's rc</a> &#8722; a mostly-compatible clone of Plan 9's <a href="man/man1/rc.html"><i>rc</i>(1)</a>
+        <br>
+        <a href="http://www.cs.yorku.ca/~oz/wily/">Gary Capell's wily</a> &#8722; an <a href="man/man1/acme.html"><i>acme</i>(1)</a>-inspired editor
+    </table>
+  <tr height=10><td>
+</table>
+
+</body>
+</html>
