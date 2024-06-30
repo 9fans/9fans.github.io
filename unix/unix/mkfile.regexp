@@ -1,0 +1,23 @@
+MAKEALL=`{cd ../make; ls Make.*}
+TARG=\
+	$MAKEALL\
+	NOTICE\
+	README\
+	Makefile\
+	regexp9.3\
+	regexp9.7\
+	regexp9.h\
+	regcomp.h\
+	lib9.h\
+	`{9 ls -p $PLAN9/src/libregexp/*.c}\
+
+WHAT=regexp
+
+<../mkfile.what
+
+%: $PLAN9/src/libregexp/%
+	cp $prereq $target
+
+lib9.h: $PLAN9/src/libregexp/lib9.std.h
+	cp $prereq $target
+

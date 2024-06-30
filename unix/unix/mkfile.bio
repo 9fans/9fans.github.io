@@ -1,0 +1,20 @@
+MAKEALL=`{cd ../make; ls Make.*}
+TARG=\
+	$MAKEALL\
+	NOTICE\
+	README\
+	Makefile\
+	bio.3\
+	bio.h\
+	lib9.h\
+	`{9 ls -p $PLAN9/src/libbio/*.c}\
+
+WHAT=bio
+<../mkfile.what
+
+%: $PLAN9/src/libbio/%
+	cp $prereq $target
+
+lib9.h: $PLAN9/src/libbio/lib9.std.h
+	cp $prereq $target
+

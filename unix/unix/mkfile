@@ -1,0 +1,74 @@
+MKSHELL=$PLAN9/bin/rc
+new-%:V:
+	t=$stem
+	if(! ~ $t utf fmt bio regexp mk){
+		echo bad target
+		exit oops
+	}
+	if(! ~ $t mk)
+		t=lib$t
+	mkdir -p $t
+	rm -f $t/*
+	cd $t
+	mk -f ../mkfile.$stem
+	cd ..
+
+test-%:V:
+	t=$stem
+	path=($PLAN9/bin $path)
+	mk new-$t
+	switch($t){
+	case bio;	d=libbio; td=libbio
+	case regexp;	d=libregexp; td=libregexp
+	case fmt;	d=lib9/fmt; td=libfmt
+	case utf;	d=lib9/utf; td=libutf
+	case mk;	d=cmd/mk; td=mk
+	}
+	cd $td
+	d=$PLAN9/src/$d
+	for(i in `{ls -p $d/*.c})
+		if(! test -f $i)
+			echo XXX missing $i
+	make
+	for(i in `{ls *.c})
+		if(! test -f `{echo $i | sed 's/.c$/.o/'})
+			echo XXX not building $i
+	cd ..
+
+test:V: test-utf test-fmt test-bio test-regexp test-mk
+	mk test-clean
+
+test-clean:V:
+	rm -rf libutf libfmt libbio libregexp mk
+
+lib%.tgz:V:
+	mk new-$stem
+	tar cf /dev/stdout lib$stem | gzip > $target
+
+libregexp9.tgz:V:
+	mk new-regexp
+	tar cf /dev/stdout libregexp | gzip >$target
+
+mk.tgz:V:
+	mk new-mk
+	tar cf /dev/stdout mk | gzip > $target
+
+mk-with-libs.tgz:V:
+	mk new-utf
+	mk new-fmt
+	mk new-bio
+	mk new-regexp
+	mk new-mk
+	rm -rf zot
+	mkdir zot
+	mv libutf libfmt libbio libregexp mk zot
+	mv zot mk
+	cp make/Makefile.all mk/Makefile
+	tar cf /dev/stdout mk | gzip > $target
+	rm -r mk
+
+tgz:V: libutf.tgz libfmt.tgz libregexp9.tgz libbio.tgz mk.tgz mk-with-libs.tgz
+
+# run from 'mk push' in ../dist, which sets 9fansweb
+push:V:
+	cp *.tgz $9fansweb/plan9port/unix
